@@ -1,4 +1,4 @@
-package myvector
+package dywoqlib
 
 import (
 	"errors"
