@@ -388,3 +388,42 @@ func (v *Vector[T]) Back() (T, error) {
 func (v *Vector[T]) String() string {
 	return fmt.Sprintf("%v", v.data)
 }
+
+// Range provides a way to iterate over all elements in the vector.
+// It returns a read-only channel that yields each element in the vector
+// in order, from index 0 to the last index. The channel is closed
+// after all elements have been sent. This is similar to range-based
+// for loops in C++ or Go's range keyword for slices.
+//
+// Returns:
+//   - <-chan T: A read-only channel yielding the vector's elements.
+//
+// Example:
+//
+//	v := NewVector[int](10)
+//	v.PushBack(1)
+//	v.PushBack(2)
+//	v.PushBack(3)
+//	for val := range v.Range() {
+//	    fmt.Println(val) // Prints 1, 2, 3
+//	}
+//
+// Time Complexity:
+//   - O(n), where n is the number of elements in the vector, as each element
+//     is sent to the channel exactly once.
+//
+// Note:
+//   - The channel is closed automatically after all elements are yielded.
+//   - If the vector is empty, the channel is closed immediately.
+//   - Concurrent modification of the vector during iteration is not safe and
+//     may lead to undefined behavior.
+func (v *Vector[T]) Range() <-chan T {
+	ch := make(chan T)
+	go func() {
+		defer close(ch)
+		for _, elem := range v.data {
+			ch <- elem
+		}
+	}()
+	return ch
+}
