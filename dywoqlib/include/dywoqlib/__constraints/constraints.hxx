@@ -12,6 +12,7 @@
 #include "../__config.hxx"
 #include "arithmetic.hxx"
 #include "array.hxx"
+#include "class.hxx"
 #include "const.hxx"
 #include "enum.hxx"
 #include "function.hxx"
@@ -70,6 +71,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool enumc() noexcept {
     return enum_constraint<_Tp>::status;
+  }
+  inline constexpr static bool classc() noexcept {
+    return class_constraint<_Tp>::status;
   }
 };
 

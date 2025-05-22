@@ -14,6 +14,7 @@
 #if DYWOQLIB_VERSION >= 202505LL
 #  include "__constraints/arithmetic.hxx"          // IWYU pragma: keep
 #  include "__constraints/array.hxx"               // IWYU pragma: keep
+#  include "__constraints/class.hxx"               // IWYU pragma: keep
 #  include "__constraints/const.hxx"               // IWYU pragma: keep
 #  include "__constraints/constraints.hxx"         // IWYU pragma: keep
 #  include "__constraints/enum.hxx"                // IWYU pragma: keep
