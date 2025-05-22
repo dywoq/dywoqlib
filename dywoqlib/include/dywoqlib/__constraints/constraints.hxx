@@ -13,6 +13,7 @@
 #include "arithmetic.hxx"
 #include "array.hxx"
 #include "const.hxx"
+#include "enum.hxx"
 #include "function.hxx"
 #include "integer.hxx"
 #include "pointer.hxx"
@@ -66,6 +67,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool arithmetic() noexcept {
     return arithmetic_constraint<_Tp>::status;
+  }
+  inline constexpr static bool enumc() noexcept {
+    return enum_constraint<_Tp>::status;
   }
 };
 
