@@ -8,3 +8,8 @@ file(GLOB SOURCES src/dywoqlib/*.cxx)
 
 target_sources(${PROJECT_NAME} PUBLIC ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC include/dywoqlib)
+target_compile_options(${PROJECT_NAME} PRIVATE 
+	"-fno-exceptions"
+	"-fno-rtti"
+	"-D__dywoqlib=202505LL"
+)

@@ -13,7 +13,6 @@
 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
-namespace types {
 
 #  if DYWOQLIB_SYSTEM_ARCHITECTURE == 64
 using size = unsigned long long;
@@ -21,7 +20,6 @@ using size = unsigned long long;
 using size = unsigned int;
 #  endif
 
-} // namespace types
 DYWOQLIB_END_NAMESPACE
 #endif
 

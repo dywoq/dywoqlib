@@ -1,0 +1,41 @@
+//
+//						dywoqlib (C++)
+//
+// Part of repository: https://github.com/dywoq/dywoqlib
+// Under Apache License 2.0
+//
+// Copyright 2025 dywoq
+//
+#ifndef DYWOQLIB_CONSTRAINTS_CONSTRAINTS_HXX
+#define DYWOQLIB_CONSTRAINTS_CONSTRAINTS_HXX
+
+#include "../__config.hxx"
+#include "integer.hxx"
+#include "same_as.hxx"
+#include "void.hxx"
+
+#if DYWOQLIB_VERSION >= 202505LL
+DYWOQLIB_BEGIN_NAMESPACE
+
+template <typename _Tp> struct constraints {
+  template <typename _Ut> inline constexpr static bool same_as() noexcept {
+    return same_as_constraint<_Tp, _Ut>::status;
+  }
+  inline constexpr static bool voidc() noexcept {
+    return void_constraint<_Tp>::status;
+  }
+  inline constexpr static bool integer() noexcept {
+    return integer_constraint<_Tp>::status;
+  }
+  inline constexpr static bool signed_integer() noexcept {
+    return signed_integer_constraint<_Tp>::status;
+  }
+  inline constexpr static bool unsigned_integer() noexcept {
+    return unsigned_integer_constraint<_Tp>::status;
+  }
+};
+
+DYWOQLIB_END_NAMESPACE
+#endif
+
+#endif
