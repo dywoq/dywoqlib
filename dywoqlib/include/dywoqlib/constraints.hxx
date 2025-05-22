@@ -19,9 +19,9 @@
 #  include "__constraints/integer.hxx"             // IWYU pragma: keep
 #  include "__constraints/is_constraint_valid.hxx" // IWYU pragma: keep
 #  include "__constraints/pointer.hxx"             // IWYU pragma: keep
+#  include "__constraints/reference.hxx"           // IWYU pragma: keep
 #  include "__constraints/same_as.hxx"             // IWYU pragma: keep
 #  include "__constraints/void.hxx"                // IWYU pragma: keep
-
 #endif
 
 #endif

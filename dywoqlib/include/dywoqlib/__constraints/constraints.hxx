@@ -14,6 +14,7 @@
 #include "function.hxx"
 #include "integer.hxx"
 #include "pointer.hxx"
+#include "reference.hxx"
 #include "same_as.hxx"
 #include "void.hxx"
 
@@ -42,8 +43,17 @@ template <typename _Tp> struct constraints {
   inline constexpr static bool pointer() noexcept {
     return pointer_constraint<_Tp>::status;
   }
-  inline constexpr static bool is_function() noexcept {
+  inline constexpr static bool function() noexcept {
     return function_constraint<_Tp>::status;
+  }
+  inline constexpr static bool reference() noexcept {
+    return reference_constraint<_Tp>::status;
+  }
+  inline constexpr static bool lvalue_reference() noexcept {
+    return lvalue_reference_constraint<_Tp>::status;
+  }
+  inline constexpr static bool rvalue_reference() noexcept {
+    return rvalue_reference_constraint<_Tp>::status;
   }
 };
 
