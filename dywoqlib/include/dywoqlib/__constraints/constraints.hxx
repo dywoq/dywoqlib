@@ -10,6 +10,7 @@
 #define DYWOQLIB_CONSTRAINTS_CONSTRAINTS_HXX
 
 #include "../__config.hxx"
+#include "arithmetic.hxx"
 #include "array.hxx"
 #include "const.hxx"
 #include "function.hxx"
@@ -62,6 +63,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool volatilec() noexcept {
     return volatile_constraint<_Tp>::status;
+  }
+  inline constexpr static bool arithmetic() noexcept {
+    return arithmetic_constraint<_Tp>::status;
   }
 };
 

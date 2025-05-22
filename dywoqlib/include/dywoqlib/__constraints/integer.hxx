@@ -11,7 +11,6 @@
 
 #include "../__config.hxx"
 #include "is_constraint_valid.hxx"
-#include <type_traits>
 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
