@@ -20,6 +20,7 @@
 #include "pointer.hxx"
 #include "reference.hxx"
 #include "same_as.hxx"
+#include "union.hxx"
 #include "void.hxx"
 #include "volatile.hxx"
 
@@ -74,6 +75,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool classc() noexcept {
     return class_constraint<_Tp>::status;
+  }
+  inline constexpr static bool unionc() noexcept {
+    return union_constraint<_Tp>::union_constraint;
   }
 };
 

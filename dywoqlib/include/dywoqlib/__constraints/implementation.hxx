@@ -40,6 +40,18 @@ public:
     return true;
 #  endif
   }
+
+  template <typename _Tp>
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
+  is_union() noexcept {
+#  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
+    return __is_union(_Tp);
+#  else
+#    warning [dywoqlib/__constraints/__implementation.hxx] Built-in __is_union can't be found in your compiler. \
+		The returning value will be always true
+    return true;
+#  endif
+  }
 };
 
 } // namespace constraints_library
