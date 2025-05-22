@@ -10,6 +10,7 @@
 #define DYWOQLIB_CONSTRAINTS_CONSTRAINTS_HXX
 
 #include "../__config.hxx"
+#include "array.hxx"
 #include "integer.hxx"
 #include "same_as.hxx"
 #include "void.hxx"
@@ -32,6 +33,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool unsigned_integer() noexcept {
     return unsigned_integer_constraint<_Tp>::status;
+  }
+  inline constexpr static bool array() noexcept {
+    return array_constraint<_Tp>::status;
   }
 };
 
