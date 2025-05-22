@@ -12,6 +12,7 @@
 #include "../__config.hxx"
 #include "array.hxx"
 #include "integer.hxx"
+#include "pointer.hxx"
 #include "same_as.hxx"
 #include "void.hxx"
 
@@ -36,6 +37,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool array() noexcept {
     return array_constraint<_Tp>::status;
+  }
+  inline constexpr static bool pointer() noexcept {
+    return pointer_constraint<_Tp>::status;
   }
 };
 
