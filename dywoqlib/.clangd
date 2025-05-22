@@ -3,4 +3,4 @@ CompileFlags:
     - --std=c++20
     - -fno-exceptions
     - -fno-rtti
-    - -dywoqlib=202505LL
+    - -D__dywoqlib=202505LL
