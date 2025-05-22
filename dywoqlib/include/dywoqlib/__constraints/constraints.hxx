@@ -11,6 +11,7 @@
 
 #include "../__config.hxx"
 #include "array.hxx"
+#include "const.hxx"
 #include "function.hxx"
 #include "integer.hxx"
 #include "pointer.hxx"
@@ -54,6 +55,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool rvalue_reference() noexcept {
     return rvalue_reference_constraint<_Tp>::status;
+  }
+  inline constexpr static bool constc() noexcept {
+    return const_constraint<_Tp>::status;
   }
 };
 
