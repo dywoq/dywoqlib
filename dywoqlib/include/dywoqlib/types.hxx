@@ -4,7 +4,7 @@
 // Part of repository: https://github.com/dywoq/dywoqlib
 // Under Apache License 2.0
 //
-// 2025 - dywoq
+// Copyright 2025 dywoq
 //
 #ifndef DYWOQLIB_TYPES_HXX
 #define DYWOQLIB_TYPES_HXX
@@ -18,7 +18,7 @@ namespace types {
 #  if DYWOQLIB_SYSTEM_ARCHITECTURE == 64
 using size = unsigned long long;
 #  elif DYWOQLIB_SYSTEM_ARCHITECTURE == 32
-using size = unsigned int int;
+using size = unsigned int;
 #  endif
 
 } // namespace types

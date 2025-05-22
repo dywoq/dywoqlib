@@ -4,7 +4,7 @@
 // Part of repository: https://github.com/dywoq/dywoqlib
 // Under Apache License 2.0
 //
-// 2025 - dywoq
+// Copyright 2025 dywoq
 //
 #ifndef DYWOQLIB___CONFIG_HXX
 #define DYWOQLIB___CONFIG_HXX
