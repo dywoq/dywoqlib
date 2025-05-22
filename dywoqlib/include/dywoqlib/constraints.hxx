@@ -15,11 +15,13 @@
 #  include "__constraints/array.hxx"               // IWYU pragma: keep
 #  include "__constraints/constraints.hxx"         // IWYU pragma: keep
 #  include "__constraints/floating_point.hxx"      // IWYU pragma: keep
+#  include "__constraints/function.hxx"            // IWYU pragma: keep
 #  include "__constraints/integer.hxx"             // IWYU pragma: keep
 #  include "__constraints/is_constraint_valid.hxx" // IWYU pragma: keep
 #  include "__constraints/pointer.hxx"             // IWYU pragma: keep
 #  include "__constraints/same_as.hxx"             // IWYU pragma: keep
 #  include "__constraints/void.hxx"                // IWYU pragma: keep
+
 #endif
 
 #endif

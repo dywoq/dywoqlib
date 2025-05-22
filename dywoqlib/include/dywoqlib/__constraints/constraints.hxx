@@ -11,6 +11,7 @@
 
 #include "../__config.hxx"
 #include "array.hxx"
+#include "function.hxx"
 #include "integer.hxx"
 #include "pointer.hxx"
 #include "same_as.hxx"
@@ -40,6 +41,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool pointer() noexcept {
     return pointer_constraint<_Tp>::status;
+  }
+  inline constexpr static bool is_function() noexcept {
+    return function_constraint<_Tp>::status;
   }
 };
 
