@@ -17,32 +17,12 @@ DYWOQLIB_BEGIN_NAMESPACE
 inline namespace constraints_library {
 
 template <typename _Tp>
-struct integer_constraint : public is_constraint_valid<false> {};
-
-template <typename _Tp>
 struct unsigned_integer_constraint : public is_constraint_valid<false> {};
 
 template <typename _Tp>
 struct signed_integer_constraint : public is_constraint_valid<false> {};
 
 // clang-format off
-// integer constraint
-template <>
-struct integer_constraint<char> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<short> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<int> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<long long> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<unsigned char> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<unsigned short> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<unsigned int> : public is_constraint_valid<true> {};
-template <>
-struct integer_constraint<unsigned long long> : public is_constraint_valid<true> {};
 
 // unsigned integer constraint
 template <>
@@ -63,7 +43,11 @@ template <>
 struct signed_integer_constraint<int> : public is_constraint_valid<true> {};
 template <>
 struct signed_integer_constraint<long long> : public is_constraint_valid<true> {};
+
 // // clang-format on
+
+template <typename _Tp>
+struct integer_constraint : public is_constraint_valid<signed_integer_constraint<_Tp>::status && unsigned_integer_constraint<_Tp>::status> {};
 
 template <typename _Tp>
 concept integer_c = integer_constraint<_Tp>::status;
