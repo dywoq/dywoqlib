@@ -11,6 +11,7 @@
 
 #include "../__config.hxx"
 #include "is_constraint_valid.hxx"
+#include <type_traits>
 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
@@ -44,10 +45,12 @@ struct signed_integer_constraint<int> : public is_constraint_valid<true> {};
 template <>
 struct signed_integer_constraint<long long> : public is_constraint_valid<true> {};
 
-// // clang-format on
+// clang-format on
 
 template <typename _Tp>
-struct integer_constraint : public is_constraint_valid<signed_integer_constraint<_Tp>::status && unsigned_integer_constraint<_Tp>::status> {};
+struct integer_constraint
+    : public is_constraint_valid<signed_integer_constraint<_Tp>::status &&
+                                 unsigned_integer_constraint<_Tp>::status> {};
 
 template <typename _Tp>
 concept integer_c = integer_constraint<_Tp>::status;

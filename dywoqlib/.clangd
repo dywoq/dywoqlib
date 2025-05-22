@@ -1,6 +1,6 @@
 CompileFlags:
   Add: 
-    - --std=c++20
+    - --std=c++23
     - -fno-exceptions
     - -fno-rtti
     - -D__dywoqlib=202505LL
