@@ -77,7 +77,7 @@ template <typename _Tp> struct constraints {
     return class_constraint<_Tp>::status;
   }
   inline constexpr static bool unionc() noexcept {
-    return union_constraint<_Tp>::union_constraint;
+    return union_constraint<_Tp>::status;
   }
 };
 
