@@ -18,6 +18,7 @@
 #include "reference.hxx"
 #include "same_as.hxx"
 #include "void.hxx"
+#include "volatile.hxx"
 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
@@ -58,6 +59,9 @@ template <typename _Tp> struct constraints {
   }
   inline constexpr static bool constc() noexcept {
     return const_constraint<_Tp>::status;
+  }
+  inline constexpr static bool volatilec() noexcept {
+    return volatile_constraint<_Tp>::status;
   }
 };
 
