@@ -15,9 +15,9 @@
 DYWOQLIB_BEGIN_NAMESPACE
 
 #  if DYWOQLIB_SYSTEM_ARCHITECTURE == 64
-using size = unsigned long long;
+using size DYWOQLIB_NODEBUG = unsigned long long;
 #  elif DYWOQLIB_SYSTEM_ARCHITECTURE == 32
-using size = unsigned int;
+using size DYWOQLIB_NODEBUG = unsigned int;
 #  endif
 
 DYWOQLIB_END_NAMESPACE

@@ -44,4 +44,11 @@
 #  define DYWOQLIB_SYSTEM_ARCHITECTURE 64
 #endif
 
+// nodebug
+#if defined(__GNUC__)
+#  define DYWOQLIB_NODEBUG [[gnu::nodebug]]
+#else
+#  define DYWOQLIB_NODEBUG
+#endif
+
 #endif

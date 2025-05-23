@@ -15,9 +15,11 @@
 DYWOQLIB_BEGIN_NAMESPACE
 
 template <bool _Bv> struct is_constraint_valid {
-  using status_type = decltype(_Bv);
-  static constexpr bool status = _Bv;
-  constexpr operator bool() noexcept { return status; }
+  using status_type DYWOQLIB_NODEBUG = decltype(_Bv);
+  DYWOQLIB_NODEBUG static constexpr bool status = _Bv;
+  DYWOQLIB_NODEBUG constexpr operator bool() noexcept {
+    return status;
+  }
 };
 
 DYWOQLIB_END_NAMESPACE
