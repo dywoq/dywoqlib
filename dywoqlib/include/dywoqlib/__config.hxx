@@ -10,7 +10,7 @@
 #define DYWOQLIB___CONFIG_HXX
 
 // abi
-#if defined(_WIN32) && defined(_MSC_VER)
+#if defined(_MSC_VER)
 #  define DYWOQLIB_EXPORTED_FROM_ABI __declspec(dllexport)
 #  define DYWOQLIB_HIDDEN_FROM_ABI
 #elif defined(__clang__) || defined(__GNUC__)
