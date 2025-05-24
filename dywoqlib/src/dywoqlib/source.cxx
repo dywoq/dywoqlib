@@ -2,6 +2,9 @@
 
 DYWOQLIB_BEGIN_NAMESPACE
 
+DYWOQLIB_EXPORTED_FROM_ABI const char *source_error_value =
+    "__PRETTY_FUNCTION__ is not supported in your compiler";
+
 DYWOQLIB_EXPORTED_FROM_ABI source::source() noexcept {
 }
 

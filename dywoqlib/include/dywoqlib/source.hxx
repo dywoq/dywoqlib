@@ -15,10 +15,13 @@
 #  if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 
+extern DYWOQLIB_EXPORTED_FROM_ABI const char *source_error_value;
+
 class source {
 private:
   const char *__file_name_;
   const char *__function_;
+  const char *__pretty_function_;
   int __line_;
 
 public:
@@ -37,8 +40,13 @@ public:
   DYWOQLIB_EXPORTED_FROM_ABI int line() const noexcept;
 };
 
-#    define DYWOQLIB_SOURCE_CURRENT                                            \
-      ::dywoqlib::source(__FILE__, __func__, __LINE__)
+#    if defined(__clang__) || defined(__GNUC__) || defined(_MSC_VER)
+#      define DYWOQLIB_SOURCE_CURRENT                                          \
+        ::dywoqlib::source(__FILE__, __func__, __PRETTY_FUNCTION__, __LINE__)
+#    else
+#      define DYWOQLIB_SOURCE_CURRENT                                          \
+        ::dywoqlib::source(__FILE__, __func__, source_error_value, __LINE__)
+#    endif
 
 DYWOQLIB_END_NAMESPACE
 #  endif
