@@ -29,6 +29,7 @@ public:
 
   DYWOQLIB_EXPORTED_FROM_ABI explicit source(const char *__file_name,
                                              const char *__function,
+                                             const char *__pretty_function,
                                              int __line) noexcept;
 
   DYWOQLIB_EXPORTED_FROM_ABI source &operator=(const source &__source) noexcept;
@@ -36,6 +37,8 @@ public:
   DYWOQLIB_EXPORTED_FROM_ABI const char *file_name() const noexcept;
 
   DYWOQLIB_EXPORTED_FROM_ABI const char *function() const noexcept;
+
+  DYWOQLIB_EXPORTED_FROM_ABI const char *pretty_function() const noexcept;
 
   DYWOQLIB_EXPORTED_FROM_ABI int line() const noexcept;
 };
