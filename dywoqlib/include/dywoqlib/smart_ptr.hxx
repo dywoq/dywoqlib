@@ -77,21 +77,20 @@ __value_param) noexcept;
 #include "__config.hxx"
 #include "types.hxx"
 
-#if __cplusplus >= 202002LL 
-#if DYWOQLIB_VERSION >= 202505LL
+#if __cplusplus >= 202002LL
+#  if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 
 enum class ptr_kind { shared, unique };
 
-template <typename _Tp>
-struct DYWOQLIB_HIDDEN_FROM_ABI __shared_control_block_ {
-  _Tp *__ptr_data_;
-  size __ref_count_data_;
+template <typename _Tp> struct __shared_control_block_ {
+  DYWOQLIB_HIDDEN_FROM_ABI _Tp *__ptr_data_;
+  DYWOQLIB_HIDDEN_FROM_ABI size __ref_count_data_;
 
-  explicit __shared_control_block_(_Tp *__p_param_)
+  DYWOQLIB_HIDDEN_FROM_ABI explicit __shared_control_block_(_Tp *__p_param_)
       : __ptr_data_(__p_param_), __ref_count_data_(1) {
   }
-  ~__shared_control_block_() {
+  DYWOQLIB_HIDDEN_FROM_ABI ~__shared_control_block_() {
     delete __ptr_data_;
     __ptr_data_ = nullptr;
   }
@@ -133,11 +132,11 @@ private:
   }
 
 public:
-  explicit smart_ptr() noexcept
+  DYWOQLIB_HIDDEN_FROM_ABI explicit smart_ptr() noexcept
       : __ptr_data_(nullptr), __control_block_(nullptr) {
   }
 
-  explicit smart_ptr(pointer __p_param_) noexcept
+  DYWOQLIB_HIDDEN_FROM_ABI explicit smart_ptr(pointer __p_param_) noexcept
       : __ptr_data_(__p_param_), __control_block_(nullptr) {
     if constexpr (_Kind == ptr_kind::shared) {
       if (__p_param_) {
@@ -146,7 +145,7 @@ public:
     }
   }
 
-  ~smart_ptr() noexcept {
+  DYWOQLIB_HIDDEN_FROM_ABI ~smart_ptr() noexcept {
     if constexpr (_Kind == ptr_kind::shared) {
       __release_shared_();
     } else {
@@ -154,18 +153,19 @@ public:
     }
   }
 
-  smart_ptr(const smart_ptr &__other_param_) noexcept
+  DYWOQLIB_HIDDEN_FROM_ABI smart_ptr(const smart_ptr &__other_param_) noexcept
     requires(_Kind == ptr_kind::shared)
       : __ptr_data_(__other_param_.__ptr_data_),
         __control_block_(__other_param_.__control_block_) {
     __add_ref_();
   }
 
-  smart_ptr(const smart_ptr &__other_param_) noexcept
+  DYWOQLIB_HIDDEN_FROM_ABI smart_ptr(const smart_ptr &__other_param_) noexcept
     requires(_Kind == ptr_kind::unique)
   = delete;
 
-  [[nodiscard]] smart_ptr &operator=(const smart_ptr &__other_param_) noexcept
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI smart_ptr &
+  operator=(const smart_ptr &__other_param_) noexcept
     requires(_Kind == ptr_kind::shared)
   {
     if (this != &__other_param_) {
@@ -177,11 +177,12 @@ public:
     return *this;
   }
 
-  smart_ptr &operator=(const smart_ptr &__other_param_) noexcept
+  DYWOQLIB_HIDDEN_FROM_ABI smart_ptr &
+  operator=(const smart_ptr &__other_param_) noexcept
     requires(_Kind == ptr_kind::unique)
   = delete;
 
-  smart_ptr(smart_ptr &&__other_param_) noexcept
+  DYWOQLIB_HIDDEN_FROM_ABI smart_ptr(smart_ptr &&__other_param_) noexcept
       : __ptr_data_(__other_param_.__ptr_data_),
         __control_block_(_Kind == ptr_kind::shared
                              ? __other_param_.__control_block_
@@ -192,7 +193,8 @@ public:
     __other_param_.__ptr_data_ = nullptr;
   }
 
-  [[nodiscard]] smart_ptr &operator=(smart_ptr &&__other_param_) noexcept {
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI smart_ptr &
+  operator=(smart_ptr &&__other_param_) noexcept {
     if (this != &__other_param_) {
       if constexpr (_Kind == ptr_kind::shared) {
         __release_shared_();
@@ -207,14 +209,14 @@ public:
     return *this;
   }
 
-  [[nodiscard]] pointer get() const noexcept {
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI pointer get() const noexcept {
     if constexpr (_Kind == ptr_kind::shared) {
       return __control_block_ ? __control_block_->__ptr_data_ : nullptr;
     }
     return __ptr_data_;
   }
 
-  void reset() noexcept {
+  DYWOQLIB_HIDDEN_FROM_ABI void reset() noexcept {
     if constexpr (_Kind == ptr_kind::shared) {
       __release_shared_();
       __ptr_data_ = nullptr;
@@ -224,7 +226,7 @@ public:
     }
   }
 
-  void reset(pointer __p_param_) noexcept {
+  DYWOQLIB_HIDDEN_FROM_ABI void reset(pointer __p_param_) noexcept {
     if constexpr (_Kind == ptr_kind::shared) {
       if (__control_block_ && __control_block_->__ptr_data_ == __p_param_) {
         return;
@@ -246,44 +248,45 @@ public:
     }
   }
 
-  [[nodiscard]] size count() const noexcept
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI size count() const noexcept
     requires(_Kind == ptr_kind::shared)
   {
     return __control_block_ ? __control_block_->__ref_count_data_ : 0;
   }
 
-  [[nodiscard]] reference operator*() const noexcept {
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI reference operator*() const noexcept {
     return *get();
   }
 
-  [[nodiscard]] pointer operator->() const noexcept {
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI pointer operator->() const noexcept {
     return get();
   }
 
-  [[nodiscard]] explicit operator bool() const noexcept {
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI explicit
+  operator bool() const noexcept {
     return get() != nullptr;
   }
 
-  static void reset(pointer &__p_param_) noexcept {
+  DYWOQLIB_HIDDEN_FROM_ABI static void reset(pointer &__p_param_) noexcept {
     delete __p_param_;
     __p_param_ = nullptr;
   }
 };
 
 template <typename _Tp>
-[[nodiscard]] smart_ptr<_Tp, ptr_kind::unique>
+[[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI smart_ptr<_Tp, ptr_kind::unique>
 make_unique_ptr(_Tp __value_param) noexcept {
   return smart_ptr<_Tp, ptr_kind::unique>(new _Tp(__value_param));
 }
 
 template <typename _Tp>
-[[nodiscard]] smart_ptr<_Tp, ptr_kind::shared>
+[[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI smart_ptr<_Tp, ptr_kind::shared>
 make_shared_ptr(_Tp __value_param) noexcept {
   return smart_ptr<_Tp, ptr_kind::shared>(new _Tp(__value_param));
 }
 
 DYWOQLIB_END_NAMESPACE
-#endif
+#  endif
 #endif
 
 #endif
