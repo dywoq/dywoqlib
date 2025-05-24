@@ -20,7 +20,7 @@ public:
   template <typename _Tp>
   [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
   is_enum() noexcept {
-#  if !defined(__GNUC__) || !defined(__clang__) || defined(__MSC_VER)
+#  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
     return __is_enum(_Tp);
 #  else
 #    if defined(__clang__) || defined(__GNUC__)
