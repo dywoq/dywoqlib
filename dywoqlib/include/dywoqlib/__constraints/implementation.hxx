@@ -69,6 +69,24 @@ public:
     return true;
 #  endif
   }
+
+  template <typename _Tp, typename _Ut>
+  [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
+  is_base_of() noexcept {
+#  if defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER)
+    return __is_base_of(_Tp, _Ut);
+#  else
+#    if defined(__clang__) || defined(__GNUC__)
+#      warning [dywoqlib/__constraints/implementation.hxx] Built-in __is_base_of can't be found in your compiler. \
+		The returning value will be always true
+#    elif defined(__MSC_VER)
+#      pragma message(                                                         \
+          "[dywoqlib/__constraints/implementation.hxx] Built-in __is_base_of can't be found in your compiler.
+    The returning value will be always true ")
+#    endif
+    return true;
+#  endif
+  }
 };
 
 } // namespace constraints_library

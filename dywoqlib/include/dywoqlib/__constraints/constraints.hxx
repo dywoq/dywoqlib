@@ -23,6 +23,7 @@
 #include "union.hxx"
 #include "void.hxx"
 #include "volatile.hxx"
+#include "base_of.hxx"
 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
@@ -30,6 +31,10 @@ DYWOQLIB_BEGIN_NAMESPACE
 template <typename _Tp> struct constraints {
   template <typename _Ut> inline constexpr static bool same_as() noexcept {
     return same_as_constraint<_Tp, _Ut>::status;
+  }
+  template<typename _Ut>
+  inline constexpr static bool base_of() noexcept {
+	return base_of_constraint<_Tp, _Ut>::status;
   }
   inline constexpr static bool voidc() noexcept {
     return void_constraint<_Tp>::status;
@@ -79,6 +84,7 @@ template <typename _Tp> struct constraints {
   inline constexpr static bool unionc() noexcept {
     return union_constraint<_Tp>::status;
   }
+  
 };
 
 DYWOQLIB_END_NAMESPACE

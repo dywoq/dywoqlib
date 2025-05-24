@@ -81,6 +81,9 @@ namespace dywoqlib {
 		template<typename _Tp>
 		struct union_constraint;
 
+		template <typename _Tp, typename _Ut>
+		struct base_of_constraint;
+
 		// concepts
 		template<typename _Tp>
 		concept floating_point_c;
@@ -138,10 +141,14 @@ namespace dywoqlib {
 
 		template<typename _Tp>
 		concept union_c;
+
+		template <typename _Tp, typename _Ut>
+		concept base_of_c;
 	}
 
 	template <typename _Tp> struct constraints {
   		template <typename _Ut> inline constexpr static bool same_as() noexcept;
+		template<typename _Ut> inline static constexpr bool base_of() noexcept;
 		inline constexpr static bool voidc() noexcept;
 		inline constexpr static bool integer() noexcept;
 		inline constexpr static bool signed_integer() noexcept;
@@ -170,6 +177,7 @@ namespace dywoqlib {
 #if DYWOQLIB_VERSION >= 202505LL
 #  include "__constraints/arithmetic.hxx"          // IWYU pragma: keep
 #  include "__constraints/array.hxx"               // IWYU pragma: keep
+#  include "__constraints/base_of.hxx"             // IWYU pragma: keep
 #  include "__constraints/class.hxx"               // IWYU pragma: keep
 #  include "__constraints/const.hxx"               // IWYU pragma: keep
 #  include "__constraints/constraints.hxx"         // IWYU pragma: keep
