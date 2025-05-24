@@ -77,6 +77,7 @@ __value_param) noexcept;
 #include "__config.hxx"
 #include "types.hxx"
 
+#if __cplusplus >= 202002LL 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 
@@ -283,4 +284,6 @@ make_shared_ptr(_Tp __value_param) noexcept {
 
 DYWOQLIB_END_NAMESPACE
 #endif
+#endif
+
 #endif

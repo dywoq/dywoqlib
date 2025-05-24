@@ -25,6 +25,7 @@
 #include "volatile.hxx"
 #include "base_of.hxx"
 
+#if __cplusplus >= 202002LL
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 
@@ -89,5 +90,6 @@ template <typename _Tp> struct constraints {
 
 DYWOQLIB_END_NAMESPACE
 #endif
+#endif 
 
 #endif

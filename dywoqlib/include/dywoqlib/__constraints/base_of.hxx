@@ -13,7 +13,8 @@
 #include "implementation.hxx"
 #include "is_constraint_valid.hxx"
 
-#if DYWOQLIB_VERSION >= 202505LL
+#if __cplusplus >= 202002LL
+#  if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 inline namespace constraints_library {
 
@@ -26,7 +27,7 @@ concept base_of_c = base_of_constraint<_Tp, _Ut>::status;
 
 } // namespace constraints_library
 DYWOQLIB_END_NAMESPACE
+#  endif
 #endif
 
 #endif
-

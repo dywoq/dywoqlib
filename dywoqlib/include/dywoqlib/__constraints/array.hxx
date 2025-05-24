@@ -13,6 +13,7 @@
 #include "../types.hxx"
 #include "is_constraint_valid.hxx"
 
+#if __cplusplus >= 202002LL
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 inline namespace constraints_library {
@@ -31,6 +32,7 @@ concept array_c = array_constraint<_Tp>::status;
 
 } // namespace constraints_library
 DYWOQLIB_END_NAMESPACE
+#endif
 #endif
 
 #endif

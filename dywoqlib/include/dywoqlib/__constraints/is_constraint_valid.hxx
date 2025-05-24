@@ -11,6 +11,7 @@
 
 #include "../__config.hxx"
 
+#if __cplusplus >= 202002LL 
 #if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 
@@ -23,6 +24,7 @@ template <bool _Bv> struct is_constraint_valid {
 };
 
 DYWOQLIB_END_NAMESPACE
+#endif
 #endif
 
 #endif

@@ -11,16 +11,18 @@
 
 #include "__config.hxx"
 
-#if DYWOQLIB_VERSION >= 202505LL
+#if __cplusplus >= 202002LL
+#  if DYWOQLIB_VERSION >= 202505LL
 DYWOQLIB_BEGIN_NAMESPACE
 
-#  if DYWOQLIB_SYSTEM_ARCHITECTURE == 64
+#    if DYWOQLIB_SYSTEM_ARCHITECTURE == 64
 using size DYWOQLIB_NODEBUG = unsigned long long;
-#  elif DYWOQLIB_SYSTEM_ARCHITECTURE == 32
+#    elif DYWOQLIB_SYSTEM_ARCHITECTURE == 32
 using size DYWOQLIB_NODEBUG = unsigned int;
-#  endif
+#    endif
 
 DYWOQLIB_END_NAMESPACE
+#  endif
 #endif
 
 #endif
