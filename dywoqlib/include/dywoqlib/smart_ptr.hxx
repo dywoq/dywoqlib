@@ -33,7 +33,7 @@ public:
     requires(_Kind == ptr_kind::unique)
   = delete;
 
-  smart_ptr &operator=(const smart_ptr &__other_param_) noexcept
+  [[nodiscard]] smart_ptr &operator=(const smart_ptr &__other_param_) noexcept
     requires(_Kind == ptr_kind::shared);
 
   smart_ptr &operator=(const smart_ptr &__other_param_) noexcept
@@ -42,31 +42,33 @@ public:
 
   smart_ptr(smart_ptr &&__other_param_) noexcept;
 
-  smart_ptr &operator=(smart_ptr &&__other_param_) noexcept;
+  [[nodiscard]] smart_ptr &operator=(smart_ptr &&__other_param_) noexcept;
 
-  pointer get() const noexcept;
+  [[nodiscard]] pointer get() const noexcept;
 
   void reset() noexcept;
 
   void reset(pointer __p_param_) noexcept;
 
-  size count() const noexcept
+  [[nodiscard]] size count() const noexcept
     requires(_Kind == ptr_kind::shared);
 
-  reference operator*() const noexcept;
+  [[nodiscard]] reference operator*() const noexcept;
 
-  pointer operator->() const noexcept;
+  [[nodiscard]] pointer operator->() const noexcept;
 
-  explicit operator bool() const noexcept;
+  [[nodiscard]] explicit operator bool() const noexcept;
 
   static void reset(pointer &__p_param_) noexcept;
 };
 
 template <typename _Tp>
-smart_ptr<_Tp, ptr_kind::unique> make_unique_ptr(_Tp __value_param) noexcept;
+[[nodiscard]] smart_ptr<_Tp, ptr_kind::unique> make_unique_ptr(_Tp
+__value_param) noexcept;
 
 template <typename _Tp>
-smart_ptr<_Tp, ptr_kind::shared> make_shared_ptr(_Tp __value_param) noexcept;
+[[nodiscard]] smart_ptr<_Tp, ptr_kind::shared> make_shared_ptr(_Tp
+__value_param) noexcept;
 
 } // namespace dywoqlib
 
