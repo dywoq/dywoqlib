@@ -20,7 +20,7 @@ public:
   template <typename _Tp>
   [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
   is_enum() noexcept {
-#  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
+#  if __has_builtin(__is_enum) || defined(_MSC_VER)
     return __is_enum(_Tp);
 #  else
 #    if defined(__clang__) || defined(__GNUC__)
@@ -37,7 +37,7 @@ public:
   template <typename _Tp>
   [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
   is_class() noexcept {
-#  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
+#  if __has_builtin(__is_class) || defined(_MSC_VER)
     return __is_class(_Tp);
 #  else
 #    if defined(__clang__) || defined(__GNUC__)
@@ -55,7 +55,7 @@ public:
   template <typename _Tp>
   [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
   is_union() noexcept {
-#  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
+#  if __has_builtin(__is_union) || defined(_MSC_VER)
     return __is_union(_Tp);
 #  else
 #    if defined(__clang__) || defined(__GNUC__)
@@ -73,7 +73,7 @@ public:
   template <typename _Tp, typename _Ut>
   [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
   is_base_of() noexcept {
-#  if defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER)
+#  if __has_builtin(__is_base_of) || defined(_MSC_VER)
     return __is_base_of(_Tp, _Ut);
 #  else
 #    if defined(__clang__) || defined(__GNUC__)
