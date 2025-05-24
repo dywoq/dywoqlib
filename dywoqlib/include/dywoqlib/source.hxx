@@ -32,15 +32,19 @@ public:
                                              const char *__pretty_function,
                                              int __line) noexcept;
 
-  DYWOQLIB_EXPORTED_FROM_ABI source &operator=(const source &__source) noexcept;
+  [[nodiscard]] DYWOQLIB_EXPORTED_FROM_ABI source &
+  operator=(const source &__source) noexcept;
 
-  DYWOQLIB_EXPORTED_FROM_ABI const char *file_name() const noexcept;
+  [[nodiscard]] DYWOQLIB_EXPORTED_FROM_ABI const char *
+  file_name() const noexcept;
 
-  DYWOQLIB_EXPORTED_FROM_ABI const char *function() const noexcept;
+  [[nodiscard]] DYWOQLIB_EXPORTED_FROM_ABI const char *
+  function() const noexcept;
 
-  DYWOQLIB_EXPORTED_FROM_ABI const char *pretty_function() const noexcept;
+  [[nodiscard]] DYWOQLIB_EXPORTED_FROM_ABI const char *
+  pretty_function() const noexcept;
 
-  DYWOQLIB_EXPORTED_FROM_ABI int line() const noexcept;
+  [[nodiscard]] DYWOQLIB_EXPORTED_FROM_ABI int line() const noexcept;
 };
 
 #    if defined(__clang__) || defined(__GNUC__) || defined(_MSC_VER)
