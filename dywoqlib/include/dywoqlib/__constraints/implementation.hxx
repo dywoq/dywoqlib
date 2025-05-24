@@ -20,11 +20,16 @@ public:
   template <typename _Tp>
   [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI inline static constexpr bool
   is_enum() noexcept {
-#  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
+#  if !defined(__GNUC__) || !defined(__clang__) || defined(__MSC_VER)
     return __is_enum(_Tp);
 #  else
-#    warning [dywoqlib/__constraints/__implementation.hxx] Built-in __is_enum can't be found in your compiler. \
-		The returning value will be always true
+#    if defined(__clang__) || defined(__GNUC__)
+#      warning [dywoqlib/__constraints/implementation.hxx] Built-in __is_enum can't be found in your compiler. The returning value will be always true
+#    elif defined(__MSC_VER)
+#      pragma message(                                                         \
+          "[dywoqlib/__constraints/implementation.hxx] Built-in __is_enum can't be found in your compiler.
+    The returning value will be always true ")
+#    endif
     return true;
 #  endif
   }
@@ -35,8 +40,14 @@ public:
 #  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
     return __is_class(_Tp);
 #  else
-#    warning [dywoqlib/__constraints/__implementation.hxx] Built-in __is_class can't be found in your compiler. \
+#    if defined(__clang__) || defined(__GNUC__)
+#      warning [dywoqlib/__constraints/implementation.hxx] Built-in __is_class can't be found in your compiler. \
 		The returning value will be always true
+#    elif defined(__MSC_VER)
+#      pragma message(                                                         \
+          "[dywoqlib/__constraints/implementation.hxx] Built-in __is_class can't be found in your compiler.
+    The returning value will be always true ")
+#    endif
     return true;
 #  endif
   }
@@ -47,8 +58,14 @@ public:
 #  if defined(__GNUC__) || defined(__clang__) || defined(__MSC_VER)
     return __is_union(_Tp);
 #  else
-#    warning [dywoqlib/__constraints/__implementation.hxx] Built-in __is_union can't be found in your compiler. \
+#    if defined(__clang__) || defined(__GNUC__)
+#      warning [dywoqlib/__constraints/implementation.hxx] Built-in __is_union can't be found in your compiler. \
 		The returning value will be always true
+#    elif defined(__MSC_VER)
+#      pragma message(                                                         \
+          "[dywoqlib/__constraints/implementation.hxx] Built-in __is_union can't be found in your compiler.
+    The returning value will be always true ")
+#    endif
     return true;
 #  endif
   }
