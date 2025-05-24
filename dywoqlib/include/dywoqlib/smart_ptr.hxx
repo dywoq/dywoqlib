@@ -276,13 +276,13 @@ public:
 template <typename _Tp>
 [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI smart_ptr<_Tp, ptr_kind::unique>
 make_unique_ptr(_Tp __value_param) noexcept {
-  return smart_ptr<_Tp, ptr_kind::unique>(new _Tp(__value_param));
+  return smart_ptr(new _Tp(__value_param));
 }
 
 template <typename _Tp>
 [[nodiscard]] DYWOQLIB_HIDDEN_FROM_ABI smart_ptr<_Tp, ptr_kind::shared>
 make_shared_ptr(_Tp __value_param) noexcept {
-  return smart_ptr<_Tp, ptr_kind::shared>(new _Tp(__value_param));
+  return smart_ptr(new _Tp(__value_param));
 }
 
 DYWOQLIB_END_NAMESPACE
