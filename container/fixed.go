@@ -13,7 +13,7 @@ type Fixed[T any] struct {
 // Panics if the actual length of data is out of the initial length.
 func NewFixed[T any](initialLength int, data []T) *Fixed[T] {
 	if len(data) >= initialLength {
-		Panic("the actual size of data is out of the initial length")
+		Panic(ErrOffTheInitialLength.Error())
 	}
 	return &Fixed[T]{initialLength, data}
 }
@@ -40,6 +40,10 @@ func (f Fixed[T]) Empty() bool {
 
 // Returns the first element of the slice.
 func (f Fixed[T]) Front() T {
+	if f.OffInitialLength() {
+		Panic(ErrOffTheInitialLength.Error())
+	}
+
 	if f.Empty() {
 		var zero T
 		return zero
@@ -49,6 +53,10 @@ func (f Fixed[T]) Front() T {
 
 // Returns the last element of the slice.
 func (f Fixed[T]) Back() T {
+	if f.OffInitialLength() {
+		Panic(ErrOffTheInitialLength.Error())
+	}
+
 	if f.Empty() {
 		var zero T
 		return zero
