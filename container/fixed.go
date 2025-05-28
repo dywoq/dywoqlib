@@ -1,5 +1,7 @@
 package container
 
+import "errors"
+
 // Fixed indicates a fixed-length slice wrapper.
 // Fixed is a generic struct that wraps a Go slice (`[]T`) and associates it
 // with a predetermined `initialLength`. This `initialLength` acts as a cap
@@ -128,5 +130,42 @@ func (f *Fixed[T]) RemoveAt(index int) error {
 		return ErrInvalidIndex
 	}
 	f.data = append(f.data[:index], f.data[index+1:]...)
+	return nil
+}
+
+// Pop removes and returns the last element of the fixed-length slice.
+// Returns an error if the slice is empty.
+func (f *Fixed[T]) Pop() (T, error) {
+	if f.Empty() {
+		var zero T
+		return zero, ErrEmptyFixedSlice
+	}
+	lastIndex := f.ActualLength() - 1
+	val := f.data[lastIndex]
+	f.data = f.data[:lastIndex]
+	return val, nil
+}
+
+// Slice returns a sub-slice of the fixed-length slice within the specified range [start, end).
+// Returns an error if the start or end indices are out of bounds or if start is greater than end.
+func (f Fixed[T]) Slice(start, end int) ([]T, error) {
+	if start < 0 || start > f.ActualLength() || end < 0 || end > f.ActualLength() {
+		return nil, ErrInvalidIndex
+	}
+	if start > end {
+		return nil, errors.New("start index cannot be greater than end index")
+	}
+	return f.data[start:end], nil
+}
+
+// Fill fills the fixed-length slice with a given value until it reaches its initialLength.
+// If the slice is already full, it returns an error.
+func (f *Fixed[T]) Fill(val T) error {
+	if f.IsFull() {
+		return ErrFixedSliceFull
+	}
+	for f.ActualLength() < f.InitialLength() {
+		f.data = append(f.data, val)
+	}
 	return nil
 }
