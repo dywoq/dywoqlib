@@ -196,3 +196,9 @@ func (f *Fixed[T]) Replace(oldVal, newVal T) int {
 	}
 	return count
 }
+
+// CurrentCapacity returns the total allocated capacity of the underlying slice.
+// This is different from InitialLength which is your user-defined "fixed" limit.
+func (f Fixed[T]) CurrentCapacity() int {
+	return cap(f.data)
+}
