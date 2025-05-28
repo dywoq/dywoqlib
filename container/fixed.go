@@ -181,3 +181,18 @@ func (f Fixed[T]) Filter(predicate func(T) bool) (*Fixed[T], error) {
 	}
 	return NewFixed(f.InitialLength(), filteredData)
 }
+
+// Replace replaces all occurrences of an old value with a new value in the fixed-length slice.
+// Returns the number of replacements made.
+// Note: This requires the type T to be comparable. For non-comparable types,
+// a custom comparison function would be needed.
+func (f *Fixed[T]) Replace(oldVal, newVal T) int {
+	count := 0
+	for i, val := range f.data {
+		if any(val) == any(oldVal) {
+			f.data[i] = newVal
+			count++
+		}
+	}
+	return count
+}
