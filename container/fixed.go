@@ -111,3 +111,22 @@ func (f *Fixed[T]) Set(index int, val T) error {
 func (f *Fixed[T]) Native() []T {
 	return f.data
 }
+
+// Clear resets the fixed-length slice by setting its data to an empty slice.
+// The initial length remains unchanged.
+func (f *Fixed[T]) Clear() {
+	f.data = []T{}
+}
+
+// RemoveAt removes the element at the specified index from the fixed-length slice.
+// Returns an error if the index is out of bounds or if the slice is empty.
+func (f *Fixed[T]) RemoveAt(index int) error {
+	if f.Empty() {
+		return ErrEmptyFixedSlice
+	}
+	if index < 0 || index >= f.ActualLength() {
+		return ErrInvalidIndex
+	}
+	f.data = append(f.data[:index], f.data[index+1:]...)
+	return nil
+}
