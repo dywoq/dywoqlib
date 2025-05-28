@@ -32,3 +32,21 @@ func (f Fixed[T]) ActualLength() int {
 func (f Fixed[T]) Empty() bool {
 	return f.ActualLength() == 0
 }
+
+// Returns the first element of the slice.
+func (f Fixed[T]) Front() T {
+	if f.Empty() {
+		var zero T
+		return zero
+	}
+	return f.data[0]
+}
+
+// Returns the last element of the slice.
+func (f Fixed[T]) Back() T {
+	if f.Empty() {
+		var zero T
+		return zero
+	}
+	return f.data[f.ActualLength()]
+}
