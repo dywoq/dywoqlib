@@ -106,3 +106,8 @@ func (f *Fixed[T]) Set(index int, val T) error {
 	f.data[index] = val
 	return nil
 }
+
+// Native returns the current slice data.
+func (f *Fixed[T]) Native() []T {
+	return f.data
+}

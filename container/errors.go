@@ -1,13 +1,23 @@
 package container
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
-var ErrOffTheInitialLength = errors.New("the actual size of data is out of the initial length")
+func formatError(message string) error {
+	strs := []string{"[github.com/dywoq/dywoqlib/container] ", message}
+	formattedMessage := strings.Join(strs, "")
+	result := errors.New(formattedMessage)
+	return result
+}
 
-var ErrNegativeInitialLength = errors.New("the initial length can't be negative")
+var ErrOffTheInitialLength = formatError("the actual size of data is out of the initial length")
 
-var ErrEmptyFixedSlice = errors.New("cannot access element from an empty fixed-length slice")
+var ErrNegativeInitialLength = formatError("the initial length can't be negative")
 
-var ErrFixedSliceFull = errors.New("fixed-length slice is full")
+var ErrEmptyFixedSlice = formatError("cannot access element from an empty fixed-length slice")
 
-var ErrInvalidIndex = errors.New("index out of bounds")
+var ErrFixedSliceFull = formatError("fixed-length slice is full")
+
+var ErrInvalidIndex = formatError("index out of bounds")
