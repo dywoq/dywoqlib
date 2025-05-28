@@ -169,3 +169,15 @@ func (f *Fixed[T]) Fill(val T) error {
 	}
 	return nil
 }
+
+// Filter returns a new Fixed slice containing only the elements for which the provided
+// predicate function returns true. The new slice's initialLength will be that of the original.
+func (f Fixed[T]) Filter(predicate func(T) bool) (*Fixed[T], error) {
+	var filteredData []T
+	for _, val := range f.data {
+		if predicate(val) {
+			filteredData = append(filteredData, val)
+		}
+	}
+	return NewFixed(f.InitialLength(), filteredData)
+}
