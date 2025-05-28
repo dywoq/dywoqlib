@@ -23,7 +23,12 @@ func (f Fixed[T]) InitialLength() int {
 	return f.initialLength
 }
 
-// ActualLength returns the actual length of the slice.
+// ActualLength returns the actual length of the fixed-length slice.
 func (f Fixed[T]) ActualLength() int {
 	return len(f.data)
+}
+
+// Empty checks if the fixed-length slice is not empty,
+func (f Fixed[T]) Empty() bool {
+	return f.ActualLength() == 0
 }
