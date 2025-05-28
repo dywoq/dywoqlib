@@ -12,16 +12,16 @@ type Fixed[T any] struct {
 }
 
 // NewFixed returns a new instance of Fixed.
-// Returns an error if initialLength is negative or if the actual length of
+// Panics if initialLength is negative or if the actual length of
 // data is greater than the initialLength.
-func NewFixed[T any](initialLength int, data []T) (*Fixed[T], error) {
+func NewFixed[T any](initialLength int, data []T) *Fixed[T] {
 	if initialLength < 0 {
-		return nil, ErrNegativeInitialLength
+		panic(ErrNegativeInitialLength)
 	}
 	if len(data) > initialLength {
-		return nil, ErrOffTheInitialLength
+		panic(ErrOffTheInitialLength)
 	}
-	return &Fixed[T]{initialLength, data}, nil
+	return &Fixed[T]{initialLength, data}
 }
 
 // IsOverCapacity checks if the fixed-length slice has exceeded its initial length (capacity).
@@ -172,7 +172,7 @@ func (f *Fixed[T]) Fill(val T) error {
 
 // Filter returns a new Fixed slice containing only the elements for which the provided
 // predicate function returns true. The new slice's initialLength will be that of the original.
-func (f Fixed[T]) Filter(predicate func(T) bool) (*Fixed[T], error) {
+func (f Fixed[T]) Filter(predicate func(T) bool) *Fixed[T] {
 	var filteredData []T
 	for _, val := range f.data {
 		if predicate(val) {
