@@ -17,3 +17,13 @@ func NewFixed[T any](initialLength int, data []T) *Fixed[T] {
 	}
 	return &Fixed[T]{initialLength, data}
 }
+
+// InitialLength returns the initial length.
+func (f Fixed[T]) InitialLength() int {
+	return f.initialLength
+}
+
+// ActualLength returns the actual length of the slice.
+func (f Fixed[T]) ActualLength() int {
+	return len(f.data)
+}
