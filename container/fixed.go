@@ -18,7 +18,7 @@ func NewFixed[T any](initialLength int, data []T) *Fixed[T] {
 	return &Fixed[T]{initialLength, data}
 }
 
-// OffLimit checks if the fixed-length slice is off the initial length.
+// OffInitialLength checks if the fixed-length slice is off the initial length.
 func (f Fixed[T]) OffInitialLength() bool {
 	return f.ActualLength() >= f.InitialLength()
 }
