@@ -9,57 +9,100 @@ type Fixed[T any] struct {
 	data          []T
 }
 
-// NewFixed returns new instance of Fixed.
-// Panics if the actual length of data is out of the initial length.
-func NewFixed[T any](initialLength int, data []T) *Fixed[T] {
-	if len(data) >= initialLength {
-		Panic(ErrOffTheInitialLength.Error())
+// NewFixed returns a new instance of Fixed.
+// Returns an error if initialLength is negative or if the actual length of
+// data is greater than the initialLength.
+func NewFixed[T any](initialLength int, data []T) (*Fixed[T], error) {
+	if initialLength < 0 {
+		return nil, ErrNegativeInitialLength
 	}
-	return &Fixed[T]{initialLength, data}
+	if len(data) > initialLength {
+		return nil, ErrOffTheInitialLength
+	}
+	return &Fixed[T]{initialLength, data}, nil
 }
 
-// OffInitialLength checks if the fixed-length slice is off the initial length.
-func (f Fixed[T]) OffInitialLength() bool {
-	return f.ActualLength() >= f.InitialLength()
+// IsOverCapacity checks if the fixed-length slice has exceeded its initial length (capacity).
+// This indicates an invalid state where the slice has grown beyond its intended maximum size.
+func (f Fixed[T]) IsOverCapacity() bool {
+	return f.ActualLength() > f.InitialLength()
 }
 
-// InitialLength returns the initial length.
+// IsFull checks if the fixed-length slice has reached its initial length.
+func (f Fixed[T]) IsFull() bool {
+	return f.ActualLength() == f.InitialLength()
+}
+
+// InitialLength returns the initial length (capacity) of the fixed-length slice.
 func (f Fixed[T]) InitialLength() int {
 	return f.initialLength
 }
 
-// ActualLength returns the actual length of the fixed-length slice.
+// ActualLength returns the current number of elements in the fixed-length slice.
 func (f Fixed[T]) ActualLength() int {
 	return len(f.data)
 }
 
-// Empty checks if the fixed-length slice is not empty,
+// Empty checks if the fixed-length slice is empty.
 func (f Fixed[T]) Empty() bool {
 	return f.ActualLength() == 0
 }
 
-// Returns the first element of the slice.
-func (f Fixed[T]) Front() T {
-	if f.OffInitialLength() {
-		Panic(ErrOffTheInitialLength.Error())
-	}
-
+// Front returns the first element of the slice.
+// Returns an error if the slice is empty.
+func (f Fixed[T]) Front() (T, error) {
 	if f.Empty() {
 		var zero T
-		return zero
+		return zero, ErrEmptyFixedSlice
 	}
-	return f.data[0]
+
+	if f.IsOverCapacity() {
+		var zero T
+		return zero, ErrOffTheInitialLength
+	}
+	return f.data[0], nil
 }
 
-// Returns the last element of the slice.
-func (f Fixed[T]) Back() T {
-	if f.OffInitialLength() {
-		Panic(ErrOffTheInitialLength.Error())
-	}
-
+// Back returns the last element of the slice.
+// Returns an error if the slice is empty.
+func (f Fixed[T]) Back() (T, error) {
 	if f.Empty() {
 		var zero T
-		return zero
+		return zero, ErrEmptyFixedSlice
 	}
-	return f.data[f.ActualLength()]
+	if f.IsOverCapacity() {
+		var zero T
+		return zero, ErrOffTheInitialLength
+	}
+	return f.data[f.ActualLength()-1], nil
+}
+
+// Add appends an element to the fixed-length slice.
+// Returns an error if the slice is already full.
+func (f *Fixed[T]) Add(val T) error {
+	if f.IsFull() {
+		return ErrFixedSliceFull
+	}
+	f.data = append(f.data, val)
+	return nil
+}
+
+// Get returns the element at the specified index.
+// Returns an error if the index is out of bounds.
+func (f Fixed[T]) Get(index int) (T, error) {
+	if index < 0 || index >= f.ActualLength() {
+		var zero T
+		return zero, ErrInvalidIndex
+	}
+	return f.data[index], nil
+}
+
+// Set sets the element at the specified index.
+// Returns an error if the index is out of bounds.
+func (f *Fixed[T]) Set(index int, val T) error {
+	if index < 0 || index >= f.ActualLength() {
+		return ErrInvalidIndex
+	}
+	f.data[index] = val
+	return nil
 }
