@@ -10,6 +10,11 @@ type ElementGetter[T any] interface {
 	Get(index int) (T, error)
 }
 
+// ElementSetter defines a method to set an element to a collection at the index.
+type ElementSetter[T any] interface {
+	Set(index int, val T) error 	
+}
+
 // Peeker defines methods for inspecting the elements at the ends of a collection without removal.
 type Peeker[T any] interface {
 	Front() (T, error)
