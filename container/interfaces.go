@@ -37,3 +37,8 @@ type InitialLengthGetter interface {
 type DirectDataGetter[T any] interface {
 	Direct() []T
 }
+
+// Cleaner defines a method which clears a whole collection.
+type Cleaner interface {
+	Clear()
+}
