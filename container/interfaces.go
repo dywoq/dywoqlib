@@ -12,7 +12,7 @@ type ElementGetter[T any] interface {
 
 // ElementSetter defines a method to set an element to a collection at the index.
 type ElementSetter[T any] interface {
-	Set(index int, val T) error 	
+	Set(index int, val T) error
 }
 
 // Peeker defines methods for inspecting the elements at the ends of a collection without removal.
@@ -31,4 +31,9 @@ type ActualLengthGetter interface {
 // Usually it's implemented by Fixed structure.
 type InitialLengthGetter interface {
 	InitialLength() int
+}
+
+// DirectDataGetter defines a method for getting an private slice directly.
+type DirectDataGetter[T any] interface {
+	Direct() []T
 }

@@ -109,8 +109,8 @@ func (f *Fixed[T]) Set(index int, val T) error {
 	return nil
 }
 
-// Native returns the current slice data.
-func (f *Fixed[T]) Native() []T {
+// Direct returns the current slice data.
+func (f *Fixed[T]) Direct() []T {
 	return f.data
 }
 
