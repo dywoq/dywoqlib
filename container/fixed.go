@@ -55,7 +55,7 @@ func (f Fixed[T]) Empty() bool {
 func (f Fixed[T]) Front() (T, error) {
 	if f.Empty() {
 		var zero T
-		return zero, ErrEmptyFixedSlice
+		return zero, ErrEmptySlice
 	}
 
 	if f.IsOverCapacity() {
@@ -70,7 +70,7 @@ func (f Fixed[T]) Front() (T, error) {
 func (f Fixed[T]) Back() (T, error) {
 	if f.Empty() {
 		var zero T
-		return zero, ErrEmptyFixedSlice
+		return zero, ErrEmptySlice
 	}
 	if f.IsOverCapacity() {
 		var zero T
@@ -83,7 +83,7 @@ func (f Fixed[T]) Back() (T, error) {
 // Returns an error if the slice is already full.
 func (f *Fixed[T]) Add(val T) error {
 	if f.IsFull() {
-		return ErrFixedSliceFull
+		return ErrSliceFull
 	}
 	f.data = append(f.data, val)
 	return nil
@@ -124,7 +124,7 @@ func (f *Fixed[T]) Clear() {
 // Returns an error if the index is out of bounds or if the slice is empty.
 func (f *Fixed[T]) RemoveAt(index int) error {
 	if f.Empty() {
-		return ErrEmptyFixedSlice
+		return ErrEmptySlice
 	}
 	if index < 0 || index >= f.ActualLength() {
 		return ErrInvalidIndex
@@ -138,7 +138,7 @@ func (f *Fixed[T]) RemoveAt(index int) error {
 func (f *Fixed[T]) Pop() (T, error) {
 	if f.Empty() {
 		var zero T
-		return zero, ErrEmptyFixedSlice
+		return zero, ErrEmptySlice
 	}
 	lastIndex := f.ActualLength() - 1
 	val := f.data[lastIndex]
@@ -162,7 +162,7 @@ func (f Fixed[T]) Slice(start, end int) ([]T, error) {
 // If the slice is already full, it returns an error.
 func (f *Fixed[T]) Fill(val T) error {
 	if f.IsFull() {
-		return ErrFixedSliceFull
+		return ErrSliceFull
 	}
 	for f.ActualLength() < f.InitialLength() {
 		f.data = append(f.data, val)
