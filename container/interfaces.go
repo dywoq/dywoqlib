@@ -38,7 +38,17 @@ type DirectDataGetter[T any] interface {
 	Direct() []T
 }
 
-// Cleaner defines a method which clears a whole collection.
+// Cleaner defines a method to clear a whole collection.
 type Cleaner interface {
 	Clear()
+}
+
+// FullnessChecker defines methods for checking if a container is full.
+type FullnessChecker interface {
+	IsFull() bool
+}
+
+// InitialLengthChecker defines a method that checks if a container is over the initial length.
+type InitialLengthChecker interface {
+	IsOverInitialLength() bool
 }

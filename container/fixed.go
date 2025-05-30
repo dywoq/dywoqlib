@@ -24,9 +24,9 @@ func NewFixed[T any](initialLength int, data []T) *Fixed[T] {
 	return &Fixed[T]{initialLength, data}
 }
 
-// IsOverCapacity checks if the fixed-length slice has exceeded its initial length (capacity).
+// IsOverInitialLength checks if the fixed-length slice has exceeded its initial length (capacity).
 // This indicates an invalid state where the slice has grown beyond its intended maximum size.
-func (f Fixed[T]) IsOverCapacity() bool {
+func (f Fixed[T]) IsOverInitialLength() bool {
 	return f.ActualLength() > f.InitialLength()
 }
 
@@ -58,7 +58,7 @@ func (f Fixed[T]) Front() (T, error) {
 		return zero, ErrEmptySlice
 	}
 
-	if f.IsOverCapacity() {
+	if f.IsOverInitialLength() {
 		var zero T
 		return zero, ErrOffTheInitialLength
 	}
@@ -72,7 +72,7 @@ func (f Fixed[T]) Back() (T, error) {
 		var zero T
 		return zero, ErrEmptySlice
 	}
-	if f.IsOverCapacity() {
+	if f.IsOverInitialLength() {
 		var zero T
 		return zero, ErrOffTheInitialLength
 	}
