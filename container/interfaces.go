@@ -65,3 +65,9 @@ type Filterer[T any, S any] interface {
 type Replacer[T any] interface {
 	Replace(oldVal, newVal T) int
 }
+
+// CurrentCapacityGetter defines a method
+// that returns the total allocated capacity of the container's private variable slice.
+type CurrentCapacityGetter interface {
+	CurrentCapacity() int
+}
