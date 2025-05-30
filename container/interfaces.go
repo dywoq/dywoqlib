@@ -52,3 +52,10 @@ type FullnessChecker interface {
 type InitialLengthChecker interface {
 	IsOverInitialLength() bool
 }
+
+// Filterer defines a method that filters elements of the S container,
+// and returns the new S container instance that holds chosen elements
+// that satisfy predicate.
+type Filterer[T any, S any] interface {
+	Filter(predicate func(T) bool) *S
+}
