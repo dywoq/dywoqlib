@@ -59,3 +59,9 @@ type InitialLengthChecker interface {
 type Filterer[T any, S any] interface {
 	Filter(predicate func(T) bool) *S
 }
+
+// Replacer defines a method that replaces newVal over oldVal.
+// The method returns the number of replacements made.
+type Replacer[T any] interface {
+	Replace(oldVal, newVal T) int
+}
