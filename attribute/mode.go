@@ -1,4 +1,4 @@
-package attributes
+package attribute
 
 type Mode int
 
