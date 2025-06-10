@@ -15,8 +15,8 @@ import "strings"
 //		return 0
 // 	}
 func Todo(mode Mode) {
-	target := functionName(1)
-	source := functionName(2)
+	target := functionName(targetNumberSkip)
+	source := functionName(sourceNumberSkip)
 	message := strings.Join(
 		[]string{
 			"attributes.Todo: ",

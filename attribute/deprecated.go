@@ -14,8 +14,8 @@ import "strings"
 //		return 0
 // 	}
 func Deprecated(mode Mode) {
-	target := functionName(1)
-	source := functionName(2)
+	target := functionName(targetNumberSkip)
+	source := functionName(sourceNumberSkip)
 	message := strings.Join(
 		[]string{
 			"attributes.Deprecated: ",
@@ -36,13 +36,13 @@ func Deprecated(mode Mode) {
 //		return 0
 // 	}
 func DeprecatedN(newFunc string, mode Mode) {
-	target := functionName(1)
-	source := functionName(2)
+	target := functionName(targetNumberSkip)
+	source := functionName(sourceNumberSkip)
 	message := strings.Join(
 		[]string{
 			"attributes.DeprecatedN: ",
 			target,
-			" is deprecated; use ", newFunc, ". source of the warning: ",
+			" is deprecated, use ", newFunc, ". source of the warning: ",
 			source,
 		}, "",
 	)
