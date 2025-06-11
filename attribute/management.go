@@ -25,6 +25,9 @@ func (m management) functionName(skip int) string {
 		return zero
 	}
 	fn := runtime.FuncForPC(ret)
+	if fn == nil {
+		return zero
+	}
 	return fn.Name()
 }
 
