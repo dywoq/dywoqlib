@@ -1,7 +1,7 @@
 package attribute
 
 // Mode indicates the mode of an attribute warning message.
-// Its enumerations are SoftMode, StrictMode.
+// Its enumerations are SoftMode and StrictMode.
 type Mode int
 
 const (
