@@ -7,7 +7,6 @@ type Mode int
 const (
 	// SoftMode is a mode that doesn't allows warning to terminate the program.
 	SoftMode Mode = iota
-
 	// StrictMode is a mode which makes warning terminate the program.
 	StrictMode
 )
