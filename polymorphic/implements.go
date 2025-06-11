@@ -12,7 +12,7 @@ func Implements[I any, S any]() bool {
 	if !IsKind[I](reflect.Interface) {
 		return false
 	}
-	tInterface := reflect.TypeOf((*I)(nil)).Elem()
-	tStruct := reflect.TypeOf((*S)(nil)).Elem()
+	tInterface := TypeOfGeneric[I]()
+	tStruct := TypeOfGeneric[S]()
 	return tStruct.Implements(tInterface)
 }
