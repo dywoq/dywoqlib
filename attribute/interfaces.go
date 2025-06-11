@@ -15,10 +15,8 @@ type Callable interface {
 	// Otherwise, if it's set to StrictMode, program will be immediately executed.
 	// The message should contain:
 	//
-	// - name of an attribute;
-	//
-	// - the function where Call() was used;
-	//
-	// - the source of warning.
+	// 	- name of an attribute;
+	// 	- the function where Call() was used;
+	// 	- the source of warning.
 	Call(mode Mode)
 }
