@@ -8,12 +8,12 @@ import "strings"
 // Todo is an attribute-function that generates a warning,
 // which indicates that a function is not implemented yet.
 // The warning includes:
-// 	- name of the not implemented function.
-// 	- name of the source of the warning.
+//   - name of the not implemented function.
+//   - name of the source of the warning.
 //
 // If mode is set to:
-// 	- SoftMode - the warning will be just simply outputted into console.
-// 	- StrictMode - the warning will be outputted into console and cause program terminate.
+//   - SoftMode - the warning will be just simply outputted into console.
+//   - StrictMode - the warning will be outputted into console and cause program terminate.
 func Todo(mode Mode) {
 	m := management{}
 	target := m.functionName(m.targetNumberSkip())
