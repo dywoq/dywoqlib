@@ -26,14 +26,7 @@ type Fixed[T comparable] struct {
 	err           error
 }
 
-func NewFixed[T comparable](initialLength int) *Fixed[T] {
-	if initialLength < 0 {
-		return &Fixed[T]{err: ErrNegativeInitialLength}
-	}
-	return &Fixed[T]{make([]T, initialLength), initialLength, nil}
-}
-
-func NewFixedWithData[T comparable](initialLength int, data []T) *Fixed[T] {
+func NewFixed[T comparable](initialLength int, data []T) *Fixed[T] {
 	if len(data) > initialLength {
 		return &Fixed[T]{err: ErrOverInitialLength}
 	}
@@ -148,7 +141,7 @@ func (f *Fixed[T]) Clear() {
 	if f.err != nil {
 		return
 	}
-	
+
 	for i := range f.data {
 		f.data[i] = *new(T)
 	}
