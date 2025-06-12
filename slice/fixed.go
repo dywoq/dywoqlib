@@ -117,12 +117,12 @@ func (f *Fixed[T]) Set(index int, value T) {
 	f.data[index] = value
 }
 
-func (f *Fixed[T]) Append(element T) {
+func (f *Fixed[T]) Append(elements ...T) {
 	f.updateErrorState()
 	if f.err != nil {
 		return
 	}
-	f.data = append(f.data, element)
+	f.data = append(f.data, elements...)
 }
 
 func (f *Fixed[T]) updateErrorState() {
