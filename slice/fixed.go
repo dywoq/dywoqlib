@@ -15,6 +15,8 @@
 package slice
 
 import (
+	"slices"
+
 	"github.com/dywoq/dywoqlib/slice/iterator"
 )
 
@@ -123,6 +125,14 @@ func (f *Fixed[T]) Append(elements ...T) {
 		return
 	}
 	f.data = append(f.data, elements...)
+}
+
+func (f *Fixed[T]) Remove(index int) {
+	f.updateErrorState()
+	if f.err != nil {
+		return
+	}
+	f.data = slices.Delete(f.data, index, index+1)
 }
 
 func (f *Fixed[T]) updateErrorState() {
