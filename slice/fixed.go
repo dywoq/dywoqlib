@@ -20,20 +20,20 @@ import (
 	"github.com/dywoq/dywoqlib/slice/iterator"
 )
 
-type Fixed[T any] struct {
+type Fixed[T comparable] struct {
 	data          []T
 	initialLength int
 	err           error
 }
 
-func NewFixed[T any](initialLength int) *Fixed[T] {
+func NewFixed[T comparable](initialLength int) *Fixed[T] {
 	if initialLength < 0 {
 		return &Fixed[T]{err: ErrNegativeInitialLength}
 	}
 	return &Fixed[T]{make([]T, initialLength), initialLength, nil}
 }
 
-func NewFixedWithData[T any](initialLength int, data []T) *Fixed[T] {
+func NewFixedWithData[T comparable](initialLength int, data []T) *Fixed[T] {
 	if len(data) > initialLength {
 		return &Fixed[T]{err: ErrOverInitialLength}
 	}
@@ -133,6 +133,14 @@ func (f *Fixed[T]) Remove(index int) {
 		return
 	}
 	f.data = slices.Delete(f.data, index, index+1)
+}
+
+func (f *Fixed[T]) Contains(t T) bool {
+	f.updateErrorState()
+	if f.err != nil {
+		return false
+	}
+	return slices.Contains(f.data, t)
 }
 
 func (f *Fixed[T]) updateErrorState() {
