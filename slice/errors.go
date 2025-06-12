@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iterator
+package slice
 
-// New returns a new instance of the structure Iterator.
-// The generic type must be given.
-func New[T any](pos int, slice []T) Iterator[T] {
-	return Iterator[T]{pos: pos, data: slice, err: nil}
-}
+import "errors"
+
+var ErrNoElements = errors.New("github.com/dywoq/dywoqlib/slice: there are no elements in the slice")
+var ErrOverInitialLength = errors.New("github.com/dywoq/dywoqlib/slice: over the initial length")
+var ErrNegativeInitialLength = errors.New("github.com/dywoq/dywoqlib/slice: initial length cannot be negative")
