@@ -143,6 +143,17 @@ func (f *Fixed[T]) Contains(t T) bool {
 	return slices.Contains(f.data, t)
 }
 
+func (f *Fixed[T]) Clear() {
+	f.updateErrorState()
+	if f.err != nil {
+		return
+	}
+	
+	for i := range f.data {
+		f.data[i] = *new(T)
+	}
+}
+
 func (f *Fixed[T]) updateErrorState() {
 	errs := make(map[bool]error, 3)
 	errs[f.Empty()] = ErrNoElements
