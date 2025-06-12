@@ -67,11 +67,17 @@ func (f *Fixed[T]) Negative() bool {
 
 func (f *Fixed[T]) Begin() iterator.Iterator[T] {
 	f.updateErrorState()
+	if f.err != nil {
+		return iterator.Iterator[T]{}
+	}
 	return iterator.New(0, f.data)
 }
 
 func (f *Fixed[T]) End() iterator.Iterator[T] {
 	f.updateErrorState()
+	if f.err != nil {
+		return iterator.Iterator[T]{}
+	}
 	return iterator.New(f.ActualLength()-1, f.data)
 }
 
@@ -82,17 +88,33 @@ func (f *Fixed[T]) At(index int) T {
 
 func (f *Fixed[T]) Front() T {
 	f.updateErrorState()
+	if f.err != nil {
+		var zero T
+		return zero
+	}
 	return f.At(0)
 }
 
 func (f *Fixed[T]) Back() T {
 	f.updateErrorState()
+	if f.err != nil {
+		var zero T
+		return zero
+	}
 	return f.At(len(f.data) - 1)
 }
 
 func (f *Fixed[T]) String() string {
 	m := management[T]{}
 	return m.formatSlice(f.data)
+}
+
+func (f *Fixed[T]) Set(index int, value T) {
+	f.updateErrorState()
+	if f.err != nil {
+		return
+	}
+	f.data[index] = value
 }
 
 func (f *Fixed[T]) updateErrorState() {
