@@ -16,9 +16,6 @@ package slice
 
 import "errors"
 
-// ErrNoElements occurs when a slice is empty.
-var ErrNoElements = errors.New("github.com/dywoq/dywoqlib/slice: there are no elements in the slice")
-
 // ErrOverInitialLength occurs when a slice is over the initial length.
 var ErrOverInitialLength = errors.New("github.com/dywoq/dywoqlib/slice: over the initial length")
 

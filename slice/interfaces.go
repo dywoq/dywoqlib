@@ -1,5 +1,10 @@
 package slice
 
+// ErrorChecker interface for types that can report an error state.
+type ErrorChecker interface {
+	Err() error
+}
+
 // LengthChecker interface for types that provide information about their length and capacity.
 type LengthChecker[T comparable] interface {
 	InitialLength() int

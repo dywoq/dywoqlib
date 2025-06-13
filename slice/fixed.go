@@ -168,7 +168,6 @@ func (f *Fixed[T]) Clear() {
 
 func (f *Fixed[T]) updateErrorState() {
 	errs := make(map[bool]error, 3)
-	errs[f.Empty()] = ErrNoElements
 	errs[f.Negative()] = ErrNegativeInitialLength
 	errs[f.OverInitialLength()] = ErrOverInitialLength
 
