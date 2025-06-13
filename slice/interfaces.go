@@ -6,12 +6,16 @@ type ErrorChecker interface {
 }
 
 // LengthChecker interface for types that provide information about their length and capacity.
-type LengthChecker[T comparable] interface {
-	InitialLength() int
+type LengthChecker interface {
 	ActualLength() int
 	Empty() bool
 	OverInitialLength() bool
 	Negative() bool
+}
+
+// InitialLengthGetter interface for types that provide information about their initial length.
+type InitialLengthGetter interface {
+	InitialLength() int
 }
 
 // ElementReader interface for types whose elements can be read.
