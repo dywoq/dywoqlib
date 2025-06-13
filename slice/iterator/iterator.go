@@ -15,7 +15,7 @@
 package iterator
 
 // Iterator provides a generic way to traverse over a collection of elements.
-type Iterator[T any] struct {
+type Iterator[T comparable] struct {
 	pos  int
 	data []T
 	err  error
