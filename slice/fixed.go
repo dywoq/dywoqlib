@@ -89,6 +89,11 @@ func (f *Fixed[T]) End() iterator.Iterator[T] {
 // At returns the element at the specified index within the Fixed slice.
 func (f *Fixed[T]) At(index int) T {
 	f.updateErrorState()
+	if index < 0 && index > len(f.data) {
+		f.err = ErrWrongIndex
+		var zero T
+		return zero
+	}
 	return f.data[index]
 }
 
