@@ -38,13 +38,8 @@ func (s *Slice[T]) Next() bool {
 	if s.err != nil {
 		return false
 	}
-
 	s.pos++
-
-	if !s.isValidPosition(s.pos) {
-		return false
-	}
-	return true
+	return s.isValidPosition(s.pos)
 }
 
 // Value returns the element at the current iterator position.
