@@ -81,6 +81,7 @@ func (m management[T]) at(i int) T {
 		return m.zero()
 	}
 
+	m.err = nil
 	return elem
 }
 
