@@ -8,6 +8,11 @@ type Iterator[T any] struct {
 	err  error
 }
 
+// Native returns the internal slice.
+func (i *Iterator[T]) Native() []T {
+	return i.data
+}
+
 // Err returns the first error that was encountered by the iterator.
 func (i *Iterator[T]) Err() error {
 	return i.err
