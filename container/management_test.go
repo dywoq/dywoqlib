@@ -26,6 +26,7 @@ func TestFind(t *testing.T) {
 	expected := 3
 	if m.currentErr() != nil {
 		t.Errorf("management.find[int](3) got error %s", m.currentErr())
+		return 
 	}
 
 	if got != expected {
@@ -41,6 +42,7 @@ func TestAt(t *testing.T) {
 	expected := 2
 	if m.currentErr() != nil {
 		t.Errorf("management.at[int](0) got error %s", m.currentErr())
+		return 
 	}
 
 	if got != expected {

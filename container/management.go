@@ -56,33 +56,19 @@ func (m management[T]) at(i int) T {
 	}
 
 	it := m.it.Begin()
-	if it.Native() == nil {
-		m.err = fmt.Errorf("iterator's native collection is nil")
+	n := it.Native()
+	if n == nil {
+		m.err = ErrSliceIsNil
 		return m.zero()
 	}
 
-	var elem T
-	found := false
-	for it.Next() {
-		if it.Position() == i {
-			found = true
-			elem = it.Value()
-			break
-		}
-	}
-
-	if it.Err() != nil {
-		m.err = it.Err()
-		return m.zero()
-	}
-
-	if !found {
-		m.err = ErrElementNotFound
+	if i < 0 || i >= len(n) {
+		m.err = ErrIndexOutOfBounds
 		return m.zero()
 	}
 
 	m.err = nil
-	return elem
+	return n[i]
 }
 
 // used to implement fmt.Stringer interface

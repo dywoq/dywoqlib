@@ -47,7 +47,7 @@ func (i *Iterator[T]) Value() T {
 }
 
 func (i *Iterator[T]) isValidPosition(pos int) bool {
-	return pos >= 0 && pos < len(i.data)
+	return pos > 0 && pos < len(i.data)
 }
 
 func (i *Iterator[T]) zeroValueAndSetError() T {
