@@ -16,32 +16,72 @@ func (m *management[T]) currentErr() error {
 	return m.err
 }
 
-func (m *management[T]) find(reqElem T) (elem T) {
+func (m *management[T]) find(reqElem T) T {
+	if m.err != nil {
+		return m.zero()
+	}
+
 	it := m.it.Begin()
+	if it.Native() == nil {
+		return m.zero()
+	}
+
+	found := false
+	var elem T
 	for it.Next() {
-		if it.Value() != reqElem {
-			var zero T
-			elem = zero
-			m.err = ErrElementNotFound
+		if it.Value() == reqElem {
+			found = true
+			elem = it.Value()
 			break
 		}
-		elem = it.Value()
 	}
-	return
+
+	if it.Err() != nil {
+		m.err = it.Err()
+		return m.zero()
+	}
+
+	if !found {
+		m.err = ErrElementNotFound
+		return m.zero()
+	}
+
+	m.err = nil
+	return elem
 }
 
-func (m management[T]) at(i int) (elem T) {
+func (m management[T]) at(i int) T {
+	if m.err != nil {
+		return m.zero()
+	}
+
 	it := m.it.Begin()
+	if it.Native() == nil {
+		m.err = fmt.Errorf("iterator's native collection is nil")
+		return m.zero()
+	}
+
+	var elem T
+	found := false
 	for it.Next() {
-		if it.Position() != i {
-			var zero T
-			elem = zero
-			m.err = ErrElementNotFound
+		if it.Position() == i {
+			found = true
+			elem = it.Value()
 			break
 		}
-		elem = it.Value()
 	}
-	return
+
+	if it.Err() != nil {
+		m.err = it.Err()
+		return m.zero()
+	}
+
+	if !found {
+		m.err = ErrElementNotFound
+		return m.zero()
+	}
+
+	return elem
 }
 
 // used to implement fmt.Stringer interface
@@ -57,4 +97,9 @@ func (m management[T]) format() string {
 	}
 	b.WriteString("]")
 	return b.String()
+}
+
+func (m management[T]) zero() T {
+	var zero T
+	return zero
 }
