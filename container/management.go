@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dywoq/dywoqlib/container/iterator"
+	"github.com/dywoq/dywoqlib/iterator"
 )
 
 type management[T comparable] struct {
