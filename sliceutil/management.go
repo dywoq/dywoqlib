@@ -1,4 +1,5 @@
-package container
+// sliceutil is primarily used by containers and ATDs to prevent rewriting functionality every time
+package sliceutil
 
 import (
 	"fmt"
