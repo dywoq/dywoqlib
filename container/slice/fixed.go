@@ -126,6 +126,11 @@ func (f *Fixed[T]) AppendBack(args ...T) []T {
 		var zero []T
 		return zero
 	}
+	if f.overFixedSize() {
+		f.err = ErrOverFixedSize
+		var zero []T
+		return zero
+	}
 	if (len(f.s)) == 0 {
 		f.err = ErrSliceIsEmpty
 		var zero []T
@@ -139,11 +144,20 @@ func (f *Fixed[T]) Append(args ...T) {
 	if f.err != nil {
 		return
 	}
+	if f.overFixedSize() {
+		f.err = ErrOverFixedSize
+		return
+	}
 	_ = f.AppendBack(args...)
 }
 
 func (f *Fixed[T]) PopBack() T {
 	if f.err != nil {
+		var zero T
+		return zero
+	}
+	if f.overFixedSize() {
+		f.err = ErrOverFixedSize
 		var zero T
 		return zero
 	}
@@ -162,11 +176,19 @@ func (f *Fixed[T]) Pop() {
 	if f.err != nil {
 		return
 	}
+	if f.overFixedSize() {
+		f.err = ErrOverFixedSize
+		return
+	}
 	_ = f.PopBack()
 }
 
 func (f *Fixed[T]) Erase() {
 	if f.err != nil {
+		return
+	}
+	if f.overFixedSize() {
+		f.err = ErrOverFixedSize
 		return
 	}
 	if (len(f.s)) == 0 {
