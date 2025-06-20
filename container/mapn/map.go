@@ -5,15 +5,20 @@ import (
 	"strings"
 )
 
+// Map represents a generic map with error handling.
 type Map[K comparable, V comparable] struct {
 	data map[K]V
 	err  error
 }
 
+// Err returns the first error encountered during map operations.
+// It allows checking for any errors that have occurred.
 func (m *Map[K, V]) Err() error {
 	return m.err
 }
 
+// Keys returns a slice of all keys in the map.
+// It returns a zero slice if the map is empty or an error occurred.
 func (m *Map[K, V]) Keys() []K {
 	if m.err != nil {
 		var zero []K
@@ -25,12 +30,14 @@ func (m *Map[K, V]) Keys() []K {
 		return zero
 	}
 	keys := []K{}
-	for k, _ := range m.data {
+	for k := range m.data {
 		keys = append(keys, k)
 	}
 	return keys
 }
 
+// Values returns a slice of all values in the map.
+// It returns a zero slice if the map is empty or an error occurred.
 func (m *Map[K, V]) Values() []V {
 	if m.err != nil {
 		var zero []V
@@ -48,6 +55,8 @@ func (m *Map[K, V]) Values() []V {
 	return values
 }
 
+// At returns the value associated with the given key.
+// It returns a zero value if the key is not found, the map is empty, or an error occurred.
 func (m *Map[K, V]) At(key K) V {
 	if m.err != nil {
 		var zero V
@@ -67,6 +76,8 @@ func (m *Map[K, V]) At(key K) V {
 	return foundValue
 }
 
+// String provides a string representation of the map.
+// It formats the map's key-value pairs for display.
 func (m *Map[K, V]) String() string {
 	var b strings.Builder
 	b.WriteString("[")
