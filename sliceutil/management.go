@@ -53,7 +53,7 @@ func (m *Management[T]) Find(reqElem T) T {
 	}
 
 	if !found {
-		m.err = ErrElementNotFound
+		m.err = ErrNotFound
 		return m.Zero()
 	}
 

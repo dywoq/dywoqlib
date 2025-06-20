@@ -3,6 +3,8 @@ package slice
 import (
 	"errors"
 	"testing"
+
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 func TestFixed_Find(t *testing.T) {
@@ -31,7 +33,7 @@ func TestFixed_Find(t *testing.T) {
 			data:      []int{1, 2, 3, 4},
 			find:      5,
 			wantValue: 0,
-			wantErr:   errors.New("not found"),
+			wantErr:   sliceutil.ErrNotFound,
 		},
 		{
 			name:      "over fixed size",
@@ -81,7 +83,7 @@ func TestFixed_Find(t *testing.T) {
 					t.Errorf("Err() = %v, want nil", f.Err())
 				}
 			} else {
-				if f.Err() == nil || f.Err().Error() != tc.wantErr.Error() {
+				if f.Err() == nil || !errors.Is(f.Err(), tc.wantErr) {
 					t.Errorf("Err() = %v, want %v", f.Err(), tc.wantErr)
 				}
 			}
