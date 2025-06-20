@@ -13,7 +13,7 @@ type Fixed[T comparable] struct {
 	fixedSize int
 }
 
-func NewFixed[T comparable](size int, args ... T) *Fixed[T] {
+func NewFixed[T comparable](size int, args ...T) *Fixed[T] {
 	var err error
 	if size < 0 {
 		err = ErrNegativeFixedSize
@@ -103,7 +103,7 @@ func (f *Fixed[T]) Front() T {
 		return zero
 	}
 	if (len(f.s)) == 0 {
-		f.err = ErrSliceIsEmpty
+		f.err = ErrEmpty
 		var zero T
 		return zero
 	}
@@ -121,7 +121,7 @@ func (f *Fixed[T]) Back() T {
 		return zero
 	}
 	if (len(f.s)) == 0 {
-		f.err = ErrSliceIsEmpty
+		f.err = ErrEmpty
 		var zero T
 		return zero
 	}
@@ -139,7 +139,7 @@ func (f *Fixed[T]) AppendBack(args ...T) []T {
 		return zero
 	}
 	if (len(f.s)) == 0 {
-		f.err = ErrSliceIsEmpty
+		f.err = ErrEmpty
 		var zero []T
 		return zero
 	}
@@ -170,7 +170,7 @@ func (f *Fixed[T]) PopBack() T {
 		return zero
 	}
 	if (len(f.s)) == 0 {
-		f.err = ErrSliceIsEmpty
+		f.err = ErrEmpty
 		var zero T
 		return zero
 	}
@@ -200,7 +200,7 @@ func (f *Fixed[T]) Erase() {
 		return
 	}
 	if (len(f.s)) == 0 {
-		f.err = ErrSliceIsEmpty
+		f.err = ErrEmpty
 		return
 	}
 	f.s = []T{}

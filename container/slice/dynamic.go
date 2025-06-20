@@ -88,7 +88,7 @@ func (d *Dynamic[T]) Front() T {
 		return zero
 	}
 	if (len(d.s)) == 0 {
-		d.err = ErrSliceIsEmpty
+		d.err = ErrEmpty
 		var zero T
 		return zero
 	}
@@ -101,7 +101,7 @@ func (d *Dynamic[T]) Back() T {
 		return zero
 	}
 	if (len(d.s)) == 0 {
-		d.err = ErrSliceIsEmpty
+		d.err = ErrEmpty
 		var zero T
 		return zero
 	}
@@ -114,7 +114,7 @@ func (d *Dynamic[T]) AppendBack(args ...T) []T {
 		return zero
 	}
 	if (len(d.s)) == 0 {
-		d.err = ErrSliceIsEmpty
+		d.err = ErrEmpty
 		var zero []T
 		return zero
 	}
@@ -135,7 +135,7 @@ func (d *Dynamic[T]) PopBack() T {
 		return zero
 	}
 	if (len(d.s)) == 0 {
-		d.err = ErrSliceIsEmpty
+		d.err = ErrEmpty
 		var zero T
 		return zero
 	}
@@ -157,7 +157,7 @@ func (d *Dynamic[T]) Erase() {
 		return
 	}
 	if (len(d.s)) == 0 {
-		d.err = ErrSliceIsEmpty
+		d.err = ErrEmpty
 		return
 	}
 	d.s = []T{}
