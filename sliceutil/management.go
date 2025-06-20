@@ -8,23 +8,27 @@ import (
 	"github.com/dywoq/dywoqlib/iterator"
 )
 
-type management[T comparable] struct {
+type Management[T comparable] struct {
 	it  iterator.Iterable[T]
 	err error
 }
 
-func (m *management[T]) currentErr() error {
+func (m *Management[T]) SetIterableType(it iterator.Iterable[T]) {
+	m.it = it
+}
+
+func (m *Management[T]) Err() error {
 	return m.err
 }
 
-func (m *management[T]) find(reqElem T) T {
+func (m *Management[T]) Find(reqElem T) T {
 	if m.err != nil {
-		return m.zero()
+		return m.Zero()
 	}
 
 	it := m.it.Begin()
 	if it.Native() == nil {
-		return m.zero()
+		return m.Zero()
 	}
 
 	found := false
@@ -39,33 +43,33 @@ func (m *management[T]) find(reqElem T) T {
 
 	if it.Err() != nil {
 		m.err = it.Err()
-		return m.zero()
+		return m.Zero()
 	}
 
 	if !found {
 		m.err = ErrElementNotFound
-		return m.zero()
+		return m.Zero()
 	}
 
 	m.err = nil
 	return elem
 }
 
-func (m management[T]) at(i int) T {
+func (m Management[T]) At(i int) T {
 	if m.err != nil {
-		return m.zero()
+		return m.Zero()
 	}
 
 	it := m.it.Begin()
 	n := it.Native()
 	if n == nil {
 		m.err = ErrSliceIsNil
-		return m.zero()
+		return m.Zero()
 	}
 
 	if i < 0 || i >= len(n) {
 		m.err = ErrIndexOutOfBounds
-		return m.zero()
+		return m.Zero()
 	}
 
 	m.err = nil
@@ -73,7 +77,7 @@ func (m management[T]) at(i int) T {
 }
 
 // used to implement fmt.Stringer interface
-func (m management[T]) format() string {
+func (m Management[T]) Format() string {
 	var b strings.Builder
 	it := m.it.Begin()
 	b.WriteString("[")
@@ -87,7 +91,7 @@ func (m management[T]) format() string {
 	return b.String()
 }
 
-func (m management[T]) zero() T {
+func (m Management[T]) Zero() T {
 	var zero T
 	return zero
 }
