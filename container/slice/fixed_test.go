@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/dywoq/dywoqlib/iterator"
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
@@ -17,6 +18,8 @@ func TestFixed_Find(t *testing.T) {
 		wantErr   error
 		setupErr  error
 	}
+
+	var sentinelErr = errors.New("some error")
 
 	tests := []testCase{
 		{
@@ -49,8 +52,8 @@ func TestFixed_Find(t *testing.T) {
 			data:      []int{1, 2, 3},
 			find:      2,
 			wantValue: 0,
-			wantErr:   errors.New("some error"),
-			setupErr:  errors.New("some error"),
+			wantErr:   sentinelErr,
+			setupErr:  sentinelErr,
 		},
 		{
 			name:      "empty slice",
@@ -58,7 +61,7 @@ func TestFixed_Find(t *testing.T) {
 			data:      []int{},
 			find:      1,
 			wantValue: 0,
-			wantErr:   ErrEmpty,
+			wantErr:   iterator.ErrInvalidPosition,
 		},
 		{
 			name:      "negative fixed size",
@@ -66,7 +69,7 @@ func TestFixed_Find(t *testing.T) {
 			data:      []int{1, 2},
 			find:      1,
 			wantValue: 0,
-			wantErr:   ErrNegativeFixedSize,
+			wantErr:   ErrOverFixedSize,
 		},
 	}
 
