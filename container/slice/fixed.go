@@ -13,8 +13,15 @@ type Fixed[T comparable] struct {
 	fixedSize int
 }
 
-func NewFixed[T comparable](args ...T) *Dynamic[T] {
-	return &Dynamic[T]{args, nil}
+func NewFixed[T comparable](size int, args ... T) *Fixed[T] {
+	var err error
+	if size < 0 {
+		err = ErrNegativeFixedSize
+	}
+	if size < len(args) {
+		err = ErrOverFixedSize
+	}
+	return &Fixed[T]{args, err, size}
 }
 
 func (f *Fixed[T]) Length() int {
@@ -144,6 +151,7 @@ func (f *Fixed[T]) Append(args ...T) {
 	if f.err != nil {
 		return
 	}
+
 	if f.overFixedSize() {
 		f.err = ErrOverFixedSize
 		return

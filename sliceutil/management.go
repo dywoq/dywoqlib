@@ -33,11 +33,17 @@ func (m *Management[T]) Find(reqElem T) T {
 
 	found := false
 	var elem T
-	for it.Next() {
-		if it.Value() == reqElem {
-			found = true
-			elem = it.Value()
-			break
+
+	if it.Value() == reqElem {
+		found = true
+		elem = it.Value()
+	} else {
+		for it.Next() {
+			if it.Value() == reqElem {
+				found = true
+				elem = it.Value()
+				break
+			}
 		}
 	}
 
@@ -80,13 +86,18 @@ func (m Management[T]) At(i int) T {
 func (m Management[T]) Format() string {
 	var b strings.Builder
 	it := m.it.Begin()
+	n := it.Native()
+
 	b.WriteString("[")
-	for it.Next() {
+
+	if len(n) > 0 {
 		b.WriteString(fmt.Sprintf("%v", it.Value()))
-		if it.Position() != len(it.Native())-1 {
-			b.WriteString(", ")
+
+		for it.Next() {
+			b.WriteString(fmt.Sprintf(", %v", it.Value()))
 		}
 	}
+
 	b.WriteString("]")
 	return b.String()
 }

@@ -12,8 +12,8 @@ type Dynamic[T comparable] struct {
 	err error
 }
 
-func NewDynamic[T comparable](args ...T) *Dynamic[T] {
-	return &Dynamic[T]{args, nil}
+func NewDynamic[T comparable](data ...T) *Dynamic[T] {
+	return &Dynamic[T]{data, nil}
 }
 
 func (d *Dynamic[T]) Length() int {
@@ -25,11 +25,23 @@ func (d *Dynamic[T]) Err() error {
 }
 
 func (d *Dynamic[T]) Begin() *iterator.Iterator[T] {
-	return iterator.New(0, d.s)
+	it := iterator.New(0, d.s)
+	if it.Err() != nil {
+		d.err = it.Err()
+		var zero *iterator.Iterator[T]
+		return zero
+	}
+	return it
 }
 
 func (d *Dynamic[T]) End() *iterator.Iterator[T] {
-	return iterator.New(len(d.s)-1, d.s)
+	it := iterator.New(len(d.s)-1, d.s)
+	if it.Err() != nil {
+		d.err = it.Err()
+		var zero *iterator.Iterator[T]
+		return zero
+	}
+	return it
 }
 
 func (d *Dynamic[T]) Find(reqElem T) T {
