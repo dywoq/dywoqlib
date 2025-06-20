@@ -3,6 +3,9 @@ package slice
 import (
 	"errors"
 	"testing"
+
+	"github.com/dywoq/dywoqlib/iterator"
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 func TestDynamic_Find(t *testing.T) {
@@ -14,6 +17,8 @@ func TestDynamic_Find(t *testing.T) {
 		wantErr   error
 		setupErr  error
 	}
+
+	var sentinelErr = errors.New("some error")
 
 	tests := []testCase{
 		{
@@ -28,22 +33,22 @@ func TestDynamic_Find(t *testing.T) {
 			data:      []int{1, 2, 3, 4},
 			find:      5,
 			wantValue: 0,
-			wantErr:   errors.New("not found"),
+			wantErr:   sliceutil.ErrNotFound,
 		},
 		{
 			name:      "empty slice",
 			data:      []int{},
 			find:      1,
 			wantValue: 0,
-			wantErr:   ErrEmpty,
+			wantErr:   iterator.ErrInvalidPosition,
 		},
 		{
 			name:      "previous error exists",
 			data:      []int{1, 2, 3},
 			find:      2,
 			wantValue: 0,
-			wantErr:   errors.New("some error"),
-			setupErr:  errors.New("some error"),
+			wantErr:   sentinelErr,
+			setupErr:  sentinelErr,
 		},
 	}
 
@@ -60,7 +65,7 @@ func TestDynamic_Find(t *testing.T) {
 					t.Errorf("Err() = %v, want nil", d.Err())
 				}
 			} else {
-				if d.Err() == nil || d.Err().Error() != tc.wantErr.Error() {
+				if d.Err() == nil || !errors.Is(d.Err(), tc.wantErr) {
 					t.Errorf("Err() = %v, want %v", d.Err(), tc.wantErr)
 				}
 			}
