@@ -33,6 +33,11 @@ func (f *Fixed[T]) Length() int {
 	return len(f.s)
 }
 
+// Empty returns true if the fixed-size slice contains no elements.
+func (f *Fixed[T]) Empty() bool {
+	return len(f.s) == 0
+}
+
 // FixedSize returns the maximum capacity of the Fixed slice.
 // It indicates the hard limit for the slice's size.
 func (f *Fixed[T]) FixedSize() int {

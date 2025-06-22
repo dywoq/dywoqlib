@@ -31,6 +31,11 @@ func (d *Dynamic[T]) Err() error {
 	return d.err
 }
 
+// Empty returns true if the dynamic slice contains no elements.
+func (d *Dynamic[T]) Empty() bool {
+	return len(d.s) == 0
+}
+
 // Begin returns an iterator pointing to the first element.
 // It sets an internal error if iterator creation fails.
 func (d *Dynamic[T]) Begin() *iterator.Iterator[T] {
