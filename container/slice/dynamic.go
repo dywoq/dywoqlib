@@ -141,11 +141,6 @@ func (d *Dynamic[T]) AppendBack(args ...T) []T {
 		var zero []T
 		return zero
 	}
-	if len(d.s) == 0 {
-		d.err = ErrEmpty
-		var zero []T
-		return zero
-	}
 	d.s = append(d.s, args...)
 	return args
 }

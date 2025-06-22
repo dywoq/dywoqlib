@@ -168,11 +168,6 @@ func (f *Fixed[T]) AppendBack(args ...T) []T {
 		var zero []T
 		return zero
 	}
-	if len(f.s) == 0 {
-		f.err = ErrEmpty
-		var zero []T
-		return zero
-	}
 	f.s = append(f.s, args...)
 	return args
 }

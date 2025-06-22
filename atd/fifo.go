@@ -1,6 +1,8 @@
 package atd
 
-import "github.com/dywoq/dywoqlib/container/slice"
+import (
+	"github.com/dywoq/dywoqlib/container/slice"
+)
 
 // Fifo is a generic first-in-first-out queue for comparable types.
 type Fifo[T comparable] struct {
@@ -101,10 +103,6 @@ func (f *Fifo[T]) Pop() {
 		return
 	}
 	f.data.Pop()
-	if f.data.Err() != nil {
-		f.err = f.data.Err()
-		return
-	}
 }
 
 // String returns a string representation of the Fifo.
