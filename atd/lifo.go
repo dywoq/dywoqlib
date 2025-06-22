@@ -80,3 +80,7 @@ func (l *Lifo[T]) Pop() {
 		return
 	}
 }
+
+func (l *Lifo[T]) String() string {
+	return l.data.String()
+}
