@@ -106,3 +106,8 @@ func (f *Fifo[T]) Pop() {
 		return
 	}
 }
+
+// String returns a string representation of the Fifo.
+func (f *Fifo[T]) String() string {
+	return f.data.String()
+}

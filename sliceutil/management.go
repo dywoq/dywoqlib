@@ -1,4 +1,4 @@
-// sliceutil is primarily used by containers and ATDs to prevent rewriting functionality every time
+// sliceutil is primarily used by containers to prevent rewriting functionality every time
 package sliceutil
 
 import (
