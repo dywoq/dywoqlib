@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// sliceutil is primarily used by containers to prevent rewriting functionality every time
+// Package sliceutil is primarily used by containers to prevent rewriting functionality every time.
 package sliceutil
 
 import (
@@ -22,19 +22,24 @@ import (
 	"github.com/dywoq/dywoqlib/iterator"
 )
 
+// Management provides utility methods for managing slices and iterators.
 type Management[T comparable] struct {
 	it  iterator.Iterable[T]
 	err error
 }
 
+// SetIterableType sets the underlying iterator for the Management.
 func (m *Management[T]) SetIterableType(it iterator.Iterable[T]) {
 	m.it = it
 }
 
+// Err returns the last error encountered by Management operations.
 func (m *Management[T]) Err() error {
 	return m.err
 }
 
+// Find searches for reqElem in the underlying slice and returns it if found.
+// If not found, it sets an error and returns the zero value.
 func (m *Management[T]) Find(reqElem T) T {
 	if m.err != nil {
 		return m.Zero()
@@ -75,6 +80,8 @@ func (m *Management[T]) Find(reqElem T) T {
 	return elem
 }
 
+// At returns the element at index i in the underlying slice.
+// If the index is out of bounds or the slice is nil, it sets an error and returns the zero value.
 func (m Management[T]) At(i int) T {
 	if m.err != nil {
 		return m.Zero()
@@ -96,7 +103,8 @@ func (m Management[T]) At(i int) T {
 	return n[i]
 }
 
-// used to implement fmt.Stringer interface
+// Format returns a string representation of the underlying slice.
+// Used to implement the fmt.Stringer interface.
 func (m Management[T]) Format() string {
 	var b strings.Builder
 	it := m.it.Begin()
@@ -116,6 +124,7 @@ func (m Management[T]) Format() string {
 	return b.String()
 }
 
+// Zero returns the zero value for type T.
 func (m Management[T]) Zero() T {
 	var zero T
 	return zero

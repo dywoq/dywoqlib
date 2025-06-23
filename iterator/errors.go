@@ -16,6 +16,11 @@ package iterator
 
 import "errors"
 
+// ErrNoMoreElements is returned when an iterator has no more elements to return.
 var ErrNoMoreElements = errors.New("github.com/dywoq/dywoqlib/container/iterator: no more elements")
+
+// ErrOutOfBounds is returned when an iterator is accessed out of its valid range.
 var ErrOutOfBounds = errors.New("github.com/dywoq/dywoqlib/container/iterator: out of bounds")
+
+// ErrInvalidPosition is returned when an iterator is in an invalid position.
 var ErrInvalidPosition = errors.New("github.com/dywoq/dywoqlib/container/iterator: invalid position")

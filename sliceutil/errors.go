@@ -16,6 +16,11 @@ package sliceutil
 
 import "errors"
 
+// ErrNotFound is returned when an element is not found in the slice.
 var ErrNotFound = errors.New("github.com/dywoq/dywoqlib/sliceutil: element wasn't found")
+
+// ErrSliceIsNil is returned when the provided slice is nil.
 var ErrSliceIsNil = errors.New("github.com/dywoq/dywoqlib/sliceutil: slice is nil")
+
+// ErrIndexOutOfBounds is returned when an index is outside the valid range of the slice.
 var ErrIndexOutOfBounds = errors.New("github.com/dywoq/dywoqlib/sliceutil: index out of bounds")
