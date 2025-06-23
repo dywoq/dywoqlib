@@ -35,7 +35,7 @@ var event func()
 // 	}
 //
 // 	func main() {
-//		check() 
+//		check()
 //	}
 //
 func SetEvent(value func()) {
