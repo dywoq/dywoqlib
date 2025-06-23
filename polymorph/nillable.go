@@ -20,7 +20,12 @@ import "reflect"
 func Nillable[T any]() bool {
 	kind := KindOf[T]()
 	switch kind {
-	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+	case reflect.Chan,
+		reflect.Func,
+		reflect.Interface,
+		reflect.Map,
+		reflect.Pointer,
+		reflect.Slice:
 		return true
 	default:
 		return false
