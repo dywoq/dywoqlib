@@ -9,27 +9,33 @@ import (
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
+// Dynamic represents a mutable string with various utility methods.
 type Dynamic struct {
 	str string
 	err error
 }
 
+// NewDynamic creates a new Dynamic string with the given initial value.
 func NewDynamic(str string) *Dynamic {
 	return &Dynamic{str, nil}
 }
 
+// Length returns the length of the string.
 func (d *Dynamic) Length() int {
 	return len(d.str)
 }
 
+// Err returns the last error encountered by the Dynamic string.
 func (d *Dynamic) Err() error {
 	return d.err
 }
 
+// Empty reports whether the string is empty.
 func (d *Dynamic) Empty() bool {
 	return len(d.str) == 0
 }
 
+// Begin returns an iterator to the beginning of the string.
 func (d *Dynamic) Begin() *iterator.Iterator[rune] {
 	it := iterator.New(0, []rune(d.str))
 	if it.Err() != nil {
@@ -39,6 +45,7 @@ func (d *Dynamic) Begin() *iterator.Iterator[rune] {
 	return it
 }
 
+// End returns an iterator to the end of the string.
 func (d *Dynamic) End() *iterator.Iterator[rune] {
 	it := iterator.New(len(d.str)-1, []rune(d.str))
 	if it.Err() != nil {
@@ -48,6 +55,8 @@ func (d *Dynamic) End() *iterator.Iterator[rune] {
 	return it
 }
 
+// Find searches for the specified rune in the string.
+// Returns zero value if not found or if an error occurs.
 func (d *Dynamic) Find(reqRune rune) rune {
 	if d.err != nil {
 		var zero rune
@@ -64,6 +73,8 @@ func (d *Dynamic) Find(reqRune rune) rune {
 	return foundElem
 }
 
+// At returns the rune at the specified index.
+// Returns zero value if out of bounds or if an error occurs.
 func (d *Dynamic) At(i int) rune {
 	if d.err != nil {
 		var zero rune
@@ -80,6 +91,7 @@ func (d *Dynamic) At(i int) rune {
 	return foundElem
 }
 
+// Format implements custom formatting for the Dynamic string.
 func (d *Dynamic) Format(state fmt.State, verb rune) {
 	// outputting string
 	if verb == 'v' || verb == 's' {
@@ -100,6 +112,8 @@ func (d *Dynamic) Format(state fmt.State, verb rune) {
 	fmt.Fprintln(state, d.str)
 }
 
+// Front returns the first rune of the string.
+// Returns zero value if the string is empty or an error occurs.
 func (d *Dynamic) Front() rune {
 	if d.err != nil {
 		var zero rune
@@ -113,6 +127,8 @@ func (d *Dynamic) Front() rune {
 	return d.At(0)
 }
 
+// Back returns the last rune of the string.
+// Returns zero value if the string is empty or an error occurs.
 func (d *Dynamic) Back() rune {
 	if d.err != nil {
 		var zero rune
@@ -126,6 +142,8 @@ func (d *Dynamic) Back() rune {
 	return d.At(d.Length() - 1)
 }
 
+// AppendBack appends the provided strings to the end of the string.
+// Returns the resulting string, or an empty string if an error occurs.
 func (d *Dynamic) AppendBack(strs ...string) string {
 	if d.err != nil {
 		return ""
@@ -138,6 +156,8 @@ func (d *Dynamic) AppendBack(strs ...string) string {
 	return d.str
 }
 
+// Append appends the provided strings to the end of the string.
+// Does nothing if an error occurs.
 func (d *Dynamic) Append(strs ...string) {
 	if d.err != nil {
 		return
@@ -145,6 +165,8 @@ func (d *Dynamic) Append(strs ...string) {
 	_ = d.AppendBack(strs...)
 }
 
+// EraseBack erases the string and returns its previous value.
+// Returns an empty string if an error occurs.
 func (d *Dynamic) EraseBack() string {
 	if d.err != nil {
 		return ""
@@ -154,6 +176,7 @@ func (d *Dynamic) EraseBack() string {
 	return saved
 }
 
+// Erase erases the string. Does nothing if an error occurs.
 func (d *Dynamic) Erase() {
 	if d.err != nil {
 		return
