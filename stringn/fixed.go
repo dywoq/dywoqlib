@@ -3,6 +3,7 @@ package stringn
 import (
 	"fmt"
 
+	"github.com/dywoq/dywoqlib/container/slice"
 	"github.com/dywoq/dywoqlib/iterator"
 )
 
@@ -96,12 +97,18 @@ func (f *Fixed) At(i int) rune {
 //
 // %V - Outputs the string to console, but with the fixed length.
 func (f *Fixed) Format(state fmt.State, verb rune) {
-	// default
-	f.d.Format(state, verb)
-	// custom
 	switch verb {
+	case 'v', 's':
+		fmt.Fprintln(state, f.str)
+	case 'd':
+		fmt.Fprintln(state, f.Length())
+	case 'r':
+		fixed := slice.NewFixed(f.Length(), []rune(f.str)...)
+		fmt.Fprintln(state, fixed)
 	case 'V':
 		fmt.Fprintf(state, "%v:%d", f.str, f.fixedLength)
+	default:
+		fmt.Fprintln(state, f.str)
 	}
 }
 
