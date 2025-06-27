@@ -56,8 +56,7 @@ func (d *Dynamic[T]) Begin() *iterator.Iterator[T] {
 	it := iterator.New(0, d.s)
 	if it.Err() != nil {
 		d.err = it.Err()
-		var zero *iterator.Iterator[T]
-		return zero
+		return nil
 	}
 	return it
 }
@@ -68,8 +67,7 @@ func (d *Dynamic[T]) End() *iterator.Iterator[T] {
 	it := iterator.New(len(d.s)-1, d.s)
 	if it.Err() != nil {
 		d.err = it.Err()
-		var zero *iterator.Iterator[T]
-		return zero
+		return nil
 	}
 	return it
 }
