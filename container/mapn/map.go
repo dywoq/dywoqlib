@@ -104,18 +104,12 @@ func (m *Map[K, V]) String() string {
 
 // Insert adds a new key-value pair to the Map. 
 // If the Map has a non-nil error state, the operation is aborted.
-// If the Map is empty, it sets the error to ErrEmpty and returns.
 // If the key already exists in the Map, it sets the error to ErrKeyAlreadyExist and returns.
 // Otherwise, it inserts the key-value pair into the Map.
 func (m *Map[K, V]) Insert(reqKey K, reqValue V) {
 	if m.err != nil {
 		return
 	}
-	if len(m.data) == 0 {
-		m.err = ErrEmpty
-		return
-	}
-
 	for key := range m.data {
 		if reqKey == key {
 			m.err = ErrKeyAlreadyExist
