@@ -23,3 +23,6 @@ var ErrEmpty = errors.New("github.com/dywoq/dywoqlib/container/mapn: map is empt
 // ErrNotFound indicates that the requested key was not found in the map.
 // This error occurs during lookup operations when the key does not exist.
 var ErrNotFound = errors.New("github.com/dywoq/dywoqlib/container/mapn: not found")
+
+// ErrKeyAlreadyExist is returned when an attempt is made to insert a key that already exists in the mapn container.
+var ErrKeyAlreadyExist = errors.New("github.com/dywoq/dywoqlib/container/mapn: key already exist.")
