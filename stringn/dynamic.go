@@ -80,24 +80,24 @@ func (d *Dynamic) At(i int) rune {
 	return foundElem
 }
 
-func (d *Dynamic) Format(f fmt.State, verb rune) {
+func (d *Dynamic) Format(state fmt.State, verb rune) {
 	// outputting string
 	if verb == 'v' || verb == 's' {
-		fmt.Fprintln(f, d.str)
+		fmt.Fprintln(state, d.str)
 	}
 
 	// outputting the length of string
 	if verb == 'd' {
-		fmt.Fprintln(f, d.Length())
+		fmt.Fprintln(state, d.Length())
 	}
 
 	// outputting runes
 	if verb == 'r' {
 		fixed := slice.NewFixed(len(d.str), []rune(d.str)...)
-		fmt.Fprintln(f, fixed)
+		fmt.Fprintln(state, fixed)
 	}
 
-	fmt.Fprintln(f, d.str)
+	fmt.Fprintln(state, d.str)
 }
 
 func (d *Dynamic) Front() rune {
