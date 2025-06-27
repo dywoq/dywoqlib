@@ -92,24 +92,25 @@ func (d *Dynamic) At(i int) rune {
 }
 
 // Format implements custom formatting for the Dynamic string.
+// The custom format specifiers: 
+//
+// %v, %s - outputs the string to console;
+// 
+// %d - outputs a length of the string to console;
+//
+// %r - outputs a slice of the string runes.
 func (d *Dynamic) Format(state fmt.State, verb rune) {
-	// outputting string
-	if verb == 'v' || verb == 's' {
+	switch verb {
+	case 'v', 's':
+		fmt.Fprintln(state, d.str)
+	case 'd':
+		fmt.Fprintln(state, d.Length())
+	case 'r':
+		fixed := slice.NewFixed(len(d.str), []rune(d.str)...) // using slice.Fixed just for optimization
+		fmt.Fprintln(state, fixed)
+	default:
 		fmt.Fprintln(state, d.str)
 	}
-
-	// outputting the length of string
-	if verb == 'd' {
-		fmt.Fprintln(state, d.Length())
-	}
-
-	// outputting runes
-	if verb == 'r' {
-		fixed := slice.NewFixed(len(d.str), []rune(d.str)...)
-		fmt.Fprintln(state, fixed)
-	}
-
-	fmt.Fprintln(state, d.str)
 }
 
 // Front returns the first rune of the string.

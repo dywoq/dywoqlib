@@ -3,6 +3,7 @@ package stringn
 import (
 	"fmt"
 
+	"github.com/dywoq/dywoqlib/container/slice"
 	"github.com/dywoq/dywoqlib/iterator"
 )
 
@@ -91,12 +92,17 @@ func (f *Fixed) At(i int) rune {
 }
 
 // Format implements custom formatting for the Fixed string.
+// The format specifiers are same as described in Dynamic.Format(), but
+// there's a special specifier for Fixed:
+//
+// %V - Outputs the string to console, but with the fixed length.
 func (f *Fixed) Format(state fmt.State, verb rune) {
 	// default
 	f.d.Format(state, verb)
 	// custom
-	if verb == 'r' && state.Flag('#') {
-		fmt.Fprintf(state, "%s:%d", f.str, f.fixedLength)
+	switch verb {
+	case 'V':
+		fmt.Fprintf(state, "%v:%d", f.str, f.fixedLength)
 	}
 }
 
