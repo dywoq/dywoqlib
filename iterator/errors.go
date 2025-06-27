@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package iterator provides generic iterator types and interfaces for traversing
+// collections, with error handling for invalid positions and bounds.
 package iterator
 
 import "errors"

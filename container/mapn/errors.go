@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package mapn provides a generic map container with error handling and utility methods
+// for key-value access, insertion, and retrieval.
 package mapn
 
 import "errors"

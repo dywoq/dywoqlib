@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package atd provides generic abstract data types (ADTs) such as stacks (LIFO) and queues (FIFO)
+// for comparable types, with error handling and dynamic storage.
 package atd
 
 import "errors"

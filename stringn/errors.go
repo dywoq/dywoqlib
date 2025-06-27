@@ -1,3 +1,5 @@
+// Package stringn provides advanced string types with dynamic and fixed-length constraints,
+// along with utility methods for manipulation and error handling.
 package stringn
 
 import "errors"

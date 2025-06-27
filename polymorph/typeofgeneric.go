@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package polymorph provides generic reflection utilities for Go types,
+// including type information, kind, comparability, method and field checks, and interface implementation.
 package polymorph
 
 import "reflect"
