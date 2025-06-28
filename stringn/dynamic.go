@@ -37,7 +37,7 @@ func (d *Dynamic) Empty() bool {
 
 // Begin returns an iterator to the beginning of the string.
 func (d *Dynamic) Begin() *iterator.Iterator[rune] {
-	it := iterator.New(0, []rune(d.str))
+	it := iterator.New(-1, []rune(d.str))
 	if it.Err() != nil {
 		d.err = it.Err()
 		return nil
@@ -47,7 +47,7 @@ func (d *Dynamic) Begin() *iterator.Iterator[rune] {
 
 // End returns an iterator to the end of the string.
 func (d *Dynamic) End() *iterator.Iterator[rune] {
-	it := iterator.New(len(d.str)-1, []rune(d.str))
+	it := iterator.New(len(d.str)-2, []rune(d.str))
 	if it.Err() != nil {
 		d.err = it.Err()
 		return nil

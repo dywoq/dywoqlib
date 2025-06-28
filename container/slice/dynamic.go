@@ -53,7 +53,7 @@ func (d *Dynamic[T]) Empty() bool {
 // Begin returns an iterator pointing to the first element.
 // It sets an internal error if iterator creation fails.
 func (d *Dynamic[T]) Begin() *iterator.Iterator[T] {
-	it := iterator.New(0, d.s)
+	it := iterator.New(-1, d.s)
 	if it.Err() != nil {
 		d.err = it.Err()
 		return nil
@@ -64,7 +64,7 @@ func (d *Dynamic[T]) Begin() *iterator.Iterator[T] {
 // End returns an iterator pointing to the last element.
 // It sets an internal error if iterator creation fails.
 func (d *Dynamic[T]) End() *iterator.Iterator[T] {
-	it := iterator.New(len(d.s)-1, d.s)
+	it := iterator.New(len(d.s)-2, d.s)
 	if it.Err() != nil {
 		d.err = it.Err()
 		return nil

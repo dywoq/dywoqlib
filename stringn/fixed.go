@@ -23,6 +23,9 @@ func NewFixed(fixedLength int, str string) *Fixed {
 	if fixedLength < 0 {
 		return &Fixed{err: ErrNegativeFixedLength}
 	}
+	if len(str) > fixedLength {
+		return &Fixed{err: ErrOutOfFixedLength}
+	}
 	return &Fixed{str, nil, fixedLength, NewDynamic(str)}
 }
 

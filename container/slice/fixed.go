@@ -67,13 +67,13 @@ func (f *Fixed[T]) Err() error {
 // Begin returns an iterator pointing to the first element.
 // It creates a new iterator starting from index 0.
 func (f *Fixed[T]) Begin() *iterator.Iterator[T] {
-	return iterator.New(0, f.s)
+	return iterator.New(-1, f.s)
 }
 
 // End returns an iterator pointing to the last element.
 // It creates a new iterator for the final element.
 func (f *Fixed[T]) End() *iterator.Iterator[T] {
-	return iterator.New(len(f.s)-1, f.s)
+	return iterator.New(len(f.s)-2, f.s)
 }
 
 // Find searches for a requested element within the Fixed slice.
