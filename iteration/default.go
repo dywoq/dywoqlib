@@ -12,11 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iterator
+package iteration
 
-// Iterable represents a generic collection of elements of type T that can be iterated over.
-// The Iterate method accepts a function f, which is called for each element in the collection.
+// Default iterates over the slice s of type T, calling the provided function f for each element.
+// The function f receives the index and the element as arguments, and should return a boolean indicating
+// whether to continue iteration (true) or stop (false). The iteration stops early if f returns false.
 // T must be a comparable type.
-type Iterable[T comparable] interface {
-	Iterate(f func(T))
+func Default[T comparable](s []T, f Type[T]) {
+	for i, elem := range s {
+		keepGoing := f(i, elem)
+		if !keepGoing {
+			break
+		}
+	}
 }
