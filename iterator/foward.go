@@ -9,6 +9,12 @@ type Forward[T comparable] struct {
 	err  error
 }
 
+// NewForward creates and returns a new Forward iterator for the provided slice of type T.
+// T must be a comparable type.
+func NewForward[T comparable](data []T) *Forward[T] {
+	return &Forward[T]{data, -1, nil}
+}
+
 // Error returns the error encountered during iteration, or nil if no error has occurred.
 func (f *Forward[T]) Error() error {
 	return f.err
