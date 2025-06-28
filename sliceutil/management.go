@@ -112,12 +112,11 @@ func (m Management[T]) Format() string {
 	b.WriteString("[")
 
 	isFirst := true
-	// Loop by first advancing the iterator, then checking if it's valid, then getting its value.
-	for it.Next() { // This call moves from -1 to 0 (for the first element), then 0 to 1, etc.
+	for it.Next() {
 		if !isFirst {
-			b.WriteString(", ") // Add comma separator for subsequent elements
+			b.WriteString(", ")
 		}
-		b.WriteString(fmt.Sprintf("%v", it.Value())) // Get the value at the now-valid current position
+		b.WriteString(fmt.Sprintf("%v", it.Value())) 
 		isFirst = false
 	}
 
