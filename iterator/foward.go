@@ -41,6 +41,15 @@ func (f *Forward[T]) Next() bool {
 	return f.pos < len(f.data)
 }
 
+// Reset sets the iterator position to the beginning.
+// If an error has occurred (f.err is not nil), Reset does nothing.
+func (f *Forward[T]) Reset() {
+	if f.err != nil {
+		return
+	}
+	f.pos = 0
+}
+
 func (f *Forward[T]) zero() T {
 	var zero T
 	return zero

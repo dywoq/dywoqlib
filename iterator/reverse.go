@@ -40,6 +40,15 @@ func (r *Reverse[T]) Next() bool {
 	return r.pos >= 0
 }
 
+// Reset sets the iterator position to the beginning, allowing iteration to start over.
+// If an error has occurred (r.err is not nil), Reset does nothing.
+func (r *Reverse[T]) Reset() {
+	if r.err != nil {
+		return
+	}
+	r.pos = 0
+}
+
 func (r *Reverse[T]) zero() T {
 	var zero T
 	return zero
