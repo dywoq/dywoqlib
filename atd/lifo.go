@@ -26,7 +26,8 @@ type Lifo[T comparable] struct {
 
 // NewLifo creates and returns a new Lifo.
 func NewLifo[T comparable]() *Lifo[T] {
-	return &Lifo[T]{slice.NewDynamic[T](), nil}
+	empty := []T{}
+	return &Lifo[T]{slice.NewDynamic(empty...), nil}
 }
 
 // Err returns the last error encountered by the Lifo.
