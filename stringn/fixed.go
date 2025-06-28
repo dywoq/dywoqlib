@@ -18,7 +18,11 @@ type Fixed struct {
 }
 
 // NewFixed creates a new Fixed string with the given fixed length and initial value.
+// Can return error if fixed-length is negative.
 func NewFixed(fixedLength int, str string) *Fixed {
+	if fixedLength < 0 {
+		return &Fixed{err: ErrNegativeFixedLength}
+	}
 	return &Fixed{str, nil, fixedLength, NewDynamic(str)}
 }
 
