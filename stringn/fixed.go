@@ -51,6 +51,11 @@ func (f *Fixed) End() *iterator.Iterator[rune] {
 	return f.d.End()
 }
 
+// Err returns the last encountered error.
+func (f *Fixed) Err() error {
+	return f.err
+}
+
 // Find searches for the specified rune in the string.
 // Returns zero value if not found or if an error occurs.
 func (f *Fixed) Find(reqRune rune) rune {
