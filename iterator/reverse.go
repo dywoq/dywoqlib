@@ -55,6 +55,16 @@ func (r *Reverse[T]) Reset() {
 	r.pos = 0
 }
 
+// Length returns the current length ofthe slice.
+// If an error has occured (f.err is not nil), it returns 0.
+func (r *Reverse[T]) Length() int {
+	if r.err != nil {
+		return 0
+	}
+	return len(r.data)
+}
+
+
 func (r *Reverse[T]) zero() T {
 	var zero T
 	return zero

@@ -12,4 +12,6 @@ type Base[T comparable] interface {
 	Next() bool
 	// Reset resets the iterator to its initial state.
 	Reset()
+	// Length returns the current length ofthe slice.
+	Length() int
 }

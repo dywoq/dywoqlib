@@ -56,6 +56,15 @@ func (f *Forward[T]) Reset() {
 	f.pos = 0
 }
 
+// Length returns the current length ofthe slice.
+// If an error has occured (f.err is not nil), it returns 0.
+func (f *Forward[T]) Length() int {
+	if f.err != nil {
+		return 0
+	}
+	return len(f.data)
+}
+
 func (f *Forward[T]) zero() T {
 	var zero T
 	return zero
