@@ -1,4 +1,4 @@
-package traits
+package sliceutil
 
 import "errors"
 
