@@ -54,8 +54,7 @@ func (d *Dynamic[T]) Find(req T) T {
 	if d.err != nil {
 		return d.zero()
 	}
-	it := d.Iterating().Forward()
-	found, err := sliceutil.Find(req, it)
+	found, err := sliceutil.Find(req, d.Iterating().Forward())
 	if err != nil {
 		return d.zero()
 	}
