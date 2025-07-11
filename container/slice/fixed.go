@@ -36,6 +36,10 @@ func (f *Fixed[T]) Iterating() *iterator.Combined[T] {
 }
 
 func (f *Fixed[T]) Append(elems ...T) []T {
+	if f.d.Length() < f.fixedLen {
+		f.err = ErrFixedLengthOutOfBounds
+		return []T{}
+	}
 	if f.err != nil {
 		return []T{}
 	}
@@ -48,6 +52,10 @@ func (f *Fixed[T]) Append(elems ...T) []T {
 }
 
 func (f *Fixed[T]) At(i int) T {
+	if f.d.Length() < f.fixedLen {
+		f.err = ErrFixedLengthOutOfBounds
+		return f.zero()
+	}
 	if f.err != nil {
 		return f.zero()
 	}
@@ -60,6 +68,10 @@ func (f *Fixed[T]) At(i int) T {
 }
 
 func (f *Fixed[T]) Find(req T) T {
+	if f.d.Length() < f.fixedLen {
+		f.err = ErrFixedLengthOutOfBounds
+		return f.zero()
+	}
 	if f.err != nil {
 		return f.zero()
 	}
@@ -84,6 +96,10 @@ func (f *Fixed[T]) String() string {
 }
 
 func (f *Fixed[T]) Set(elem T, i int) T {
+	if f.d.Length() < f.fixedLen {
+		f.err = ErrFixedLengthOutOfBounds
+		return f.zero()
+	}
 	if f.err != nil {
 		return f.zero()
 	}
@@ -96,6 +112,10 @@ func (f *Fixed[T]) Set(elem T, i int) T {
 }
 
 func (f *Fixed[T]) Delete(i int) T {
+	if f.d.Length() < f.fixedLen {
+		f.err = ErrFixedLengthOutOfBounds
+		return f.zero()
+	}
 	if f.err != nil {
 		return f.zero()
 	}
@@ -108,6 +128,10 @@ func (f *Fixed[T]) Delete(i int) T {
 }
 
 func (f *Fixed[T]) Insert(i int, elem T) T {
+	if f.d.Length() < f.fixedLen {
+		f.err = ErrFixedLengthOutOfBounds
+		return f.zero()
+	}
 	if f.err != nil {
 		return f.zero()
 	}
