@@ -108,3 +108,16 @@ func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
 	d.err = ErrKeyNotFound
 	return
 }
+
+func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
+	if d.err != nil {
+		return
+	}
+	if d.Exists(reqkey) {
+		k = reqkey
+		v = d.m[reqkey]
+		return
+	}
+	d.err = ErrKeyNotFound
+	return
+}

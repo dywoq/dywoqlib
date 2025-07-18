@@ -150,6 +150,28 @@ func (f *Fixed[K, V]) Delete(reqkey K) (k K) {
 	return
 }
 
+func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
+	if f.err != nil {
+		return
+	}
+	if f.m.Error() != nil {
+		f.err = f.m.Error()
+		return
+	}
+	if f.outOfBounds() {
+		f.err = ErrOutOfBounds
+		return
+	}
+	res1, res2 := f.m.Get(reqkey)
+	if f.m.Error() != nil {
+		f.err = f.m.Error()
+		return
+	}
+	k = res1
+	v = res2
+	return
+}
+
 func (f *Fixed[K, V]) outOfBounds() bool {
 	return f.m.Length() > f.fixedLen
 }
