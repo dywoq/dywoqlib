@@ -47,7 +47,7 @@ func (f *Fixed[K, V]) Exists(reqkey K) bool {
 	return f.m.Exists(reqkey)
 }
 
-func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) {
+func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	if f.err != nil {
 		return
 	}
@@ -59,13 +59,16 @@ func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) {
 		f.err = ErrOutOfBounds
 		return
 	}
-	f.m.Add(reqkey, reqvalue)
+	res1, res2 := f.m.Add(reqkey, reqvalue)
 	if f.m.Error() != nil {
 		f.err = f.m.Error()
 	}
+	k = res1
+	v = res2
+	return
 }
 
-func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) {
+func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	if f.err != nil {
 		return
 	}
@@ -77,10 +80,13 @@ func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) {
 		f.err = ErrOutOfBounds
 		return
 	}
-	f.m.Set(reqkey, reqvalue)
+	res1, res2 := f.m.Set(reqkey, reqvalue)
 	if f.m.Error() != nil {
 		f.err = f.m.Error()
 	}
+	k = res1
+	v = res2
+	return
 }
 
 func (f *Fixed[K, V]) Keys() []K {
