@@ -1,6 +1,11 @@
 package mapn
 
-import "github.com/dywoq/dywoqlib/container/slice"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/dywoq/dywoqlib/container/slice"
+)
 
 type Dynamic[K, V comparable] struct {
 	err error
@@ -120,4 +125,24 @@ func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
 	}
 	d.err = ErrKeyNotFound
 	return
+}
+
+func (d *Dynamic[K, V]) String() string {
+	if d.err != nil {
+		return ""
+	}
+	if len(d.m) == 0 {
+		return ""
+	}
+	var b strings.Builder
+	b.WriteString("{\n")
+	for key, value := range d.m {
+		_, err := fmt.Fprintf(&b, "  %v: %v\n", key, value)
+		if err != nil {
+			d.err = err
+			return ""
+		}
+	}
+	b.WriteString("}")
+	return b.String()
 }

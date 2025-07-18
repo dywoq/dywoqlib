@@ -14,8 +14,11 @@ func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 	if fixedLen < 0 {
 		return &Fixed[K, V]{ErrNegativeFixedLength, fixedLen, nil}
 	}
-	if len(m) < fixedLen {
+	if fixedLen < len(m) {
 		return &Fixed[K, V]{ErrFixedLengthOutOfBounds, fixedLen, nil}
+	}
+	if len(m) > fixedLen {
+		return &Fixed[K, V]{ErrOutOfBounds, fixedLen, nil}
 	}
 	d.Grow(fixedLen)
 	for key, value := range m {
@@ -114,6 +117,18 @@ func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
 	k = res1
 	v = res2
 	return
+}
+
+func (f *Fixed[K, V]) String() string {
+	if ok := f.errorsOk(); !ok {
+		return ""
+	}
+	res := f.m.String()
+	if f.m.Error() != nil {
+		f.err = f.m.Error()
+		return ""
+	}
+	return res
 }
 
 func (f *Fixed[K, V]) outOfBounds() bool {
