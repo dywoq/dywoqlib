@@ -95,3 +95,16 @@ func (d *Dynamic[K, V]) Values() []V {
 	}
 	return values.Native()
 }
+
+func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
+	if d.err != nil {
+		return
+	}
+	if d.Exists(reqkey) {
+		delete(d.m, reqkey)
+		k = reqkey
+		return
+	}
+	d.err = ErrKeyNotFound
+	return
+}
