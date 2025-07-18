@@ -6,7 +6,7 @@ func TestComparable(t *testing.T) {
 	tests := []struct {
 		got, want bool
 	}{
-		{!Comparable[int](), true},
+		{Comparable[int](), true},
 		{Comparable[map[string]int](), false},
 	}
 
