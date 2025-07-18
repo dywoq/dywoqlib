@@ -28,7 +28,16 @@ func (d *Dynamic[K, V]) Grow(i int) {
 	if d.err != nil {
 		return
 	}
-	d.m = make(map[K]V, i)
+	if len(d.m) == 0 {
+		d.m = make(map[K]V, i)
+		return
+	}
+
+	newMap := make(map[K]V, max(len(d.m), i))
+	for k, v := range d.m {
+		newMap[k] = v
+	}
+	d.m = newMap
 }
 
 func (d *Dynamic[K, V]) Exists(reqkey K) (exists bool) {

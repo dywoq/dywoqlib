@@ -18,7 +18,11 @@ func (d *Dynamic[T]) Grow(i int) {
 	if d.err != nil {
 		return
 	}
-	d.s = make([]T, i)
+	if cap(d.s) < i {
+		newSlice := make([]T, len(d.s), i)
+		copy(newSlice, d.s)
+		d.s = newSlice
+	}
 }
 
 func (d *Dynamic[T]) Native() []T {
