@@ -11,6 +11,14 @@ func NewDynamic[K, V comparable](m map[K]V) *Dynamic[K, V] {
 	return &Dynamic[K, V]{nil, m}
 }
 
+func (d *Dynamic[K, V]) Length() int {
+	return len(d.m)
+}
+
+func (d *Dynamic[K, V]) Error() error {
+	return d.err
+}
+
 func (d *Dynamic[K, V]) Grow(i int) {
 	if d.err != nil {
 		return
