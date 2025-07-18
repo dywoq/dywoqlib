@@ -17,6 +17,8 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: '1.24.4'
+    - name: Benchmarks
+      run: go test -bench=. ./...
 
     - name: Test
       run: go test -v ./...
