@@ -10,12 +10,19 @@ type Dynamic[T comparable] struct {
 	s   []T
 }
 
-func NewDynamic[T comparable](s []T) *Dynamic[T] {
-	return &Dynamic[T]{nil, s}
+func NewDynamic[T comparable](elems ...T) *Dynamic[T] {
+	return &Dynamic[T]{nil, elems}
 }
 
-func (d *Dynamic[T]) Reserve(cap int) {
-	d.s = make([]T, cap)
+func (d *Dynamic[T]) Grow(i int) {
+	if d.err != nil {
+		return
+	}
+	d.s = make([]T, i)
+}
+
+func (d *Dynamic[T]) Native() []T {
+	return d.s
 }
 
 func (d *Dynamic[T]) Error() error {

@@ -8,19 +8,24 @@ type Fixed[T comparable] struct {
 	d        *Dynamic[T]
 }
 
-func NewFixed[T comparable](fixedLen int, s []T) *Fixed[T] {
-	err := error(nil)
-	if fixedLen < 0 {
-		err = ErrNegativeFixedLength
-	}
-	if len(s) < fixedLen {
-		err = ErrFixedLengthOutOfBounds
-	}
-	d := NewDynamic(s)
+func NewFixed[T comparable](fixedLen int, elems ...T) *Fixed[T] {
+	d := NewDynamic[T]()
 	if d.Error() != nil {
-		err = d.Error()
+		return &Fixed[T]{d.Error(), fixedLen, nil}
 	}
-	return &Fixed[T]{err, fixedLen, d}
+	if fixedLen < 0 {
+		return &Fixed[T]{ErrNegativeFixedLength, fixedLen, nil}
+	}
+	if len(elems) < fixedLen {
+		return &Fixed[T]{ErrFixedLengthOutOfBounds, fixedLen, nil}
+	}
+	d.Grow(fixedLen)
+	d.Append(elems...)
+	return &Fixed[T]{nil, fixedLen, d}
+}
+
+func (f *Fixed[T]) Native() []T {
+	return f.d.Native()
 }
 
 func (f *Fixed[T]) Error() error {
