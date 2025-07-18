@@ -3,10 +3,16 @@ package polymorph
 import "testing"
 
 func TestComparable(t *testing.T) {
-	if !Comparable[int]() {
-		t.Errorf("!Comparable[int]() = false, want true")
+	tests := []struct {
+		got, want bool
+	}{
+		{!Comparable[int](), true},
+		{Comparable[map[string]int](), false},
 	}
-	if Comparable[map[string]int]() {
-		t.Errorf("!Comparable[int]() = false, want true")
+
+	for _, test := range tests {
+		if test.got != test.want {
+			t.Errorf("got %v, want %v", test.got, test.want)
+		}
 	}
 }
