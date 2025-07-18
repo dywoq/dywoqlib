@@ -7,7 +7,7 @@ type Fixed[K, V comparable] struct {
 }
 
 func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
-	d := NewDynamic(m)
+	d := NewDynamic(map[K]V{})
 	if d.Error() != nil {
 		return &Fixed[K, V]{d.Error(), fixedLen, nil}
 	}
@@ -18,6 +18,9 @@ func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 		return &Fixed[K, V]{ErrFixedLengthOutOfBounds, fixedLen, nil}
 	}
 	d.Grow(fixedLen)
+	for key, value := range m {
+		d.Add(key, value)
+	}
 	return &Fixed[K, V]{nil, fixedLen, d}
 }
 
