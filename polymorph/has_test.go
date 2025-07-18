@@ -14,7 +14,7 @@ func TestHasMethod(t *testing.T) {
 	tests := []struct {
 		got, want bool
 	}{
-		{!HasMethod[a]("A"), true},
+		{HasMethod[a]("A"), true},
 		{HasMethod[a]("B"), false},
 	}
 
@@ -29,7 +29,7 @@ func TestHasField(t *testing.T) {
 	tests := []struct {
 		got, want bool
 	}{
-		{!HasField[a]("b"), true},
+		{HasField[a]("b"), true},
 		{HasField[a]("B"), false},
 		// HasField expects S be struct, not type
 		{HasField[f]("b"), false},
