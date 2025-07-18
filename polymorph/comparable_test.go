@@ -4,15 +4,16 @@ import "testing"
 
 func TestComparable(t *testing.T) {
 	tests := []struct {
+		body string
 		got, want bool
 	}{
-		{Comparable[int](), true},
-		{Comparable[map[string]int](), false},
+		{"Comparable[int]()", Comparable[int](), true},
+		{"Comparable[map[string]int]()", Comparable[map[string]int](), false},
 	}
 
 	for _, test := range tests {
 		if test.got != test.want {
-			t.Errorf("got %v, want %v", test.got, test.want)
+			t.Errorf("%s = %v, want %v", test.body, test.got, test.want)
 		}
 	}
 }
