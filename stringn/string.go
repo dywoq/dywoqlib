@@ -173,7 +173,7 @@ func (s *String) Insert(i int, r rune) rune {
 		return s.zero()
 	}
 	rs := s.runes()
-	updatedRs, err := insertRune(i, r, rs)
+	updatedRs, err := s.insertRune(i, r, rs)
 	if err != nil {
 		s.err = err
 		return s.zero()
@@ -250,10 +250,10 @@ func (s *String) zero() rune {
 	return 0
 }
 
-func insertRune[T comparable](i int, elem T, s []T) ([]T, error) {
+func (*String) insertRune(i int, elem rune, s []rune) ([]rune, error) {
 	if i < 0 || i > len(s) {
-		var zero T
-		return []T{zero}, ErrIndexOutOfBounds
+		zero := rune(0)
+		return []rune{zero}, ErrIndexOutOfBounds
 	}
 	return slices.Insert(s, i, elem), nil
 }
