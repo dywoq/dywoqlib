@@ -171,23 +171,28 @@ func (s *String) Insert(i int, r rune) rune {
 	if s.err != nil {
 		return s.zero()
 	}
-	inserted, err := sliceutil.Insert(i, r, s.runes())
+	rs := s.runes()
+	_, err := sliceutil.Insert(i, r, rs)
 	if err != nil {
 		s.err = err
 		return s.zero()
 	}
-	return inserted
+	s.updateBuffer(rs)
+	return r
 }
 
 func (s *String) Set(r rune, i int) rune {
 	if s.err != nil {
 		return s.zero()
 	}
-	new, err := sliceutil.Set(r, i, s.runes())
+	rs := s.runes()
+	newR, err := sliceutil.Set(r, i, rs)
 	if err != nil {
 		s.err = err
+		return s.zero()
 	}
-	return new
+	s.updateBuffer(rs)
+	return newR
 }
 
 func (s *String) ContainsRune(r rune) bool {
@@ -231,6 +236,13 @@ func (s *String) runes() []rune {
 		runes = append(runes, r)
 	}
 	return runes
+}
+
+func (s *String) updateBuffer(rs []rune) {
+	s.b.Reset()
+	for _, r := range rs {
+		s.b.WriteRune(r)
+	}
 }
 
 func (s *String) zero() rune {

@@ -140,7 +140,7 @@ func TestInsert(t *testing.T) {
 
 	for _, test := range tests {
 		if test.got != test.want {
-			t.Errorf("%s = %v, want %v", test.body, test.got, test.want)
+			t.Errorf("%s = %v, want %v", test.body, string(test.got), string(test.want))
 		}
 	}
 }
@@ -195,8 +195,13 @@ func TestRead(t *testing.T) {
 	str1 := New("hello")
 	got, _ := io.ReadAll(str1)
 	want := str1.Native()
-	if string(got) != want {
-		t.Errorf("got %v, want %v", got, want)
+
+	if str1.Error() != nil {
+		t.Fatal(str1.Error())
+	}
+
+	if string(got) != string(want) {
+		t.Errorf("got %v, want %v", string(got), string(want))
 	}
 }
 
@@ -230,8 +235,10 @@ func TestNative(t *testing.T) {
 
 func TestSet(t *testing.T) {
 	str1 := New("hello")
-	_ = str1.Set('H', 0)
-
+	str1.Set('H', 0)
+	if str1.Error() != nil {
+		t.Fatal(str1.Error())
+	}
 	want := "Hello"
 	if str1.Native() != want {
 		t.Errorf("got %s, want %s", str1.Native(), want)
