@@ -23,6 +23,10 @@ func (f *Fifo[T]) Error() error {
 	return f.err
 }
 
+func (f *Fifo[T]) Empty() bool {
+	return f.d.Length() == 0
+}
+
 func (f *Fifo[T]) Length() int {
 	return f.d.Length()
 }
