@@ -134,6 +134,28 @@ func (d *Dynamic[T]) Insert(i int, elem T) T {
 	return inserted
 }
 
+func (d *Dynamic[T]) Front() T {
+	if d.err != nil {
+		return d.zero()
+	}
+	got := d.At(0)
+	if d.err != nil {
+		return d.zero()
+	}
+	return got
+}
+
+func (d *Dynamic[T]) Back() T {
+	if d.err != nil {
+		return d.zero()
+	}
+	got := d.At(len(d.s) - 1)
+	if d.err != nil {
+		return d.zero()
+	}
+	return got
+}
+
 func (d *Dynamic[T]) zero() T {
 	var zero T
 	return zero

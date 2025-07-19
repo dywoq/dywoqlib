@@ -141,6 +141,30 @@ func (f *Fixed[T]) Insert(i int, elem T) T {
 	return inserted
 }
 
+func (f *Fixed[T]) Front() T {
+	if ok := f.errorsOk(); !ok {
+		return f.zero()
+	}
+	got := f.d.Front()
+	if f.d.Error() != nil {
+		f.err = f.d.Error()
+		return f.zero()
+	}
+	return got
+}
+
+func (f *Fixed[T]) Back() T {
+	if ok := f.errorsOk(); !ok {
+		return f.zero()
+	}
+	got := f.d.Back()
+	if f.d.Error() != nil {
+		f.err = f.d.Error()
+		return f.zero()
+	}
+	return got
+}
+
 func (f *Fixed[T]) outOfBounds() bool {
 	return len(f.d.s) > f.fixedLen
 }
