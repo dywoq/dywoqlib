@@ -27,6 +27,7 @@ func Format[T comparable](s []T) (string, error) {
 		return "", nil
 	}
 	var b strings.Builder
+	b.WriteString("[")
 	for i, elem := range s {
 		_, err := fmt.Fprintf(&b, "%v", elem)
 		if err != nil {
@@ -39,6 +40,7 @@ func Format[T comparable](s []T) (string, error) {
 			}
 		}
 	}
+	b.WriteString("]")
 	return b.String(), nil
 }
 
