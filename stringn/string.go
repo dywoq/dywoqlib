@@ -230,6 +230,107 @@ func (s *String) Read(p []byte) (n int, err error) {
 	return s.b.Read(p)
 }
 
+func (s *String) Clear() {
+	if s.err != nil {
+		return
+	}
+	s.b.Reset()
+}
+
+func (s *String) Prepend(strs ...string) []string {
+	if s.err != nil {
+		return []string{}
+	}
+	currentStr := s.b.String()
+	var prependedStr string
+	for _, str := range strs {
+		prependedStr += str
+	}
+	s.b.Reset()
+	s.b.WriteString(prependedStr + currentStr)
+	return []string{s.b.String()}
+}
+
+func (s *String) Remove(start, end int) rune {
+	if s.err != nil {
+		return rune(0)
+	}
+	rs := s.runes()
+	if start < 0 || end > len(rs) || start > end {
+		s.err = ErrInvalidIndexForRemoval
+		return s.zero()
+	}
+	removedRune := rs[start]
+	s.updateBuffer(append(rs[:start], rs[end:]...))
+	return removedRune
+}
+
+func (s *String) Replace(old, new string) {
+	if s.err != nil {
+		return
+	}
+	newStr := strings.ReplaceAll(s.b.String(), old, new)
+	s.b.Reset()
+	s.b.WriteString(newStr)
+}
+
+func (s *String) Reverse() {
+	rs := s.runes()
+	for i, j := 0, len(rs)-1; i < j; i, j = i+1, j-1 {
+		rs[i], rs[j] = rs[j], rs[i]
+	}
+	s.updateBuffer(rs)
+}
+
+func (s *String) ToLower() string {
+	if s.err != nil {
+		return ""
+	}
+	return strings.ToLower(s.b.String())
+}
+
+func (s *String) ToUpper() string {
+	if s.err != nil {
+		return ""
+	}
+	return strings.ToUpper(s.b.String())
+}
+
+func (s *String) Compare(str string) int {
+	if s.err != nil {
+		return 0
+	}
+	return strings.Compare(s.b.String(), str)
+}
+
+func (s *String) Equals(str string) bool {
+	if s.err != nil {
+		return false
+	}
+	return s.b.String() == str
+}
+
+func (s *String) Split(sep string) []string {
+	return strings.Split(s.b.String(), sep)
+}
+
+func (s *String) Substring(start, end int) string {
+	if s.err != nil {
+		return ""
+	}
+	rs := s.runes()
+	if start < 0 {
+		start = 0
+	}
+	if end > len(rs) {
+		end = len(rs)
+	}
+	if start > end {
+		return ""
+	}
+	return string(rs[start:end])
+}
+
 func (s *String) runes() []rune {
 	numRunes := utf8.RuneCountInString(s.b.String())
 	runes := make([]rune, 0, numRunes)

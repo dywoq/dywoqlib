@@ -17,6 +17,7 @@ package stringn
 import "errors"
 
 var (
-	ErrIndexOutOfBounds = errors.New("github.com/dywoq/dywoqlib/stringn: index out of bounds")
-	ErrRuneNotFound     = errors.New("github.com/dywoq/dywoqlib/stringn: rune not found ")
+	ErrIndexOutOfBounds       = errors.New("github.com/dywoq/dywoqlib/stringn: index out of bounds")
+	ErrRuneNotFound           = errors.New("github.com/dywoq/dywoqlib/stringn: rune not found ")
+	ErrInvalidIndexForRemoval = errors.New("github.com/dywoq/dywoqlib/stringn: invalid index for removal")
 )
