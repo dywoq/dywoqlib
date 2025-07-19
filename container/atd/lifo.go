@@ -7,6 +7,14 @@ type Lifo[T comparable] struct {
 	d   *slice.Dynamic[T]
 }
 
+func NewLifo[T comparable]() *Lifo[T] {
+	d := slice.NewDynamic[T]()
+	if d.Error() != nil {
+		return &Lifo[T]{d.Error(), nil}
+	}
+	return &Lifo[T]{nil, d}
+}
+
 func (l *Lifo[T]) Error() error {
 	return l.err
 }

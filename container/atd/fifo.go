@@ -7,6 +7,14 @@ type Fifo[T comparable] struct {
 	d   *slice.Dynamic[T]
 }
 
+func NewFifo[T comparable]() *Fifo[T] {
+	d := slice.NewDynamic[T]()
+	if d.Error() != nil {
+		return &Fifo[T]{d.Error(), nil}
+	}
+	return &Fifo[T]{nil, d}
+}
+
 func (f *Fifo[T]) Error() error {
 	return f.err
 }
