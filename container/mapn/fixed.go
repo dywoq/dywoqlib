@@ -14,12 +14,20 @@
 
 package mapn
 
+// Fixed is a generic, fixed-length map container that wraps a Dynamic map.
+// It enforces a fixed length and can store an error state.
+// K and V must be comparable.
 type Fixed[K, V comparable] struct {
 	err      error
 	fixedLen int
 	m        *Dynamic[K, V]
 }
 
+// NewFixed creates a new Fixed map container with a specified fixed length and initial map values.
+// It returns a pointer to a Fixed[K, V] instance. If the provided fixedLen is negative, less than
+// the length of the initial map, or if there is an error initializing the underlying dynamic map,
+// the returned Fixed will contain the appropriate error. The function ensures that the resulting
+// container has a capacity of at least fixedLen and is initialized with the contents of m.
 func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 	d := NewDynamic(map[K]V{})
 	if d.Error() != nil {
@@ -41,14 +49,20 @@ func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 	return &Fixed[K, V]{nil, fixedLen, d}
 }
 
+// Length returns the number of key-value pairs currently stored in the Fixed map.
 func (f *Fixed[K, V]) Length() int {
 	return f.m.Length()
 }
 
+// Error returns the error associated with the Fixed container, if any.
+// It implements the error interface for the Fixed type.
 func (f *Fixed[K, V]) Error() error {
 	return f.err
 }
 
+// Exists checks whether the specified key exists in the Fixed map.
+// It first verifies the internal error state; if an error is present, it returns false.
+// Otherwise, it delegates the existence check to the underlying map.
 func (f *Fixed[K, V]) Exists(reqkey K) bool {
 	if ok := f.errorsOk(); !ok {
 		return false
@@ -56,6 +70,9 @@ func (f *Fixed[K, V]) Exists(reqkey K) bool {
 	return f.m.Exists(reqkey)
 }
 
+// Add inserts the specified key-value pair (reqkey, reqvalue) into the Fixed map.
+// It returns the resulting key and value after insertion. If an error occurs during
+// the operation, the error is stored internally and the zero values for K and V are returned.
 func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
@@ -69,6 +86,10 @@ func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	return
 }
 
+// Set inserts or updates the value associated with the given key in the Fixed map.
+// If there are any existing errors in the Fixed instance, the operation is skipped and zero values are returned.
+// The method returns the key and value as stored in the underlying map.
+// If an error occurs during the operation, it is recorded in the Fixed instance's error field.
 func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
@@ -82,6 +103,9 @@ func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	return
 }
 
+// Keys returns a slice containing all the keys present in the Fixed map.
+// If there are any existing errors in the Fixed instance or in the underlying map,
+// it returns an empty slice and sets the error state accordingly.
 func (f *Fixed[K, V]) Keys() []K {
 	if ok := f.errorsOk(); !ok {
 		return []K{}
@@ -94,6 +118,9 @@ func (f *Fixed[K, V]) Keys() []K {
 	return keys
 }
 
+// Values returns a slice containing all the values stored in the Fixed map.
+// If there are any errors detected by errorsOk or if the underlying map has an error,
+// it returns an empty slice and sets the error state accordingly.
 func (f *Fixed[K, V]) Values() []V {
 	if ok := f.errorsOk(); !ok {
 		return []V{}
@@ -106,6 +133,10 @@ func (f *Fixed[K, V]) Values() []V {
 	return values
 }
 
+// Delete removes the entry with the specified key (reqkey) from the Fixed map.
+// If there are any existing errors in the Fixed instance, the operation is aborted.
+// After attempting deletion, if an error occurs in the underlying map, it is stored in the Fixed instance's error field.
+// The method returns the key that was deleted, or the zero value of K if the operation was not successful.
 func (f *Fixed[K, V]) Delete(reqkey K) (k K) {
 	if ok := f.errorsOk(); !ok {
 		return
@@ -119,6 +150,11 @@ func (f *Fixed[K, V]) Delete(reqkey K) (k K) {
 	return
 }
 
+// Get retrieves the value associated with the provided key from the Fixed map.
+// It returns the key and its corresponding value. If an error occurs during the
+// retrieval process or if the Fixed map is in an error state, the returned key
+// and value will be their zero values. Any error encountered is stored in the
+// Fixed struct's err field.
 func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
@@ -133,6 +169,9 @@ func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
 	return
 }
 
+// String returns the string representation of the Fixed map. 
+// If there are any errors detected by errorsOk or from the underlying map's Error method, 
+// it sets the error field and returns an empty string.
 func (f *Fixed[K, V]) String() string {
 	if ok := f.errorsOk(); !ok {
 		return ""

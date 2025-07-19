@@ -15,29 +15,43 @@
 package mapn
 
 import (
+	"maps"
 	"fmt"
 	"strings"
 
 	"github.com/dywoq/dywoqlib/container/slice"
 )
 
+// Dynamic is a generic container that wraps a map with keys of type K and values of type V.
+// It also includes an error field to track any errors associated with the map operations.
+// K and V must be comparable types.
 type Dynamic[K, V comparable] struct {
 	err error
 	m   map[K]V
 }
 
+// NewDynamic creates and returns a new Dynamic instance wrapping the provided map m.
+// K and V are the key and value types of the map, which must be comparable.
+// The returned Dynamic can be used to perform dynamic operations on the underlying map.
 func NewDynamic[K, V comparable](m map[K]V) *Dynamic[K, V] {
 	return &Dynamic[K, V]{nil, m}
 }
 
+// Length returns the number of key-value pairs currently stored in the Dynamic map.
 func (d *Dynamic[K, V]) Length() int {
 	return len(d.m)
 }
 
+// Error returns the last error encountered by the Dynamic container, or nil if no error has occurred.
 func (d *Dynamic[K, V]) Error() error {
 	return d.err
 }
 
+// Grow increases the capacity of the underlying map to accommodate at least i elements.
+// If the map is empty, it initializes the map with the specified capacity.
+// If the map already contains elements, it creates a new map with a capacity equal to
+// the greater of the current length or i, and copies all existing elements into it.
+// If an error is present in the Dynamic instance, the method returns immediately.
 func (d *Dynamic[K, V]) Grow(i int) {
 	if d.err != nil {
 		return
@@ -48,12 +62,13 @@ func (d *Dynamic[K, V]) Grow(i int) {
 	}
 
 	newMap := make(map[K]V, max(len(d.m), i))
-	for k, v := range d.m {
-		newMap[k] = v
-	}
+	maps.Copy(newMap, d.m)
 	d.m = newMap
 }
 
+// Exists checks if the specified key exists in the dynamic map.
+// It returns true if the key is present, and false otherwise.
+// If the Dynamic instance has an error state (d.err != nil), it always returns false.
 func (d *Dynamic[K, V]) Exists(reqkey K) (exists bool) {
 	if d.err != nil {
 		return false
@@ -62,6 +77,11 @@ func (d *Dynamic[K, V]) Exists(reqkey K) (exists bool) {
 	return
 }
 
+// Add attempts to add a key-value pair (reqkey, reqvalue) to the Dynamic map.
+// If the key does not already exist, it inserts the pair and returns the key and value.
+// If the key already exists, it sets an error (ErrKeyAlreadyExist) and returns zero values.
+// If the Dynamic instance has a pre-existing error, the operation is skipped and zero values are returned.
+// Returns the inserted key and value on success, or zero values on failure.
 func (d *Dynamic[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	if d.err != nil {
 		return
@@ -76,6 +96,10 @@ func (d *Dynamic[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	return
 }
 
+// Set attempts to update the value associated with the given key in the Dynamic map.
+// If the key exists, it sets the value to reqvalue and returns the key and value.
+// If the key does not exist, it sets an internal error (ErrKeyNotFound) and returns zero values.
+// If a previous error exists in the Dynamic instance, the method returns immediately with zero values.
 func (d *Dynamic[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	if d.err != nil {
 		return
@@ -90,6 +114,10 @@ func (d *Dynamic[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	return
 }
 
+// Keys returns a slice containing all the keys present in the Dynamic map.
+// If an internal error has occurred, it returns an empty slice.
+// The method uses a fixed-size slice to collect the keys efficiently.
+// If an error occurs while appending keys, it sets the internal error state and returns an empty slice.
 func (d *Dynamic[K, V]) Keys() []K {
 	if d.err != nil {
 		return []K{}
@@ -108,6 +136,11 @@ func (d *Dynamic[K, V]) Keys() []K {
 	return keys.Native()
 }
 
+// Values returns a slice containing all the values stored in the Dynamic map.
+// If an internal error has occurred, it returns an empty slice.
+// The method collects the values using a fixed-size slice and handles any errors
+// that may arise during the collection process. If an error occurs while appending
+// values, it sets the internal error state and returns an empty slice.
 func (d *Dynamic[K, V]) Values() []V {
 	if d.err != nil {
 		return []V{}
@@ -124,6 +157,10 @@ func (d *Dynamic[K, V]) Values() []V {
 	return values.Native()
 }
 
+// Delete removes the entry with the specified key from the Dynamic map.
+// If the key exists, it is deleted and the key is returned.
+// If the key does not exist, the error field is set to ErrKeyNotFound and the zero value of K is returned.
+// If the Dynamic instance already has an error, the method returns immediately without performing any operation.
 func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
 	if d.err != nil {
 		return
@@ -137,6 +174,10 @@ func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
 	return
 }
 
+// Get retrieves the value associated with the given key from the Dynamic map.
+// If the key exists, it returns the key and its corresponding value.
+// If the key does not exist, it sets the internal error to ErrKeyNotFound and returns zero values for K and V.
+// If there is a pre-existing error in the Dynamic instance, it returns zero values for K and V immediately.
 func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
 	if d.err != nil {
 		return
@@ -150,6 +191,10 @@ func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
 	return
 }
 
+// String returns a formatted string representation of the Dynamic map.
+// If an error has previously occurred or the map is empty, it returns an empty string.
+// The output is a multi-line string with each key-value pair on a new line, enclosed in braces.
+// If formatting fails, it sets the error in the Dynamic struct and returns an empty string.
 func (d *Dynamic[K, V]) String() string {
 	if d.err != nil {
 		return ""

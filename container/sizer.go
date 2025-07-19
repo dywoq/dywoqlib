@@ -14,6 +14,7 @@
 
 package container
 
+// Sizer is an interface that defines a method for increasing the capacity of a container or data structure.
 type Sizer interface {
 	Grow(i int)
 }
