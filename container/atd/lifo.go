@@ -7,6 +7,10 @@ type Lifo[T comparable] struct {
 	d   *slice.Dynamic[T]
 }
 
+func (l *Lifo[T]) Error() error {
+	return l.err
+}
+
 func (l *Lifo[T]) Length() int {
 	return l.d.Length()
 }
