@@ -214,8 +214,14 @@ func (s *String) Write(p []byte) (int, error) {
 	if s.err != nil {
 		return len(p), s.err
 	}
-	n, err := s.b.Write(p)
-	return n, err
+	return s.b.Write(p)
+}
+
+func (s *String) Read(p []byte) (n int, err error) {
+	if s.err != nil {
+		return 0, s.err
+	}
+	return s.b.Read(p)
 }
 
 func (s *String) runes() []rune {
