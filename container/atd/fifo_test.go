@@ -70,3 +70,43 @@ func TestFifoString(t *testing.T) {
 		t.Errorf("got %v, want %v", got, want)
 	}
 }
+
+func TestFifoFront(t *testing.T) {
+	f := NewFifo[int]()
+	f.Append(2)
+	f.Append(3)
+
+	tests := []struct {
+		body      string
+		got, want bool
+	}{
+		{"f.Front() == 2", f.Front() == 2, true},
+		{"f.Front() == 3", f.Front() == 3, false},
+	}
+
+	for _, test := range tests {
+		if test.got != test.want {
+			t.Errorf("%s = %v, want %v", test.body, test.got, test.want)
+		}
+	}
+}
+
+func TestFifoBack(t *testing.T) {
+	f := NewFifo[int]()
+	f.Append(2)
+	f.Append(3)
+
+	tests := []struct {
+		body      string
+		got, want bool
+	}{
+		{"f.Back() == 3", f.Back() == 3, true},
+		{"f.Back() == 2", f.Back() == 2, false},
+	}
+
+	for _, test := range tests {
+		if test.got != test.want {
+			t.Errorf("%s = %v, want %v", test.body, test.got, test.want)
+		}
+	}
+}
