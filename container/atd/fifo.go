@@ -63,6 +63,13 @@ func (f *Fifo[T]) Pop() T {
 	return res
 }
 
+func (f *Fifo[T]) String() string {
+	if f.err != nil {
+		return ""
+	}
+	return f.d.String()
+}
+
 func (f *Fifo[T]) zero() T {
 	var zero T
 	return zero

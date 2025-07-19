@@ -55,6 +55,13 @@ func (l *Lifo[T]) Top() T {
 	return res
 }
 
+func (l *Lifo[T]) String() string {
+	if l.err != nil {
+		return ""
+	}
+	return l.d.String()
+}
+
 func (l *Lifo[T]) zero() T {
 	var zero T
 	return zero
