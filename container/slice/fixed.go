@@ -165,6 +165,18 @@ func (f *Fixed[T]) Back() T {
 	return got
 }
 
+func (f *Fixed[T]) Pop() T {
+	if ok := f.errorsOk(); !ok {
+		return f.zero()
+	}
+	got := f.d.Pop()
+	if f.d.Error() != nil {
+		f.err = f.d.Error()
+		return f.zero()
+	}
+	return got
+}
+
 func (f *Fixed[T]) outOfBounds() bool {
 	return len(f.d.s) > f.fixedLen
 }

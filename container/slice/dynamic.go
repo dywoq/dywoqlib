@@ -156,6 +156,22 @@ func (d *Dynamic[T]) Back() T {
 	return got
 }
 
+func (d *Dynamic[T]) Pop() T {
+	if d.err != nil {
+		return d.zero()
+	}
+	if d.err != nil {
+		return d.zero()
+	}
+	if len(d.s) == 0 {
+		return d.zero()
+	}
+	lastIdx := len(d.s) - 1
+	poppedElem := d.s[lastIdx]
+	d.s = d.s[:lastIdx]
+	return poppedElem
+}
+
 func (d *Dynamic[T]) zero() T {
 	var zero T
 	return zero
