@@ -130,18 +130,13 @@ func TestHasStringSuffix(t *testing.T) {
 
 func TestInsert(t *testing.T) {
 	str1 := New("bye")
-	tests := []struct {
-		body      string
-		got, want rune
-	}{
-		{"str1.Insert(str1.Length()-1, 'H')", str1.Insert(str1.Length()-1, 'H'), 'H'},
-		{"str1.Insert(0, 'H')", str1.Insert(0, 'b'), 'b'},
+	str1.Insert(str1.Length()-1, 'H')
+	if str1.Error() != nil {
+		t.Fatal(str1.Error())
 	}
-
-	for _, test := range tests {
-		if test.got != test.want {
-			t.Errorf("%s = %v, want %v", test.body, string(test.got), string(test.want))
-		}
+	want := "byeH"
+	if str1.Native() != want {
+		t.Errorf("got %s, want %s", str1.Native(), want)
 	}
 }
 
