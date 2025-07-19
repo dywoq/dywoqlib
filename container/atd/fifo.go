@@ -15,6 +15,10 @@ func NewFifo[T comparable]() *Fifo[T] {
 	return &Fifo[T]{nil, d}
 }
 
+func (f *Fifo[T]) Native() []T {
+	return f.d.Native()
+}
+
 func (f *Fifo[T]) Error() error {
 	return f.err
 }

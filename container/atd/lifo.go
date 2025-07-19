@@ -15,6 +15,10 @@ func NewLifo[T comparable]() *Lifo[T] {
 	return &Lifo[T]{nil, d}
 }
 
+func (l *Lifo[T]) Native() []T {
+	return l.d.Native()
+}
+
 func (l *Lifo[T]) Error() error {
 	return l.err
 }
@@ -39,7 +43,7 @@ func (l *Lifo[T]) Append(elem T) T {
 	return res[0]
 }
 
-func (l *Lifo[T]) Pop(elem T) T {
+func (l *Lifo[T]) Pop() T {
 	if l.err != nil {
 		return l.zero()
 	}
