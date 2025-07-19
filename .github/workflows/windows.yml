@@ -7,7 +7,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-
   build:
     runs-on: windows-latest
     steps:
@@ -20,6 +19,8 @@ jobs:
 
     - name: Benchmarks
       run: go test -bench=. ./...
+      working-directory: ./
 
     - name: Test
       run: go test -v ./...
+      working-directory: ./
