@@ -7,7 +7,7 @@
 // Error: Process completed with exit code 1.
 //
 // by adding doc.go, it makes the root directory a valid go package,
-// even it it doesn't contain any executable code and allowing to execute 
+// even it it doesn't contain any executable code. it allows to execute go test -bench=. ./...
 // without the "no Go files" error for the root.
 
 package dywoqlib
