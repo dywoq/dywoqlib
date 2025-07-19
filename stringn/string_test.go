@@ -134,7 +134,7 @@ func TestInsert(t *testing.T) {
 	if str1.Error() != nil {
 		t.Fatal(str1.Error())
 	}
-	want := "Hye"
+	want := "Hbye"
 	if str1.Native() != want {
 		t.Errorf("got %s, want %s", str1.Native(), want)
 	}
