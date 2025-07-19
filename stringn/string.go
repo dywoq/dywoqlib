@@ -210,6 +210,14 @@ func (s *String) ContainsString(str string) bool {
 	return strings.Contains(s.b.String(), str)
 }
 
+func (s *String) Write(p []byte) (int, error) {
+	if s.err != nil {
+		return len(p), s.err
+	}
+	n, err := s.b.Write(p)
+	return n, err
+}
+
 func (s *String) runes() []rune {
 	numRunes := utf8.RuneCountInString(s.b.String())
 	runes := make([]rune, 0, numRunes)
