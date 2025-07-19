@@ -11,8 +11,8 @@ func TestPackagePath(t *testing.T) {
 		body      string
 		got, want string
 	}{
-		{"PackagePath[http.Server]()", PackagePath[http.Server](), "http.Server"},
-		{"PackagePath[io.Writer]()", PackagePath[io.Writer](), "io.Writer"},
+		{"PackagePath[http.Server]()", PackagePath[http.Server](), "net/http"},
+		{"PackagePath[io.Writer]()", PackagePath[io.Writer](), "io"},
 	}
 
 	for _, test := range tests {
