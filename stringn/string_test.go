@@ -193,18 +193,18 @@ func TestWrite(t *testing.T) {
 
 func TestRead(t *testing.T) {
 	str1 := New("hello")
-	got, _ := io.ReadAll(str1)
 	want := str1.Native()
+
+	got, _ := io.ReadAll(str1)
 
 	if str1.Error() != nil {
 		t.Fatal(str1.Error())
 	}
 
-	if string(got) != string(want) {
-		t.Errorf("got %v, want %v", string(got), string(want))
+	if string(got) != want {
+		t.Errorf("got %v, want %v", string(got), want)
 	}
 }
-
 func TestEmpty(t *testing.T) {
 	str1 := New("hello")
 	str2 := New("")
