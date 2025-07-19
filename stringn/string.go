@@ -190,6 +190,26 @@ func (s *String) Set(r rune, i int) rune {
 	return new
 }
 
+func (s *String) ContainsRune(r rune) bool {
+	if s.err != nil {
+		return false
+	}
+	if s.b.Len() == 0 {
+		return false
+	}
+	return strings.Contains(s.b.String(), string(r))
+}
+
+func (s *String) ContainsString(str string) bool {
+	if s.err != nil {
+		return false
+	}
+	if s.b.Len() == 0 {
+		return false
+	}
+	return strings.Contains(s.b.String(), str)
+}
+
 func (s *String) runes() []rune {
 	numRunes := utf8.RuneCountInString(s.b.String())
 	runes := make([]rune, 0, numRunes)
