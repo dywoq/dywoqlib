@@ -25,7 +25,7 @@ func TestImplements(t *testing.T) {
 
 	for _, test := range tests {
 		if test.got != test.want {
-			t.Errorf("%v = %v, want %v", test.body, test.got, test.want)
+			t.Errorf("%s = %v, want %v", test.body, test.got, test.want)
 		}
 	}
 }
