@@ -130,11 +130,11 @@ func TestHasStringSuffix(t *testing.T) {
 
 func TestInsert(t *testing.T) {
 	str1 := New("bye")
-	str1.Insert(str1.Length()-1, 'H')
+	str1.Insert(0, 'H')
 	if str1.Error() != nil {
 		t.Fatal(str1.Error())
 	}
-	want := "byeH"
+	want := "Hye"
 	if str1.Native() != want {
 		t.Errorf("got %s, want %s", str1.Native(), want)
 	}
