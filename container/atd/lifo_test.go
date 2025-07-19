@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestLength(t *testing.T) {
+func TestLifoLength(t *testing.T) {
 	l := NewLifo[int]()
 	l.Append(1)
 	l.Append(2)
@@ -20,7 +20,7 @@ func TestLength(t *testing.T) {
 	}
 }
 
-func TestEmpty(t *testing.T) {
+func TestLifoEmpty(t *testing.T) {
 	l := NewLifo[int]()
 
 	got := l.Empty()
@@ -31,7 +31,7 @@ func TestEmpty(t *testing.T) {
 	}
 }
 
-func TestAppend(t *testing.T) {
+func TestLifoAppend(t *testing.T) {
 	l := NewLifo[int]()
 	l.Append(2)
 	l.Append(4)
@@ -44,7 +44,7 @@ func TestAppend(t *testing.T) {
 	}
 }
 
-func TestPop(t *testing.T) {
+func TestLifoPop(t *testing.T) {
 	l := NewLifo[int]()
 	l.Append(2)
 	l.Append(4)
@@ -58,7 +58,7 @@ func TestPop(t *testing.T) {
 	}
 }
 
-func TestTop(t *testing.T) {
+func TestLifoTop(t *testing.T) {
 	l := NewLifo[int]()
 	l.Append(2)
 	l.Append(4)
@@ -71,7 +71,7 @@ func TestTop(t *testing.T) {
 	}
 }
 
-func TestString(t *testing.T) {
+func TestLifoString(t *testing.T) {
 	l := NewLifo[int]()
 	l.Append(2)
 	l.Append(4)
