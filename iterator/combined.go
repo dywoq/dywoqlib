@@ -14,13 +14,20 @@
 
 package iterator
 
+// Combined is a generic iterator struct that wraps a slice of comparable elements and provides methods to create forward and reverse iterators.
+// T must be comparable.
 type Combined[T comparable] struct {
 	s []T
 }
 
+// Forward returns a new forward iterator for the combined iterator's slice.
 func (c Combined[T]) Forward() *Forward[T] { return NewForward(c.s) }
+
+// Forward returns a new reverse iterator for the combined iterator's slice.
 func (c Combined[T]) Reverse() *Reverse[T] { return NewReserve(c.s) }
 
+// NewCombined creates a new Combined iterator instance with the provided slice.
+// T must be comparable.
 func NewCombined[T comparable](s []T) *Combined[T] {
 	return &Combined[T]{s}
 }
