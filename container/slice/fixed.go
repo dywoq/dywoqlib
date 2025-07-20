@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,12 +16,16 @@ package slice
 
 import "github.com/dywoq/dywoqlib/iterator"
 
+// Fixed provides a generic, error-aware wrapper around a Go slice with a fixed maximum length.
+// It uses a Dynamic slice internally and enforces the fixed length constraint.
 type Fixed[T comparable] struct {
 	err      error
 	fixedLen int
 	d        *Dynamic[T]
 }
 
+// NewFixed creates a new Fixed slice instance with a specified fixed length and initial elements.
+// It returns an error if the fixed length is invalid or initial elements exceed the fixed length.
 func NewFixed[T comparable](fixedLen int, elems ...T) *Fixed[T] {
 	d := NewDynamic[T]()
 	if d.Error() != nil {
@@ -41,27 +45,37 @@ func NewFixed[T comparable](fixedLen int, elems ...T) *Fixed[T] {
 	return &Fixed[T]{nil, fixedLen, d}
 }
 
+// Native returns the underlying Go slice from the internal Dynamic slice.
+// This allows direct access to the raw slice data.
 func (f *Fixed[T]) Native() []T {
 	return f.d.Native()
 }
 
+// Error returns the first error encountered during operations on the Fixed slice.
+// It reflects errors from the Fixed slice itself or its underlying Dynamic slice.
 func (f *Fixed[T]) Error() error {
 	return f.err
 }
 
+// Length returns the current number of elements in the Fixed slice.
+// This is the logical length, not the fixed capacity.
 func (f *Fixed[T]) Length() int {
 	return f.d.Length()
 }
 
+// Iterating returns a Combined iterator for the elements in the Fixed slice.
+// This allows for standard iteration patterns over the slice's contents.
 func (f *Fixed[T]) Iterating() *iterator.Combined[T] {
-	return f.Iterating()
+	return f.d.Iterating()
 }
 
+// Append adds new elements to the Fixed slice, if capacity allows.
+// It returns the appended elements or an empty slice if an error occurs or capacity is exceeded.
 func (f *Fixed[T]) Append(elems ...T) []T {
 	if ok := f.errorsOk(); !ok {
 		return []T{}
 	}
-	appended := f.Append(elems...)
+	appended := f.d.Append(elems...)
 	if f.d.Error() != nil {
 		f.err = f.d.Error()
 		return []T{}
@@ -69,6 +83,8 @@ func (f *Fixed[T]) Append(elems ...T) []T {
 	return appended
 }
 
+// At returns the element at the specified index.
+// It updates the internal error if the index is out of bounds.
 func (f *Fixed[T]) At(i int) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -81,6 +97,8 @@ func (f *Fixed[T]) At(i int) T {
 	return got
 }
 
+// Find searches for the first occurrence of a requested element.
+// It returns the found element or a zero value if not found or an error occurs.
 func (f *Fixed[T]) Find(req T) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -93,6 +111,8 @@ func (f *Fixed[T]) Find(req T) T {
 	return found
 }
 
+// String returns a string representation of the Fixed slice.
+// It delegates to the underlying Dynamic slice's String method.
 func (f *Fixed[T]) String() string {
 	if ok := f.errorsOk(); !ok {
 		return ""
@@ -105,6 +125,8 @@ func (f *Fixed[T]) String() string {
 	return formatted
 }
 
+// Set updates the element at a given index within the fixed bounds.
+// It returns the updated element or a zero value on error.
 func (f *Fixed[T]) Set(elem T, i int) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -117,6 +139,8 @@ func (f *Fixed[T]) Set(elem T, i int) T {
 	return new
 }
 
+// Delete removes the element at the specified index.
+// It returns the deleted element or a zero value on error.
 func (f *Fixed[T]) Delete(i int) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -129,6 +153,8 @@ func (f *Fixed[T]) Delete(i int) T {
 	return deleted
 }
 
+// Insert adds an element at a specific index, if it doesn't exceed the fixed length.
+// It returns the inserted element or a zero value on error or if capacity is exceeded.
 func (f *Fixed[T]) Insert(i int, elem T) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -141,6 +167,8 @@ func (f *Fixed[T]) Insert(i int, elem T) T {
 	return inserted
 }
 
+// Front returns the first element of the Fixed slice.
+// It returns a zero value if the slice is empty or an error occurred.
 func (f *Fixed[T]) Front() T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -153,6 +181,8 @@ func (f *Fixed[T]) Front() T {
 	return got
 }
 
+// Back returns the last element of the Fixed slice.
+// It returns a zero value if the slice is empty or an error occurred.
 func (f *Fixed[T]) Back() T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -165,6 +195,8 @@ func (f *Fixed[T]) Back() T {
 	return got
 }
 
+// Pop removes and returns the last element of the Fixed slice.
+// It returns a zero value if the slice is empty or an error occurred.
 func (f *Fixed[T]) Pop() T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
@@ -177,10 +209,13 @@ func (f *Fixed[T]) Pop() T {
 	return got
 }
 
+// outOfBounds checks if the current length of the dynamic slice exceeds the fixed length.
 func (f *Fixed[T]) outOfBounds() bool {
 	return len(f.d.s) > f.fixedLen
 }
 
+// errorsOk checks for and updates any internal errors, including length constraints.
+// It ensures that operations only proceed if the Fixed slice is in a valid state.
 func (f *Fixed[T]) errorsOk() bool {
 	if f.fixedLen < len(f.d.s) {
 		f.err = ErrFixedLengthOutOfBounds

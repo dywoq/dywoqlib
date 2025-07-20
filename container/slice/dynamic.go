@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,15 +19,20 @@ import (
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
+// Dynamic provides a generic, error-aware wrapper around a Go slice.
 type Dynamic[T comparable] struct {
 	err error
 	s   []T
 }
 
+// NewDynamic creates a new Dynamic slice instance with initial elements.
+// It initializes the Dynamic struct with the provided elements and no error.
 func NewDynamic[T comparable](elems ...T) *Dynamic[T] {
 	return &Dynamic[T]{nil, elems}
 }
 
+// Grow increases the capacity of the underlying slice to at least i.
+// If the current capacity is less than i, a new slice is allocated and elements are copied.
 func (d *Dynamic[T]) Grow(i int) {
 	if d.err != nil {
 		return
@@ -39,22 +44,32 @@ func (d *Dynamic[T]) Grow(i int) {
 	}
 }
 
+// Native returns the underlying Go slice.
+// This allows direct interaction with the standard slice if needed.
 func (d *Dynamic[T]) Native() []T {
 	return d.s
 }
 
+// Error returns the first error encountered during operations.
+// Subsequent operations will be no-ops if an error is present.
 func (d *Dynamic[T]) Error() error {
 	return d.err
 }
 
+// Length returns the number of elements in the dynamic slice.
+// It provides the current length of the wrapped slice.
 func (d *Dynamic[T]) Length() int {
 	return len(d.s)
 }
 
+// Iterating returns a Combined iterator for the slice.
+// This allows for flexible iteration over the elements.
 func (d *Dynamic[T]) Iterating() *iterator.Combined[T] {
 	return iterator.NewCombined(d.s)
 }
 
+// Append adds new elements to the end of the slice.
+// It modifies the underlying slice and returns the appended elements.
 func (d *Dynamic[T]) Append(elems ...T) []T {
 	if d.err != nil {
 		return []T{}
@@ -63,6 +78,8 @@ func (d *Dynamic[T]) Append(elems ...T) []T {
 	return elems
 }
 
+// At returns the element at the specified index.
+// It updates the internal error if the index is out of bounds.
 func (d *Dynamic[T]) At(i int) T {
 	if d.err != nil {
 		return d.zero()
@@ -75,6 +92,8 @@ func (d *Dynamic[T]) At(i int) T {
 	return found
 }
 
+// Find searches for the first occurrence of a requested element.
+// It returns the found element or a zero value if not found or an error occurs.
 func (d *Dynamic[T]) Find(req T) T {
 	if d.err != nil {
 		return d.zero()
@@ -86,6 +105,8 @@ func (d *Dynamic[T]) Find(req T) T {
 	return found
 }
 
+// String returns a string representation of the slice.
+// It uses sliceutil.Format to format the underlying slice.
 func (d *Dynamic[T]) String() string {
 	if d.err != nil {
 		return ""
@@ -98,6 +119,8 @@ func (d *Dynamic[T]) String() string {
 	return formatted
 }
 
+// Set updates the element at a given index.
+// It returns the updated element or a zero value on error.
 func (d *Dynamic[T]) Set(elem T, i int) T {
 	if d.err != nil {
 		return d.zero()
@@ -110,6 +133,8 @@ func (d *Dynamic[T]) Set(elem T, i int) T {
 	return new
 }
 
+// Delete removes the element at the specified index.
+// It returns the deleted element or a zero value on error.
 func (d *Dynamic[T]) Delete(i int) T {
 	if d.err != nil {
 		return d.zero()
@@ -122,6 +147,8 @@ func (d *Dynamic[T]) Delete(i int) T {
 	return deleted
 }
 
+// Insert adds an element at a specific index.
+// It returns the inserted element or a zero value on error.
 func (d *Dynamic[T]) Insert(i int, elem T) T {
 	if d.err != nil {
 		return d.zero()
@@ -134,6 +161,8 @@ func (d *Dynamic[T]) Insert(i int, elem T) T {
 	return inserted
 }
 
+// Front returns the first element of the slice.
+// It returns a zero value if the slice is empty or an error occurred.
 func (d *Dynamic[T]) Front() T {
 	if d.err != nil {
 		return d.zero()
@@ -145,6 +174,8 @@ func (d *Dynamic[T]) Front() T {
 	return got
 }
 
+// Back returns the last element of the slice.
+// It returns a zero value if the slice is empty or an error occurred.
 func (d *Dynamic[T]) Back() T {
 	if d.err != nil {
 		return d.zero()
@@ -156,10 +187,9 @@ func (d *Dynamic[T]) Back() T {
 	return got
 }
 
+// Pop removes and returns the last element of the slice.
+// It returns a zero value if the slice is empty or an error occurred.
 func (d *Dynamic[T]) Pop() T {
-	if d.err != nil {
-		return d.zero()
-	}
 	if d.err != nil {
 		return d.zero()
 	}
