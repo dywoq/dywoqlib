@@ -348,7 +348,7 @@ func (s *String) updateBuffer(rs []rune) {
 }
 
 func (s *String) zero() rune {
-	return 0
+	return utf8.RuneError
 }
 
 func (*String) insertRune(i int, elem rune, s []rune) ([]rune, error) {
