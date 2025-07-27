@@ -15,8 +15,8 @@
 package mapn
 
 import (
-	"maps"
 	"fmt"
+	"maps"
 	"strings"
 
 	"github.com/dywoq/dywoqlib/container/slice"
@@ -213,4 +213,8 @@ func (d *Dynamic[K, V]) String() string {
 	}
 	b.WriteString("}")
 	return b.String()
+}
+
+func (d *Dynamic[K, V]) Native() map[K]V {
+	return d.m
 }

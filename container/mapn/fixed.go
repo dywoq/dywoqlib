@@ -184,6 +184,10 @@ func (f *Fixed[K, V]) String() string {
 	return res
 }
 
+func (f *Fixed[K, V]) Native() map[K]V {
+	return f.m.Native()
+}
+
 func (f *Fixed[K, V]) outOfBounds() bool {
 	return f.m.Length() > f.fixedLen
 }
