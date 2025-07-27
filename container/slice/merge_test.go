@@ -10,7 +10,7 @@ func TestMergeDynamic(t *testing.T) {
 	second := NewDynamic(3, 4)
 	got := MergeDynamic(first, second)
 	expected := []int{1, 2, 3, 4}
-	if slices.Equal(got.Native(), expected) {
+	if !slices.Equal(got.Native(), expected) {
 		t.Errorf("MergeDynamic(first, second) = %v, %v", got.Native(), expected)
 	}
 }
@@ -32,7 +32,7 @@ func TestMergeFixed(t *testing.T) {
 	}
 
 	expected := []int{1, 2, 3, 4}
-	if slices.Equal(got.Native(), expected) {
+	if !slices.Equal(got.Native(), expected) {
 		t.Errorf("MergeFixed(first, second) = %v, %v", got.Native(), expected)
 	}
 }
