@@ -169,8 +169,8 @@ func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
 	return
 }
 
-// String returns the string representation of the Fixed map. 
-// If there are any errors detected by errorsOk or from the underlying map's Error method, 
+// String returns the string representation of the Fixed map.
+// If there are any errors detected by errorsOk or from the underlying map's Error method,
 // it sets the error field and returns an empty string.
 func (f *Fixed[K, V]) String() string {
 	if ok := f.errorsOk(); !ok {

@@ -78,7 +78,6 @@ func (r *Reverse[T]) Length() int {
 	return len(r.data)
 }
 
-
 func (r *Reverse[T]) zero() T {
 	var zero T
 	return zero

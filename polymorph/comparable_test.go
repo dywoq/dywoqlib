@@ -4,7 +4,7 @@ import "testing"
 
 func TestComparable(t *testing.T) {
 	tests := []struct {
-		body string
+		body      string
 		got, want bool
 	}{
 		{"Comparable[int]()", Comparable[int](), true},

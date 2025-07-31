@@ -32,7 +32,10 @@ func TestTypeOfGeneric(t *testing.T) {
 		{"[]string", reflect.TypeOf([]string{})},
 		{"map[string]int", reflect.TypeOf(map[string]int{})},
 		{"struct{}", reflect.TypeOf(struct{}{})},
-		{"struct{Name string; Age int}", reflect.TypeOf(struct{ Name string; Age int }{})},
+		{"struct{Name string; Age int}", reflect.TypeOf(struct {
+			Name string
+			Age  int
+		}{})},
 	}
 
 	for _, tt := range tests {
@@ -56,7 +59,10 @@ func TestTypeOfGeneric(t *testing.T) {
 			case "struct{}":
 				got = TypeOfGeneric[struct{}]()
 			case "struct{Name string; Age int}":
-				got = TypeOfGeneric[struct{ Name string; Age int }]()
+				got = TypeOfGeneric[struct {
+					Name string
+					Age  int
+				}]()
 			default:
 				t.Fatalf("unhandled test case: %s", tt.name)
 			}

@@ -28,7 +28,7 @@ func TestHasMethod(t *testing.T) {
 
 func TestHasField(t *testing.T) {
 	tests := []struct {
-		body string
+		body      string
 		got, want bool
 	}{
 		{"HasField[a](\"b\")", HasField[a]("b"), true},
