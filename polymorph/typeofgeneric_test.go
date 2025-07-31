@@ -28,7 +28,7 @@ func TestTypeOfGeneric(t *testing.T) {
 		{"string", reflect.TypeOf("")},
 		{"bool", reflect.TypeOf(true)},
 		{"float64", reflect.TypeOf(0.0)},
-		{"*int", reflect.TypeOf((*int)(nil)).Elem()},
+		{"*int", reflect.TypeOf((*int)(nil))},
 		{"[]string", reflect.TypeOf([]string{})},
 		{"map[string]int", reflect.TypeOf(map[string]int{})},
 		{"struct{}", reflect.TypeOf(struct{}{})},
