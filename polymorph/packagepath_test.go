@@ -21,3 +21,9 @@ func TestPackagePath(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkPackagePath(b *testing.B) {
+	for b.Loop() {
+		_ = PackagePath[http.Server]()
+	}	
+}

@@ -43,3 +43,15 @@ func TestNumFields(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkNumMethods(b *testing.B) {
+	for b.Loop() {
+		_ = NumMethods[numStruct1]()
+	}
+}
+
+func BenchmarkNumFields(b *testing.B) {
+	for b.Loop() {
+		_ = NumFields[numStruct1]()
+	}
+}

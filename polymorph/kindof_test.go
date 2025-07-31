@@ -48,3 +48,9 @@ func TestKindOf(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkKindOf(b *testing.B) {
+	for b.Loop() {
+		_ = KindOf[int64]()
+	}
+}

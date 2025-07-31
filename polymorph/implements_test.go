@@ -29,3 +29,9 @@ func TestImplements(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkImplements(b *testing.B) {
+	for b.Loop() {
+		_ = Implements[someInterfaceForV, v]()
+	}
+}
