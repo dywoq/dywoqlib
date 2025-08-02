@@ -2,9 +2,9 @@ package slice
 
 // MergeDynamic merges two dynamic slices of comparable generic parameter T
 // and returns a pointer to Dynamic[T].
-// If any errors are encountered, it returns a nil instead of the pointer to Dynamic[T] 
+// If any errors are encountered, it returns a nil instead of the pointer to Dynamic[T]
 // with the first encountered error.
-func MergeDynamic[T comparable](first *Dynamic[T], second *Dynamic[T]) (*Dynamic[T], error)  {
+func MergeDynamic[T comparable](first *Dynamic[T], second *Dynamic[T]) (*Dynamic[T], error) {
 	new := NewDynamic[T]()
 	if new.Error() != nil {
 		return nil, new.Error()
@@ -15,10 +15,16 @@ func MergeDynamic[T comparable](first *Dynamic[T], second *Dynamic[T]) (*Dynamic
 	for it.Next() {
 		new.Append(it.Value())
 	}
+	if it.Error() != nil {
+		return nil, it.Error()
+	}
 
 	it = second.Iterating().Forward()
 	for it.Next() {
 		new.Append(it.Value())
+	}
+	if it.Error() != nil {
+		return nil, it.Error()
 	}
 
 	return new, nil
