@@ -23,6 +23,7 @@ func TestNillable(t *testing.T) {
 }
 
 func BenchmarkNillable(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = Nillable[chan int]()
 	}

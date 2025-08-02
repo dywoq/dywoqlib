@@ -50,6 +50,7 @@ func TestKindOf(t *testing.T) {
 }
 
 func BenchmarkKindOf(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = KindOf[int64]()
 	}

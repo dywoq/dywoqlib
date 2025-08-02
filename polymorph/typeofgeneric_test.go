@@ -75,12 +75,14 @@ func TestTypeOfGeneric(t *testing.T) {
 }
 
 func BenchmarkTypeOfGeneric(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = TypeOfGeneric[int]()
 	}
 }
 
 func BenchmarkTypeOfGenericPointer(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = TypeOfGeneric[*int]()
 	}

@@ -19,6 +19,7 @@ func TestComparable(t *testing.T) {
 }
 
 func BenchmarkComparable(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = Comparable[int]()
 	}

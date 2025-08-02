@@ -31,6 +31,7 @@ func TestImplements(t *testing.T) {
 }
 
 func BenchmarkImplements(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = Implements[someInterfaceForV, v]()
 	}
