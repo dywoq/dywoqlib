@@ -1,11 +1,12 @@
 package slice
 
 import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 	"slices"
-	"testing"
+	go_testing "testing"
 )
 
-func TestMergeDynamic(t *testing.T) {
+func TestMergeDynamic(t *go_testing.T) {
 	var (
 		first  = NewDynamic(1, 2)
 		second = NewDynamic(3, 4)
@@ -20,7 +21,7 @@ func TestMergeDynamic(t *testing.T) {
 	}
 }
 
-func TestMergeFixed(t *testing.T) {
+func TestMergeFixed(t *go_testing.T) {
 	var (
 		first  = NewFixed(10, 1, 2)
 		second = NewFixed(10, 3, 4)
@@ -46,43 +47,46 @@ func TestMergeFixed(t *testing.T) {
 	}
 }
 
-func TestMerge(t *testing.T) {
+func TestMerge(t *go_testing.T) {
 	var (
-		first = []int{10, 54, 3}
+		first  = []int{10, 54, 3}
 		second = []int{89, 23, 10}
-		got = Merge(first, second)
-		want = []int{10, 54, 3, 89, 23, 10}
+		got    = Merge(first, second)
+		want   = []int{10, 54, 3, 89, 23, 10}
 	)
 	if !slices.Equal(got, want) {
 		t.Errorf("Merge(first, second) = %v, want %v", got, want)
 	}
 }
 
-func BenchmarkMergeDynamic(b *testing.B) {
+func BenchmarkMergeDynamic(b *go_testing.B) {
 	var (
 		first  = NewDynamic(10, 1, 2)
 		second = NewDynamic(10, 3, 4)
 	)
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_, _ = MergeDynamic(first, second)
 	}
 }
 
-func BenchmarkMergeFixed(b *testing.B) {
+func BenchmarkMergeFixed(b *go_testing.B) {
 	var (
 		first  = NewFixed(10, 1, 2)
 		second = NewFixed(10, 3, 4)
 	)
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_, _ = MergeFixed(first, second)
 	}
 }
 
-func BenchmarkMerge(b *testing.B) {
+func BenchmarkMerge(b *go_testing.B) {
 	var (
-		first = []int{10, 54, 3}
+		first  = []int{10, 54, 3}
 		second = []int{89, 23, 10}
 	)
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = Merge(first, second)
 	}

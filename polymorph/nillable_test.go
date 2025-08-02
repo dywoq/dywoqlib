@@ -1,8 +1,11 @@
 package polymorph
 
-import "testing"
+import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	go_testing "testing"
+)
 
-func TestNillable(t *testing.T) {
+func TestNillable(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want bool
@@ -22,8 +25,8 @@ func TestNillable(t *testing.T) {
 	}
 }
 
-func BenchmarkNillable(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkNillable(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = Nillable[chan int]()
 	}

@@ -1,6 +1,9 @@
 package polymorph
 
-import "testing"
+import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	go_testing "testing"
+)
 
 type someInterfaceForV interface {
 	A() string
@@ -11,7 +14,7 @@ type g struct{} // doesn't implement someInterfaceForV
 
 func (v) A() string { return "A" }
 
-func TestImplements(t *testing.T) {
+func TestImplements(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want bool
@@ -30,8 +33,8 @@ func TestImplements(t *testing.T) {
 	}
 }
 
-func BenchmarkImplements(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkImplements(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = Implements[someInterfaceForV, v]()
 	}

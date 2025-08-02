@@ -1,12 +1,13 @@
 package polymorph
 
 import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 	"io"
 	"net/http"
-	"testing"
+	go_testing "testing"
 )
 
-func TestPackagePath(t *testing.T) {
+func TestPackagePath(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want string
@@ -22,7 +23,8 @@ func TestPackagePath(t *testing.T) {
 	}
 }
 
-func BenchmarkPackagePath(b *testing.B) {
+func BenchmarkPackagePath(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	b.ReportAllocs()
 	for b.Loop() {
 		_ = PackagePath[http.Server]()

@@ -15,11 +15,12 @@
 package polymorph
 
 import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 	"reflect"
-	"testing"
+	go_testing "testing"
 )
 
-func TestTypeOfGeneric(t *testing.T) {
+func TestTypeOfGeneric(t *go_testing.T) {
 	tests := []struct {
 		name string
 		want reflect.Type
@@ -39,7 +40,7 @@ func TestTypeOfGeneric(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+		t.Run(tt.name, func(t *go_testing.T) {
 			var got reflect.Type
 			switch tt.name {
 			case "int":
@@ -74,15 +75,15 @@ func TestTypeOfGeneric(t *testing.T) {
 	}
 }
 
-func BenchmarkTypeOfGeneric(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkTypeOfGeneric(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = TypeOfGeneric[int]()
 	}
 }
 
-func BenchmarkTypeOfGenericPointer(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkTypeOfGenericPointer(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = TypeOfGeneric[*int]()
 	}

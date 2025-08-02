@@ -1,6 +1,9 @@
 package polymorph
 
-import "testing"
+import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	go_testing "testing"
+)
 
 type f string
 
@@ -10,7 +13,7 @@ type a struct {
 
 func (a) A() {}
 
-func TestHasMethod(t *testing.T) {
+func TestHasMethod(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want bool
@@ -26,7 +29,7 @@ func TestHasMethod(t *testing.T) {
 	}
 }
 
-func TestHasField(t *testing.T) {
+func TestHasField(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want bool
@@ -44,15 +47,15 @@ func TestHasField(t *testing.T) {
 	}
 }
 
-func BenchmarkHasMethod(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkHasMethod(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = HasMethod[a]("A")
 	}
 }
 
-func BenchmarkHasField(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkHasField(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = HasField[a]("b")
 	}

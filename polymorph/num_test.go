@@ -1,6 +1,9 @@
 package polymorph
 
-import "testing"
+import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	go_testing "testing"
+)
 
 type numStruct1 struct{}
 
@@ -12,7 +15,7 @@ type numStruct2 struct {
 	B int
 }
 
-func TestNumMethods(t *testing.T) {
+func TestNumMethods(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want int
@@ -28,7 +31,7 @@ func TestNumMethods(t *testing.T) {
 	}
 }
 
-func TestNumFields(t *testing.T) {
+func TestNumFields(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want int
@@ -44,14 +47,15 @@ func TestNumFields(t *testing.T) {
 	}
 }
 
-func BenchmarkNumMethods(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkNumMethods(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = NumMethods[numStruct1]()
 	}
 }
 
-func BenchmarkNumFields(b *testing.B) {
+func BenchmarkNumFields(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	b.ReportAllocs()
 	for b.Loop() {
 		_ = NumFields[numStruct1]()

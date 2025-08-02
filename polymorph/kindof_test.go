@@ -2,10 +2,11 @@ package polymorph
 
 import (
 	"reflect"
-	"testing"
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	go_testing "testing"
 )
 
-func TestKindOf(t *testing.T) {
+func TestKindOf(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want reflect.Kind
@@ -49,8 +50,8 @@ func TestKindOf(t *testing.T) {
 	}
 }
 
-func BenchmarkKindOf(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkKindOf(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = KindOf[int64]()
 	}

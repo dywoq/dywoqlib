@@ -1,8 +1,11 @@
 package polymorph
 
-import "testing"
+import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	go_testing "testing"
+)
 
-func TestComparable(t *testing.T) {
+func TestComparable(t *go_testing.T) {
 	tests := []struct {
 		body      string
 		got, want bool
@@ -18,8 +21,8 @@ func TestComparable(t *testing.T) {
 	}
 }
 
-func BenchmarkComparable(b *testing.B) {
-	b.ReportAllocs()
+func BenchmarkComparable(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		_ = Comparable[int]()
 	}
