@@ -42,3 +42,13 @@ func TestMergeFixed(t *testing.T) {
 		t.Errorf("MergeFixed(first, second) = %v, want %v", got.Native(), expected)
 	}
 }
+
+func TestMerge(t *testing.T) {
+	first := []int{10, 54, 3}
+	second := []int{89, 23, 10}
+	got := Merge(first, second)
+	want := []int{10, 54, 3, 89, 23, 10}
+	if !slices.Equal(got, want) {
+		t.Errorf("Merge(first, second) = %v, want %v", got, want)
+	}
+}
