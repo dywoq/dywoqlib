@@ -45,12 +45,14 @@ func TestHasField(t *testing.T) {
 }
 
 func BenchmarkHasMethod(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = HasMethod[a]("A")
 	}
 }
 
 func BenchmarkHasField(b *testing.B) {
+	b.ReportAllocs()
 	for b.Loop() {
 		_ = HasField[a]("b")
 	}
