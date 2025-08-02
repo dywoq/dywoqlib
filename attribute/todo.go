@@ -23,7 +23,7 @@ import (
 
 // Todo is an attribute function that generates warning about unimplemented function.
 // DOES NOT automatically returns zero values (e.g., "", 0, nil etc.).
-func Todo() {
+func Todo(event func()) {
 	m := management{}
 	targetSkip, sourceSkip := m.skipNums()
 	target := m.funcInfo(targetSkip)

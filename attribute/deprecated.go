@@ -24,7 +24,7 @@ import (
 //
 // If custom event is not nil (it's set by SetEvent),
 // then it uses the custom event instead of outputting the warning.
-func Deprecated() {
+func Deprecated(event func()) {
 	m := management{}
 	targetSkip, sourceSkip := m.skipNums()
 	target := m.funcInfo(targetSkip)
