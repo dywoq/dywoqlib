@@ -16,9 +16,24 @@
 // including type information, kind, comparability, method and field checks, and interface implementation.
 package polymorph
 
-import "reflect"
+import (
+	"reflect"
+	"sync"
+)
+
+var typeCache sync.Map
 
 // TypeOfGeneric returns the reflect.Type of the generic type parameter T.
 func TypeOfGeneric[T any]() reflect.Type {
-	return reflect.TypeOf((*T)(nil)).Elem()
+	var zero T
+	t := reflect.TypeOf(&zero).Elem()
+	cacheKey := t.String()
+
+	if cachedType, ok := typeCache.Load(cacheKey); ok {
+		return cachedType.(reflect.Type)
+	}
+
+	typ := reflect.TypeOf(zero)
+	typeCache.Store(cacheKey, typ)
+	return typ
 }
