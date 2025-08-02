@@ -18,8 +18,6 @@ import (
 	"fmt"
 	"maps"
 	"strings"
-
-	"github.com/dywoq/dywoqlib/container/slice"
 )
 
 // Dynamic is a generic container that wraps a map with keys of type K and values of type V.
@@ -122,18 +120,11 @@ func (d *Dynamic[K, V]) Keys() []K {
 	if d.err != nil {
 		return []K{}
 	}
-	keys := slice.NewFixed[K](len(d.m))
-	// we don't use keys.Grow() here because we don't need to preallocate the slice -
-	// slice.NewFixed already does that
-	// or because there's no method Grow() in slice.Fixed xD
-	for key := range d.m {
-		keys.Append(key)
+	keys := make([]K, 0, len(d.m))
+	for k := range d.m {
+		keys = append(keys, k)
 	}
-	if keys.Error() != nil {
-		d.err = keys.Error()
-		return []K{}
-	}
-	return keys.Native()
+	return keys
 }
 
 // Values returns a slice containing all the values stored in the Dynamic map.
@@ -145,16 +136,11 @@ func (d *Dynamic[K, V]) Values() []V {
 	if d.err != nil {
 		return []V{}
 	}
-	values := slice.NewFixed[V](len(d.m))
-	// there's same situation as described above
-	for _, value := range d.m {
-		values.Append(value)
+	values := make([]V, 0, len(d.m))
+	for _, v := range d.m {
+		values = append(values, v)
 	}
-	if values.Error() != nil {
-		d.err = values.Error()
-		return []V{}
-	}
-	return values.Native()
+	return values
 }
 
 // Delete removes the entry with the specified key from the Dynamic map.
