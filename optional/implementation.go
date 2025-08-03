@@ -14,7 +14,7 @@ func (o *implementation[T]) Present() bool {
 }
 
 func (o *implementation[T]) Get() (T, bool) {
-	if !o.Present() {
+	if !o.present {
 		var zero T
 		return zero, false
 	}
@@ -22,9 +22,16 @@ func (o *implementation[T]) Get() (T, bool) {
 }
 
 func (o *implementation[T]) String() string {
-	if o.Present() {
+	if o.present {
 		return fmt.Sprintf("%v", o.value)
 	}
 	var zero T
 	return fmt.Sprintf("%v", zero)
+}
+
+func (o *implementation[T]) Else(other T) T {
+	if o.present {
+		return o.value
+	}
+	return other
 }
