@@ -4,19 +4,13 @@ import (
 	"log"
 )
 
-// Recover catches the encountered panic.
-// If event is not nil, it will be used instead of default logging.
-// If cleanup is not nil, cleanup will be ran after the logging or the custom event finished.
-func Recover(event, cleanup func()) (r any) {
+// Recover catches the encountered panic and returns it. Unlike builtin recover(),
+// the function outputs the log message about panic.
+// The message of caught panic would look like this:
+// recovering.Recover(): caught the panic: <caught panic() value>
+func Recover() (r any) {
 	if r = recover(); r != nil {
-		if event == nil {
-			log.Printf("recovering.Recover(): caught the panic: %v", r)
-		} else {
-			event()
-		}
-		if cleanup != nil {
-			cleanup()
-		}
+		log.Printf("recovering.Recover(): caught the panic: %v", r)
 	}
 	return
 }
