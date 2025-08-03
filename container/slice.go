@@ -28,7 +28,7 @@ type IterableSlice[T comparable] []T
 type FormattableSlice[T comparable] []T
 
 // Format returns the formatted string of FormattableSlice[T].
-// Notice the function uses sliceutil.Format(), which returns two values: the result and error;
+// Please notice the function uses sliceutil.Format(), which returns two values: the result and error;
 // the possible encountered error from sliceutil.Format() is ignored to align with fmt.Stringer interface.
 // If you want to check for errors, use sliceutil.Format() directly.
 func (f FormattableSlice[T]) String() string { str, _ := sliceutil.Format(f); return str }
