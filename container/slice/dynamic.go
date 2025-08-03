@@ -153,7 +153,7 @@ func (d *Dynamic[T]) Insert(i int, elem T) T {
 	if d.err != nil {
 		return d.zero()
 	}
-	inserted, err := sliceutil.Insert(i, elem, d.s)
+	inserted, err := sliceutil.Insert(i, d.s, elem)
 	if err != nil {
 		d.err = err
 		return d.zero()

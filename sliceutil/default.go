@@ -22,6 +22,9 @@ import (
 	"github.com/dywoq/dywoqlib/iterator"
 )
 
+// Format returns a formatted string representation of a slice,
+// enclosed in brackets and with elements separated by commas.
+// For example, a slice [1, 2, 3] is formatted as "[1, 2, 3]".
 func Format[T comparable](s []T) (string, error) {
 	if len(s) == 0 {
 		return "", nil
@@ -44,6 +47,10 @@ func Format[T comparable](s []T) (string, error) {
 	return b.String(), nil
 }
 
+// Find searches for the requested element in a forward iterator.
+// It returns the element and a nil error if found. If the element
+// is not found, it returns the zero value of T and ErrElementNotFound.
+// It also returns an error if the iterator encounters one during traversal.
 func Find[T comparable](req T, it *iterator.Forward[T]) (T, error) {
 	var val T
 	for it.Next() {
@@ -58,6 +65,8 @@ func Find[T comparable](req T, it *iterator.Forward[T]) (T, error) {
 	return val, ErrElementNotFound
 }
 
+// At returns the element at the given index. It returns ErrWrongIndex
+// if the index is out of bounds.
 func At[T comparable](i int, s []T) (T, error) {
 	if i < 0 || i >= len(s) {
 		var zero T
@@ -66,6 +75,8 @@ func At[T comparable](i int, s []T) (T, error) {
 	return s[i], nil
 }
 
+// Set changes the value at the given index to elem and returns the old value.
+// It returns ErrWrongIndex if the index is out of bounds.
 func Set[T comparable](elem T, i int, s []T) (T, error) {
 	if i < 0 || i >= len(s) {
 		var zero T
@@ -76,6 +87,8 @@ func Set[T comparable](elem T, i int, s []T) (T, error) {
 	return old, nil
 }
 
+// Delete removes the element at the given index and returns the removed value.
+// It returns ErrWrongIndex if the index is out of bounds.
 func Delete[T comparable](i int, s []T) (T, error) {
 	if i < 0 || i >= len(s) {
 		var zero T
@@ -86,7 +99,9 @@ func Delete[T comparable](i int, s []T) (T, error) {
 	return removed, nil
 }
 
-func Insert[T comparable](i int, elem T, s []T) (T, error) {
+// Insert places elem at the given index and returns the inserted value.
+// It returns ErrWrongIndex if the index is out of bounds.
+func Insert[T comparable](i int, s []T, elem T) (T, error) {
 	if i < 0 || i >= len(s) {
 		var zero T
 		return zero, ErrWrongIndex
