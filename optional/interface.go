@@ -16,8 +16,8 @@ func New[T any](val T) Optional[T] {
 	return &implementation[T]{val, true}
 }
 
-// Empty creates a new Optional with no value,
+// None creates a new Optional with no value,
 // but a generic parameter T must be still present.
-func Empty[T any]() Optional[T] {
+func None[T any]() Optional[T] {
 	return &implementation[T]{present: false}
 }

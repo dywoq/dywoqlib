@@ -15,7 +15,7 @@ func TestPresent(t *go_testing.T) {
 	}
 
 	// second test
-	opt = Empty[int]()
+	opt = None[int]()
 	got = opt.Present()
 	want = false
 	if got != want {
@@ -51,7 +51,7 @@ func TestElse(t *go_testing.T) {
 	}
 
 	// second test
-	opt = Empty[int]()
+	opt = None[int]()
 	got = opt.Else(40)
 	want = 40
 	if got != want {
