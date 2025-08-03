@@ -1,7 +1,10 @@
 package optional
 
+import "fmt"
+
 // Optional is an interface representing a optional value.
 type Optional[T any] interface {
+	fmt.Stringer
 	// Present checks if the optional value is present.
 	Present() bool
 	// Get returns the value and a boolean indicating its presence.

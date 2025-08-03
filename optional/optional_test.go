@@ -59,6 +59,24 @@ func TestElse(t *go_testing.T) {
 	}
 }
 
+func TestString(t *go_testing.T) {
+	// first test
+	opt := New(10)
+	got := opt.String()
+	want := "10"
+	if got != want {
+		t.Errorf("opt.String() = %s, want %s", got, want)
+	}
+
+	// second test
+	opt = Int()
+	got = opt.String()
+	want = "0"
+	if got != want {
+		t.Errorf("opt.String() = %s, want %s", got, want)
+	}
+}
+
 func BenchmarkPresent(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
 	opt := New(10)
