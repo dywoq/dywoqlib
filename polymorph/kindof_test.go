@@ -15,8 +15,8 @@
 package polymorph
 
 import (
-	"reflect"
 	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
+	"reflect"
 	go_testing "testing"
 )
 
