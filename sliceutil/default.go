@@ -101,12 +101,11 @@ func Delete[T comparable](i int, s []T) (T, error) {
 
 // Insert places elem at the given index and returns the inserted value.
 // It returns ErrWrongIndex if the index is out of bounds.
-func Insert[T comparable](i int, s []T, elem T) (T, error) {
-	if i < 0 || i >= len(s) {
+func Insert[T comparable](i int, s *[]T, elem T) (T, error) {
+	if i < 0 || i >= len(*s) {
 		var zero T
 		return zero, ErrWrongIndex
 	}
-	inserted := s[i]
-	s = slices.Insert(s, i, elem)
-	return inserted, nil
+	*s = slices.Insert(*s, i, elem)
+	return elem, nil
 }

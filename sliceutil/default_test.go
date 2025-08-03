@@ -110,7 +110,7 @@ func TestDelete(t *testing.T) {
 func TestInsert(t *testing.T) {
 	// first test
 	x := []int{10, 11, 44}
-	Insert(1, x, 54)
+	Insert(1, &x, 54)
 	want := []int{10, 11, 54, 44}
 	if !slices.Equal(x, want) {
 		t.Errorf("Insert(1, x, 54) = %v, want %v", x, want)
@@ -118,7 +118,7 @@ func TestInsert(t *testing.T) {
 
 	// second test
 	x = []int{10, 11, 44}
-	_, err := Insert(1000, x, 54)
+	_, err := Insert(1000, &x, 54)
 	errwant := ErrWrongIndex
 	if !errors.Is(err, errwant) {
 		t.Errorf("Insert(1000, x, 54) = %s, want %s", err.Error(), errwant.Error())
