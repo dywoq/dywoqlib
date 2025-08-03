@@ -93,7 +93,7 @@ func TestDelete(t *testing.T) {
 	// first test
 	x := []int{10, 11, 44}
 	Delete(0, x)
-	want := []int{11, 44}
+	want := []int{11, 44, 0}
 	if !slices.Equal(x, want) {
 		t.Errorf("Delete(0, x) = %v, want %v", x, want)
 	}
