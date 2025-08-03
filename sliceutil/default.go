@@ -27,7 +27,7 @@ import (
 // For example, a slice [1, 2, 3] is formatted as "[1, 2, 3]".
 func Format[T comparable](s []T) (string, error) {
 	if len(s) == 0 {
-		return "", nil
+		return "[]", nil
 	}
 	var b strings.Builder
 	b.WriteString("[")
