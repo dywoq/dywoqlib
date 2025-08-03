@@ -62,7 +62,7 @@ func TestAt(t *testing.T) {
 	if got != want {
 		t.Errorf("At(1, x) = %d, want %d", got, want)
 	}
-	
+
 	// second test
 	_, err := At(20, x)
 	errwant := ErrWrongIndex
@@ -71,7 +71,7 @@ func TestAt(t *testing.T) {
 	}
 }
 
-func TestSet(t *testing.T) {	
+func TestSet(t *testing.T) {
 	// first test
 	x := []int{10, 11, 44}
 	Set(10, 1, x)
@@ -79,7 +79,7 @@ func TestSet(t *testing.T) {
 	if !slices.Equal(x, want) {
 		t.Errorf("Set(10, 1, x) = %v, want %v", x, want)
 	}
-	
+
 	// second test
 	x = []int{10, 11, 44}
 	_, err := Set(10, 1100, x)
