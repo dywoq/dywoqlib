@@ -111,7 +111,7 @@ func TestInsert(t *testing.T) {
 	// first test
 	x := []int{10, 11, 44}
 	Insert(1, &x, 54)
-	want := []int{10, 11, 54, 44}
+	want := []int{10, 54, 11, 44}
 	if !slices.Equal(x, want) {
 		t.Errorf("Insert(1, x, 54) = %v, want %v", x, want)
 	}
