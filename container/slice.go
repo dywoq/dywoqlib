@@ -19,8 +19,20 @@ import (
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
+// IterableSlice is a slice of comparable generic parameter T
+// for iteration over standard Go slice.
 type IterableSlice[T comparable] []T
+
+// FormattableSlice is a slice of comparable generic parameter T,
+// for more readable formatting of standard Go slice.
 type FormattableSlice[T comparable] []T
 
-func (f FormattableSlice[T]) Format() (string, error)        { return sliceutil.Format(f) }
+// Format returns the formatted string of FormattableSlice[T].
+// Notice the function uses sliceutil.Format(), which returns two values: the result and error;
+// the possible encountered error from sliceutil.Format() is ignored to align with fmt.Stringer interface.
+// If you want to check for errors, use sliceutil.Format() directly.
+func (f FormattableSlice[T]) String() string { str, _ := sliceutil.Format(f); return str }
+
+// Iterating returns a pointer to iterator.Combined[T] structure.
+// It uses a factory method iterator.NewCombined() internally.
 func (it IterableSlice[T]) Iterating() *iterator.Combined[T] { return iterator.NewCombined(it) }
