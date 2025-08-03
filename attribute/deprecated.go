@@ -21,8 +21,7 @@ import (
 
 // Deprecated is an attribute-function that generates warning about deprecated function.
 // DOES NOT automatically returns zero values (e.g., "", 0, nil etc.).
-//
-// If custom event is not nil (it's set by SetEvent),
+// If event is not nil,
 // then it uses the custom event instead of outputting the warning.
 func Deprecated(event func()) {
 	m := management{}
