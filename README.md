@@ -156,7 +156,7 @@ func main() {
 
 ### optional
 
-The `optional` package provides a type-safe `Optional` that can be used to represent values that may or may not be present.
+The `optional` package provides a type-safe `Maybe` that can be used to represent values that may or may not be present.
 
 **Example:**
 
