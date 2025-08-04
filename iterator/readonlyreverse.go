@@ -64,13 +64,14 @@ func (r *ReadonlyReverse[T]) Next() bool {
 	return r.pos >= 0
 }
 
-// Reset sets the iterator position to the beginning of reverse iteration.
+// Reset sets the iterator position to the beginning of reverse iteration, and the error state to nil.
 // If an error has occurred, Reset does nothing.
 func (r *ReadonlyReverse[T]) Reset() {
 	if r.err != nil {
 		return
 	}
 	r.pos = len(r.data)
+	r.err = nil
 }
 
 // Length returns the length of the slice.

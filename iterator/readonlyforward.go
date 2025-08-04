@@ -62,13 +62,14 @@ func (f *ReadonlyForward[T]) Next() bool {
 	return f.pos < len(f.data)
 }
 
-// Reset sets the iterator position to the beginning.
+// Reset sets the iterator position to the beginning, and the error state to nil.
 // If an error has occurred, Reset does nothing.
 func (f *ReadonlyForward[T]) Reset() {
 	if f.err != nil {
 		return
 	}
 	f.pos = -1
+	f.err = nil
 }
 
 // Length returns the length of the slice.
