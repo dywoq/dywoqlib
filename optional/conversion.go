@@ -16,135 +16,29 @@ package optional
 
 type ConversionFunc[T any] func(...T) Optional[T]
 
-func Int(val ...int) Optional[int] {
+func conversion[T any](val ...T) Optional[T] {
 	if len(val) == 0 {
-		return None[int]()
+		return None[T]()
 	}
 	return New(val[0])
 }
 
-func Int8(val ...int8) Optional[int8] {
-	if len(val) == 0 {
-		return None[int8]()
-	}
-	return New(val[0])
-}
-
-func Int16(val ...int16) Optional[int16] {
-	if len(val) == 0 {
-		return None[int16]()
-	}
-	return New(val[0])
-}
-
-func Int32(val ...int32) Optional[int32] {
-	if len(val) == 0 {
-		return None[int32]()
-	}
-	return New(val[0])
-}
-
-func Int64(val ...int64) Optional[int64] {
-	if len(val) == 0 {
-		return None[int64]()
-	}
-	return New(val[0])
-}
-
-func UInt(val ...uint) Optional[uint] {
-	if len(val) == 0 {
-		return None[uint]()
-	}
-	return New(val[0])
-}
-
-func UInt8(val ...uint8) Optional[uint8] {
-	if len(val) == 0 {
-		return None[uint8]()
-	}
-	return New(val[0])
-}
-
-func UInt16(val ...uint16) Optional[uint16] {
-	if len(val) == 0 {
-		return None[uint16]()
-	}
-	return New(val[0])
-}
-
-func UInt32(val ...uint32) Optional[uint32] {
-	if len(val) == 0 {
-		return None[uint32]()
-	}
-	return New(val[0])
-}
-
-func UInt64(val ...uint64) Optional[uint64] {
-	if len(val) == 0 {
-		return None[uint64]()
-	}
-	return New(val[0])
-}
-
-func String(val ...string) Optional[string] {
-	if len(val) == 0 {
-		return None[string]()
-	}
-	return New(val[0])
-}
-
-func Bool(val ...bool) Optional[bool] {
-	if len(val) == 0 {
-		return None[bool]()
-	}
-	return New(val[0])
-}
-
-func Float32(val ...float32) Optional[float32] {
-	if len(val) == 0 {
-		return None[float32]()
-	}
-	return New(val[0])
-}
-
-func Float64(val ...float64) Optional[float64] {
-	if len(val) == 0 {
-		return None[float64]()
-	}
-	return New(val[0])
-}
-
-func UIntptr(val ...uintptr) Optional[uintptr] {
-	if len(val) == 0 {
-		return None[uintptr]()
-	}
-	return New(val[0])
-}
-
-func Rune(val ...rune) Optional[rune] {
-	if len(val) == 0 {
-		return None[rune]()
-	}
-	return New(val[0])
-}
-
-func Complex64(val ...complex64) Optional[complex64] {
-	if len(val) == 0 {
-		return None[complex64]()
-	}
-	return New(val[0])
-}
-
-func Complex128(val ...complex128) Optional[complex128] {
-	if len(val) == 0 {
-		return None[complex128]()
-	}
-	return New(val[0])
-}
-
-func Error(val ...error) Optional[error] {
-	if len(val) == 0 {
-		return None[error]()
-	}
-	return New(val[0])
-}
+func Int(val ...int) Optional[int]                      { return conversion(val...) }
+func Int8(val ...int8) Optional[int8]                   { return conversion(val...) }
+func Int16(val ...int16) Optional[int16]                { return conversion(val...) }
+func Int32(val ...int32) Optional[int32]                { return conversion(val...) }
+func Int64(val ...int64) Optional[int64]                { return conversion(val...) }
+func UInt(val ...uint) Optional[uint]                   { return conversion(val...) }
+func UInt8(val ...uint8) Optional[uint8]                { return conversion(val...) }
+func UInt16(val ...uint16) Optional[uint16]             { return conversion(val...) }
+func UInt32(val ...uint32) Optional[uint32]             { return conversion(val...) }
+func UInt64(val ...uint64) Optional[uint64]             { return conversion(val...) }
+func String(val ...string) Optional[string]             { return conversion(val...) }
+func Bool(val ...bool) Optional[bool]                   { return conversion(val...) }
+func Float32(val ...float32) Optional[float32]          { return conversion(val...) }
+func Float64(val ...float64) Optional[float64]          { return conversion(val...) }
+func UIntptr(val ...uintptr) Optional[uintptr]          { return conversion(val...) }
+func Rune(val ...rune) Optional[rune]                   { return conversion(val...) }
+func Complex64(val ...complex64) Optional[complex64]    { return conversion(val...) }
+func Complex128(val ...complex128) Optional[complex128] { return conversion(val...) }
+func Error(val ...error) Optional[error]                { return conversion(val...) }
