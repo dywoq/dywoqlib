@@ -35,7 +35,11 @@ The `attribute` package is used for internal purposes, such as getting informati
 
 ### console
 
-The `console` package provides a simple function to run external commands.
+The `console` package and its subpackages provides a functions to work with external commands and console.
+
+#### `console/ansi`
+
+This package provides a clean and structured way to manage ANSI-colored strings in Go by using an interface `Base`.  
 
 **Example:**
 
@@ -44,16 +48,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/dywoq/dywoqlib/console"
+
+	"github.com/dywoq/dywoqlib/console/ansi"
 )
 
 func main() {
-	output, err := console.Run("echo", "hello world")
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	fmt.Println(string(output)) // "hello world"
+	msg := ansi.New("Hi!").SetBgColor(ansi.Black).SetBgColor(ansi.Cyan)
+	fmt.Printf("msg: %v\n", msg)
 }
 ```
 
