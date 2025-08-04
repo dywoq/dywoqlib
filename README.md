@@ -214,12 +214,7 @@ import (
 )
 
 func main() {
-	defer func() {
-		if r := recovering.Recover(); r != nil {
-			fmt.Println("Recovered from panic:", r)
-		}
-	}()
-
+	defer recovering.Recover();
 	panic("something went wrong")
 }
 ```
