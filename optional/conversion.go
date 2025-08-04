@@ -16,13 +16,6 @@ package optional
 
 type ConversionFunc[T any] func(...T) Optional[T]
 
-func conversion[T any](val ...T) Optional[T] {
-	if len(val) == 0 {
-		return None[T]()
-	}
-	return New(val[0])
-}
-
 func Int(val ...int) Optional[int]                      { return conversion(val...) }
 func Int8(val ...int8) Optional[int8]                   { return conversion(val...) }
 func Int16(val ...int16) Optional[int16]                { return conversion(val...) }
@@ -42,3 +35,10 @@ func Rune(val ...rune) Optional[rune]                   { return conversion(val.
 func Complex64(val ...complex64) Optional[complex64]    { return conversion(val...) }
 func Complex128(val ...complex128) Optional[complex128] { return conversion(val...) }
 func Error(val ...error) Optional[error]                { return conversion(val...) }
+
+func conversion[T any](val ...T) Optional[T] {
+	if len(val) == 0 {
+		return None[T]()
+	}
+	return New(val[0])
+}
