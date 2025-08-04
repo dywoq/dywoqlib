@@ -77,6 +77,34 @@ func TestString(t *go_testing.T) {
 	}
 }
 
+func TestFilter(t *go_testing.T) {
+	type user struct {
+		age int
+	}
+
+	// first test
+	opt := New(user{19})
+	adultUser := opt.Filter(func(u user) bool {
+		return u.age >= 18
+	})
+	got := adultUser.Present()
+	want := true
+	if got != want {
+		t.Errorf("adultUser.Present() = %v, want %v", got, want)
+	}
+
+	// second test
+	opt = New(user{14})
+	teenager := opt.Filter(func(u user) bool {
+		return u.age >= 18
+	})
+	got = teenager.Present()
+	want = false
+	if got != want {
+		t.Errorf("teenager.Present() = %v, want %v", got, want)
+	}
+}
+
 func BenchmarkPresent(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
 	opt := New(10)
@@ -98,5 +126,18 @@ func BenchmarkElse(b *go_testing.B) {
 	opt := New(10)
 	for b.Loop() {
 		_ = opt.Else(20)
+	}
+}
+
+func BenchmarkFilter(b *go_testing.B) {
+	type user struct {
+		age int
+	}
+	internal_testing.SetBase().Benchmark(b)
+	opt := New(user{19})
+	for b.Loop() {
+		_ = opt.Filter(func(u user) bool {
+			return u.age >= 18
+		})
 	}
 }

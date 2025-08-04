@@ -12,6 +12,9 @@ type Maybe[T any] interface {
 	Get() (T, bool)
 	// Else returns the value if it's present, otherwise it returns a default value.
 	Else(T) T
+	// Filter returns the Maybe if it's present and the value satisfies 
+	// the provided predicate function. Otherwise, it returns an empty Maybe.
+	Filter(func(T) bool) Maybe[T]
 }
 
 // New retruns a new Maybe with a value of a generic parameter T.

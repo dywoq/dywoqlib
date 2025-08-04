@@ -35,3 +35,10 @@ func (o *implementation[T]) Else(other T) T {
 	}
 	return other
 }
+
+func (o *implementation[T]) Filter(filter func(T) bool) Maybe[T] {
+	if o.present && filter(o.value) {
+		return o
+	}
+	return None[T]()
+}
