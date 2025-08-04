@@ -16,9 +16,9 @@ package ansi
 
 import "github.com/dywoq/dywoqlib/optional"
 
-// New creates a new ANSI message. bg and fg can be optional,
-// if they are not provided, the colors will be automatically None.
-func New(value string, bg, fg optional.Optional[Color]) Base {
+// New creates a new ANSI message. bg and fg can be optional.
+// If they are not provided, the colors will be automatically None.
+func New(value string, bg, fg optional.Maybe[Color]) Base {
 	bgColor := bg.Else(None)
 	fgColor := fg.Else(None)
 	return &message{bgColor, fgColor, value}

@@ -2,8 +2,8 @@ package optional
 
 import "fmt"
 
-// Optional is an interface representing a optional value.
-type Optional[T any] interface {
+// Maybe is an interface representing a optional value.
+type Maybe[T any] interface {
 	fmt.Stringer
 	// Present checks if the optional value is present.
 	Present() bool
@@ -14,13 +14,13 @@ type Optional[T any] interface {
 	Else(T) T
 }
 
-// New retruns a new Optional with a value of a generic parameter T.
-func New[T any](val T) Optional[T] {
+// New retruns a new Maybe with a value of a generic parameter T.
+func New[T any](val T) Maybe[T] {
 	return &implementation[T]{val, true}
 }
 
-// None creates a new Optional with no value,
+// None creates a new Maybe with no value,
 // but a generic parameter T must be still present.
-func None[T any]() Optional[T] {
+func None[T any]() Maybe[T] {
 	return &implementation[T]{present: false}
 }
