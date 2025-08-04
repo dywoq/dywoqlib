@@ -17,5 +17,5 @@ func main() {
 	grow(10, d)
 	// printing capacity
 	native := d.Native()
-	fmt.Printf("cap(native): %v\n", cap(native))
+	fmt.Printf("cap(native): %v\n", cap(native)) // cap(native): 10
 }
