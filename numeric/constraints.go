@@ -6,3 +6,8 @@ type Numeric interface {
 		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
 		~float32 | ~float64
 }
+
+// Complexable is a constraint of complex integral types (complex64, complex128).
+type Complexable interface {
+	~complex64 | ~complex128
+}
