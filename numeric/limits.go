@@ -46,6 +46,6 @@ func Limits[I Numeric]() (I, I) {
 		min, max := float64(-math.MaxFloat64), float64(math.MaxFloat64)
 		return I(min), I(max)
 	default:
-		panic("github.com/dywoq/dywoqlib/numeric: unsupported numeric type")
+		panic(ErrUnsupportedNumericType)
 	}
 }
