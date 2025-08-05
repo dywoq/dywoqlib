@@ -35,6 +35,7 @@ func Rune(val ...rune) Maybe[rune]                   { return conversion(val...)
 func Complex64(val ...complex64) Maybe[complex64]    { return conversion(val...) }
 func Complex128(val ...complex128) Maybe[complex128] { return conversion(val...) }
 func Error(val ...error) Maybe[error]                { return conversion(val...) }
+func Byte(val ...byte) Maybe[byte]                   { return conversion(val...) }
 
 func conversion[T any](val ...T) Maybe[T] {
 	if len(val) == 0 {
