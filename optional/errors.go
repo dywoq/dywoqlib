@@ -18,4 +18,5 @@ import "errors"
 
 var (
 	ErrMoreThanOneArgument = errors.New("github.com/dywoq/dywoqlib/optional: more than one argument")
+	ErrNotPresent          = errors.New("github.com/dywoq/dywoqlib/optional: not present")
 )

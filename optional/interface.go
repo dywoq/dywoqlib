@@ -15,6 +15,8 @@ type Maybe[T any] interface {
 	// Filter returns the Maybe if it's present and the value satisfies
 	// the provided predicate function. Otherwise, it returns an empty Maybe.
 	Filter(func(T) bool) Maybe[T]
+	// Unwrap returns the value if it's present, otherwise it panics.
+	Unwrap() T
 }
 
 // New retruns a new Maybe with a value of a generic parameter T.

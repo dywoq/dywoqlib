@@ -42,3 +42,10 @@ func (o *implementation[T]) Filter(filter func(T) bool) Maybe[T] {
 	}
 	return None[T]()
 }
+
+func (o *implementation[T]) Unwrap() T {
+	if !o.present {
+		panic(ErrNotPresent)
+	}
+	return o.value
+}
