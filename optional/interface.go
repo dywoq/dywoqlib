@@ -17,6 +17,9 @@ type Maybe[T any] interface {
 	Filter(func(T) bool) Maybe[T]
 	// Unwrap returns the value if it's present, otherwise it panics.
 	Unwrap() T
+	// Or returns the value if it's present, otherwise it returns the result of the
+	// provided function.
+	Or(func() T) T
 }
 
 // New retruns a new Maybe with a value of a generic parameter T.

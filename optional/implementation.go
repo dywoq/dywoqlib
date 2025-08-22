@@ -49,3 +49,10 @@ func (o *implementation[T]) Unwrap() T {
 	}
 	return o.value
 }
+
+func (o *implementation[T]) Or(f func() T) T {
+	if o.present {
+		return o.value
+	}
+	return f()
+}
