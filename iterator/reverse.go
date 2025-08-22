@@ -67,7 +67,7 @@ func (r *Reverse[T]) Reset() {
 	if r.err != nil {
 		return
 	}
-	r.pos = 0
+	r.pos = len(r.data)
 	r.err = nil
 }
 
