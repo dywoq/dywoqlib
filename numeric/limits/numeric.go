@@ -1,12 +1,14 @@
-package numeric
+package limits
 
 import (
 	"math"
+
+	"github.com/dywoq/dywoqlib/numeric/constraints"
 )
 
 // Limits returns the minimal, and maximum limit of a generic parameter numeric I.
 // Rarely, but the function panics if I is not supported type.
-func Limits[I Numeric]() (I, I) {
+func Numeric[I constraints.Numeric]() (I, I) {
 	var zero I
 	switch any(zero).(type) {
 	case int:
