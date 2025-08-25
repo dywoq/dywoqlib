@@ -15,8 +15,10 @@
 package optional
 
 import (
+	"errors"
 	go_testing "testing"
 
+	"github.com/dywoq/dywoqlib/err"
 	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 )
 
@@ -202,7 +204,28 @@ func TestMap(t *go_testing.T) {
 	})
 }
 
-// Benchmarks remain unchanged as t.Run is for tests, not benchmarks.
+func TestError(t *go_testing.T) {
+	t.Run("error context is present", func(tt *go_testing.T) {
+		someError := errors.New("some error")
+		context := err.NewContext(someError, "you will give me some oreo!!")
+		opt := NoneContext[int](context)
+		got := opt.Error().Nil()
+		want := false
+		if got != want {
+			tt.Errorf("got %v, want %v", got, want)
+		}
+	})
+
+	t.Run("error context is not present", func(tt *go_testing.T) {
+		opt := Int()
+		got := opt.Error().Nil()
+		want := true
+		if got != want {
+			tt.Errorf("got %v, want %v", got, want)
+		}
+	})
+}
+
 func BenchmarkPresent(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
 	opt := New(10)
@@ -267,5 +290,15 @@ func BenchmarkMap(b *go_testing.B) {
 	opt := UInt8(20)
 	for b.Loop() {
 		_ = Map(opt, f)
+	}
+}
+
+func BenchmarkError(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	someError := errors.New("some error")
+	context := err.NewContext(someError, "you will give me some oreo!!")
+	opt := NoneContext[int](context)
+	for b.Loop() {
+		_ = opt.Error()
 	}
 }

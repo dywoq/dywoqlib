@@ -16,11 +16,14 @@ package optional
 
 import (
 	"fmt"
+
+	"github.com/dywoq/dywoqlib/err"
 )
 
 type implementation[T any] struct {
 	value   T
 	present bool
+	e       err.Context
 }
 
 func (o *implementation[T]) Present() bool {
@@ -69,4 +72,8 @@ func (o *implementation[T]) Or(f func() T) T {
 		return o.value
 	}
 	return f()
+}
+
+func (o *implementation[T]) Error() err.Context {
+	return o.e
 }

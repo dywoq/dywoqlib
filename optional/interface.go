@@ -14,7 +14,11 @@
 
 package optional
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/dywoq/dywoqlib/err"
+)
 
 // Maybe is an interface representing a optional value.
 type Maybe[T any] interface {
@@ -34,15 +38,24 @@ type Maybe[T any] interface {
 	// Or returns the value if it's present, otherwise it returns the result of the
 	// provided function.
 	Or(func() T) T
+	// Error returns the associated error context if the value is not present.
+	Error() err.Context
 }
 
 // New retruns a new Maybe with a value of a generic parameter T.
 func New[T any](val T) Maybe[T] {
-	return &implementation[T]{val, true}
+	return &implementation[T]{val, true, err.NewContext(nil, "")}
 }
 
 // None creates a new Maybe with no value,
 // but a generic parameter T must be still present.
 func None[T any]() Maybe[T] {
-	return &implementation[T]{present: false}
+	return &implementation[T]{present: false, e: err.NewContext(nil, "")}
+}
+
+// None creates a new Maybe with no value,
+// but a generic parameter T must be still present.
+// Error context can be provided unlike None.
+func NoneContext[T any](e err.Context) Maybe[T] {
+	return &implementation[T]{present: false, e: e}
 }
