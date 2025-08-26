@@ -27,6 +27,8 @@ func NewSlice[T comparable](elems ...T) *Slice[T] {
 			result = append(result, elem)
 		}
 	}
+	s.s = result
+	s.err = err.NewContext(nil, "")
 	return s
 }
 
