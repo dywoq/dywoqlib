@@ -13,6 +13,23 @@ type Slice[T comparable] struct {
 	err err.Context
 }
 
+func NewSlice[T comparable](elems ...T) *Slice[T] {
+	s := &Slice[T]{}
+	result := []T{}
+	for i, elem := range elems {
+		// to prevent out of bounds runtime error
+		if i == 0 {
+			result = append(result, elem)
+			continue
+		}
+		previous := elems[i-1]
+		if previous != elem {
+			result = append(result, elem)
+		}
+	}
+	return s
+}
+
 func (s Slice[T]) Grow(i int) {
 	if !s.err.Nil() {
 		return
