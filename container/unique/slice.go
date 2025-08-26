@@ -20,7 +20,7 @@ func (s Slice[T]) Grow(i int) {
 	if cap(s.s) < i {
 		newSlice := make([]T, len(s.s), i)
 		copy(newSlice, s.s)
-		s.s = newSlice
+		copy(s.s, newSlice)
 	}
 }
 
