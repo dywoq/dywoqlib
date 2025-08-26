@@ -57,7 +57,7 @@ func (i implementation) More() string {
 // Nil reports whether the error is nil.
 // (Currently returns true if error is not nil, may need adjustment.)
 func (i implementation) Nil() bool {
-	return i.err != nil
+	return i.err == nil
 }
 
 // String returns a human-readable string combining error and context.
