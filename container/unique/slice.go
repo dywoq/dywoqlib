@@ -174,7 +174,7 @@ func (s Slice[T]) Pop() T {
 	}
 	lastIdx := len(s.s) - 1
 	poppedElem := s.s[lastIdx]
-	s.s = s.s[:lastIdx]
+	copy(s.s, s.s[:lastIdx])
 	return poppedElem
 }
 
