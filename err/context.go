@@ -32,6 +32,10 @@ type Context interface {
 	String() string
 	// Marshal returns a JSON representation of the error and context.
 	Marshal() ([]byte, error)
+	// SetMore sets a "more" context value.
+	SetMore(string)
+	// SetError sets a error to the underlying error field.
+	SetError(error)
 }
 
 type implementation struct {
@@ -41,27 +45,22 @@ type implementation struct {
 
 // NewContext creates a new Context with the given error and additional context.
 func NewContext(err error, more string) Context {
-	return implementation{err, more}
+	return &implementation{err, more}
 }
 
-// Error returns the original error.
-func (i implementation) Error() error {
+func (i *implementation) Error() error {
 	return i.err
 }
 
-// More returns additional context information.
-func (i implementation) More() string {
+func (i *implementation) More() string {
 	return i.more
 }
 
-// Nil reports whether the error is nil.
-// (Currently returns true if error is not nil, may need adjustment.)
-func (i implementation) Nil() bool {
+func (i *implementation) Nil() bool {
 	return i.err == nil
 }
 
-// String returns a human-readable string combining error and context.
-func (i implementation) String() string {
+func (i *implementation) String() string {
 	return i.err.Error() + ": " + i.more
 }
 
@@ -70,11 +69,18 @@ type jsonPayload struct {
 	More  string `json:"more"`
 }
 
-// Marshal returns the JSON representation of the error and context.
-func (i implementation) Marshal() ([]byte, error) {
+func (i *implementation) Marshal() ([]byte, error) {
 	data := jsonPayload{
 		Error: i.err.Error(),
 		More:  i.more,
 	}
 	return json.Marshal(data)
+}
+
+func (i *implementation) SetMore(value string) {
+	i.more = value
+}
+
+func (i *implementation) SetError(value error) {
+	i.err = value
 }
