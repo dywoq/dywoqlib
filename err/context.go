@@ -36,6 +36,8 @@ type Context interface {
 	SetMore(string)
 	// SetError sets a error to the underlying error field.
 	SetError(error)
+	// Copy fully copies the fields from another Context object.
+	Copy(Context)
 }
 
 type implementation struct {
@@ -83,4 +85,9 @@ func (i *implementation) SetMore(value string) {
 
 func (i *implementation) SetError(value error) {
 	i.err = value
+}
+
+func (i *implementation) Copy(c Context) {
+	i.err = c.Error()
+	i.more = c.More()
 }
