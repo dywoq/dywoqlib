@@ -14,7 +14,8 @@
 
 package iterator
 
-//  ReadonlyReverse is a generic iterator for traversing a slice of elements of type T in reverse order in a read-only manner.
+//	ReadonlyReverse is a generic iterator for traversing a slice of elements of type T in reverse order in a read-only manner.
+//
 // The underlying slice cannot be modified during iteration.
 // T must be a comparable type.
 type ReadonlyReverse[T comparable] struct {
