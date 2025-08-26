@@ -50,6 +50,11 @@ func NewContext(err error, more string) Context {
 	return &implementation{err, more}
 }
 
+// NoneContext creates a new Context with no error and no additional context.
+func NoneContext() Context {
+	return NewContext(nil, "")
+}
+
 func (i *implementation) Error() error {
 	return i.err
 }
