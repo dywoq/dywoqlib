@@ -61,7 +61,8 @@ func (s Slice[T]) At(i int) T {
 	}
 	found, err2 := sliceutil.At(i, s.s)
 	if err2 != nil {
-		s.err = err.NewContext(err2, "source is \"unique.Slice[T].At(int) T\"")
+		s.err.SetError(err2)
+		s.err.SetMore("source is \"unique.Slice[T].At(int) T\"")
 		return s.zero()
 	}
 	return found
@@ -73,7 +74,8 @@ func (s Slice[T]) Find(req T) T {
 	}
 	found, err2 := sliceutil.Find(req, s.Iterating().Forward())
 	if err2 != nil {
-		s.err = err.NewContext(err2, "source is \"unique.Slice[T].Find(T) T\"")
+		s.err.SetError(err2)
+		s.err.SetMore("source is \"unique.Slice[T].Find(T) T\"")
 		return s.zero()
 	}
 	return found
@@ -85,7 +87,8 @@ func (s Slice[T]) String() string {
 	}
 	formatted, err2 := sliceutil.Format(s.s)
 	if err2 != nil {
-		s.err = err.NewContext(err2, "source is \"unique.Slice[T].String() string\"")
+		s.err.SetError(err2)
+		s.err.SetMore("source is \"unique.Slice[T].String() string\"")
 		return ""
 	}
 	return formatted
@@ -102,7 +105,8 @@ func (s Slice[T]) Set(elem T, i int) T {
 
 	new, err2 := sliceutil.Set(elem, i, s.s)
 	if err2 != nil {
-		s.err = err.NewContext(err2, "source is \"unique.Slice[T].Set(T, int) T\"")
+		s.err.SetError(err2)
+		s.err.SetMore("source is \"unique.Slice[T].Set(T, int) T\"")
 		return s.zero()
 	}
 	return new
@@ -114,7 +118,8 @@ func (s Slice[T]) Delete(i int) T {
 	}
 	deleted, err2 := sliceutil.Delete(i, s.s)
 	if err2 != nil {
-		s.err = err.NewContext(err2, "source is \"unique.Slice[T].Delete(int) T\"")
+		s.err.SetError(err2)
+		s.err.SetMore("source is \"unique.Slice[T].Delete(int) T\"")
 		return s.zero()
 	}
 	return deleted
@@ -131,7 +136,8 @@ func (s Slice[T]) Insert(i int, elem T) T {
 
 	inserted, err2 := sliceutil.Insert(i, &s.s, elem)
 	if err2 != nil {
-		s.err = err.NewContext(err2, "source is \"unique.Slice[T].Insert(int, T) T\"")
+		s.err.SetError(err2)
+		s.err.SetMore("source is \"unique.Slice[T].Insert(int, T) T\"")
 		return s.zero()
 	}
 	return inserted
