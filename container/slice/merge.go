@@ -77,11 +77,7 @@ func MergeFixed[T comparable](first *Fixed[T], second *Fixed[T]) (*Fixed[T], err
 // It pre-allocates a result slice with the size of first and second slice.
 func Merge[T any](first []T, second []T) []T {
 	res := make([]T, 0, len(first)+len(second))
-	for _, elem := range first {
-		res = append(res, elem)
-	}
-	for _, elem := range second {
-		res = append(res, elem)
-	}
+	res = append(res, first...)
+	res = append(res, second...)
 	return res
 }
