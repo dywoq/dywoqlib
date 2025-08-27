@@ -8,11 +8,18 @@ import (
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
+// Slice represents a dynamic slice structure,
+// ensuring all elements are unique and there are no duplicates.
 type Slice[T comparable] struct {
 	s   []T
 	err err.Context
 }
 
+// NewSlice creates and returns a new pointer to Slice.
+// First it checks for any duplicates in elems.
+// If previous element is same as the current one, the current one is skipped,
+// otherwise it's appended to slice. After the iteration completed,
+// it returns a pointer to Slice.
 func NewSlice[T comparable](elems ...T) *Slice[T] {
 	s := &Slice[T]{}
 	result := []T{}
@@ -32,6 +39,9 @@ func NewSlice[T comparable](elems ...T) *Slice[T] {
 	return s
 }
 
+// Grow pre-allocates the underlying slice, unless there are no encountered errors.
+// If capacity of the slice is lower than i, it creates a new slice with the initial capacity i,
+// and copies the new slice to the underlying one.
 func (s Slice[T]) Grow(i int) {
 	if !s.err.Nil() {
 		return
@@ -43,22 +53,31 @@ func (s Slice[T]) Grow(i int) {
 	}
 }
 
+// Native returns the underlying slice.
 func (s Slice[T]) Native() []T {
 	return s.s
 }
 
+// Error returns the possible encountered error.
 func (s Slice[T]) Error() err.Context {
 	return s.err
 }
 
+// Length returns the length of the underlying slice.
 func (s Slice[T]) Length() int {
 	return len(s.s)
 }
 
+// Iterating returns a pointer to iterator.Combined structure.
 func (s Slice[T]) Iterating() *iterator.Combined[T] {
 	return iterator.NewCombined(s.s)
 }
 
+// Append appends elems to the underlying slice, unless elems has elements that duplicate
+// already existing elements in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the appended elements.
 func (s Slice[T]) Append(elems ...T) []T {
 	if !s.err.Nil() {
 		return []T{}
@@ -74,6 +93,10 @@ func (s Slice[T]) Append(elems ...T) []T {
 	return appended
 }
 
+// At returns the element at i, if i is not out of bounds of the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the element at i.
 func (s Slice[T]) At(i int) T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -87,6 +110,10 @@ func (s Slice[T]) At(i int) T {
 	return found
 }
 
+// Find finds req in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the found element.
 func (s Slice[T]) Find(req T) T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -100,6 +127,9 @@ func (s Slice[T]) Find(req T) T {
 	return found
 }
 
+// String returns the formatted underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
 func (s Slice[T]) String() string {
 	if !s.err.Nil() {
 		return ""
@@ -113,6 +143,10 @@ func (s Slice[T]) String() string {
 	return formatted
 }
 
+// Set sets elem at i in the underlying slice, if elem doesn't exist in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the set element.
 func (s Slice[T]) Set(elem T, i int) T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -131,6 +165,10 @@ func (s Slice[T]) Set(elem T, i int) T {
 	return new
 }
 
+// Delete deletes the element at i in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the deleted element.
 func (s Slice[T]) Delete(i int) T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -144,6 +182,10 @@ func (s Slice[T]) Delete(i int) T {
 	return deleted
 }
 
+// Insert inserts elem at i in the underlying slice, if it doesn't exist in the slice already.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the inserted element.
 func (s Slice[T]) Insert(i int, elem T) T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -162,6 +204,9 @@ func (s Slice[T]) Insert(i int, elem T) T {
 	return inserted
 }
 
+// Front returns the front element in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
 func (s Slice[T]) Front() T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -173,6 +218,9 @@ func (s Slice[T]) Front() T {
 	return got
 }
 
+// Back returns the back element in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
 func (s Slice[T]) Back() T {
 	if !s.err.Nil() {
 		return s.zero()
@@ -184,6 +232,10 @@ func (s Slice[T]) Back() T {
 	return got
 }
 
+// Pop removes the last element in the underlying slice.
+// If the error state is not nil, it returns the zero value and skips the operation.
+// If any error has encountered during the operation, the function sets the error to the internal error state.
+// Returns the popped element.
 func (s Slice[T]) Pop() T {
 	if !s.err.Nil() {
 		return s.zero()
