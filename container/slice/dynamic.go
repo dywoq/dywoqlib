@@ -206,14 +206,10 @@ func (d *Dynamic[T]) Insert(i int, elem T) T {
 func (d *Dynamic[T]) Front() T {
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	if d.err != nil {
+	if d.err != nil || len(d.s) == 0 {
 		return d.zero()
 	}
-	got := d.At(0)
-	if d.err != nil {
-		return d.zero()
-	}
-	return got
+	return d.s[0]
 }
 
 // Back returns the last element of the slice.
@@ -222,14 +218,10 @@ func (d *Dynamic[T]) Front() T {
 func (d *Dynamic[T]) Back() T {
 	d.mu.Lock()
 	defer d.mu.Unlock()
-	if d.err != nil {
+	if d.err != nil || len(d.s) == 0 {
 		return d.zero()
 	}
-	got := d.At(len(d.s) - 1)
-	if d.err != nil {
-		return d.zero()
-	}
-	return got
+	return d.s[len(d.s)-1]
 }
 
 // Pop removes and returns the last element of the slice.

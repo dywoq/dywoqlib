@@ -264,14 +264,10 @@ func (s *Slice[T]) Insert(i int, elem T) T {
 func (s *Slice[T]) Front() T {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if !s.err.Nil() {
+	if !s.err.Nil() || len(s.s) == 0 {
 		return s.zero()
 	}
-	got := s.At(0)
-	if !s.err.Nil() {
-		return s.zero()
-	}
-	return got
+	return s.s[0]
 }
 
 // Back returns the back element in the underlying slice.
@@ -281,14 +277,10 @@ func (s *Slice[T]) Front() T {
 func (s *Slice[T]) Back() T {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if !s.err.Nil() {
+	if !s.err.Nil() || len(s.s) == 0 {
 		return s.zero()
 	}
-	got := s.At(len(s.s) - 1)
-	if !s.err.Nil() {
-		return s.zero()
-	}
-	return got
+	return s.s[len(s.s)-1]
 }
 
 // Pop removes the last element in the underlying slice.

@@ -18,49 +18,44 @@ import (
 	"sync"
 
 	"github.com/dywoq/dywoqlib/iterator"
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 // Fixed provides a thread-safe generic, error-aware wrapper around a Go slice with a fixed maximum length.
-// It uses a Dynamic slice internally and enforces the fixed length constraint.
 type Fixed[T comparable] struct {
 	err      error
 	fixedLen int
-	d        *Dynamic[T]
+	s        []T
 	mu       sync.Mutex
 }
 
 // NewFixed creates a new Fixed slice instance with a specified fixed length and initial elements.
 // It returns an error if the fixed length is invalid or initial elements exceed the fixed length.
 func NewFixed[T comparable](fixedLen int, elems ...T) *Fixed[T] {
-	d := NewDynamic[T]()
-	if d.Error() != nil {
-		return &Fixed[T]{d.Error(), fixedLen, nil, sync.Mutex{}}
-	}
 	if fixedLen < 0 {
-		return &Fixed[T]{ErrNegativeFixedLength, fixedLen, nil, sync.Mutex{}}
+		return &Fixed[T]{ErrNegativeFixedLength, fixedLen, []T{}, sync.Mutex{}}
 	}
 	if fixedLen < len(elems) {
-		return &Fixed[T]{ErrFixedLengthOutOfBounds, fixedLen, nil, sync.Mutex{}}
+		return &Fixed[T]{ErrFixedLengthOutOfBounds, fixedLen, []T{}, sync.Mutex{}}
 	}
 	if len(elems) > fixedLen {
-		return &Fixed[T]{ErrOutOfBounds, fixedLen, nil, sync.Mutex{}}
+		return &Fixed[T]{ErrOutOfBounds, fixedLen, []T{}, sync.Mutex{}}
 	}
-	d.Grow(fixedLen)
-	d.Append(elems...)
-	return &Fixed[T]{nil, fixedLen, d, sync.Mutex{}}
+	s := make([]T, fixedLen)
+	copy(s, elems)
+	return &Fixed[T]{nil, fixedLen, s, sync.Mutex{}}
 }
 
-// Native returns the underlying Go slice from the internal Dynamic slice.
+// Native returns the underlying Go slice.
 // This allows direct access to the raw slice data.
 // Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Native() []T {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.d.Native()
+	return f.s
 }
 
 // Error returns the first error encountered during operations on the Fixed slice.
-// It reflects errors from the Fixed slice itself or its underlying Dynamic slice.
 // Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Error() error {
 	f.mu.Lock()
@@ -74,7 +69,7 @@ func (f *Fixed[T]) Error() error {
 func (f *Fixed[T]) Length() int {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.d.Length()
+	return len(f.s)
 }
 
 // Iterating returns a Combined iterator for the elements in the Fixed slice.
@@ -83,7 +78,7 @@ func (f *Fixed[T]) Length() int {
 func (f *Fixed[T]) Iterating() *iterator.Combined[T] {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.d.Iterating()
+	return iterator.NewCombined(f.s)
 }
 
 // Append adds new elements to the Fixed slice, if capacity allows.
@@ -95,12 +90,8 @@ func (f *Fixed[T]) Append(elems ...T) []T {
 	if ok := f.errorsOk(); !ok {
 		return []T{}
 	}
-	appended := f.d.Append(elems...)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
-		return []T{}
-	}
-	return appended
+	f.s = append(f.s, elems...)
+	return elems
 }
 
 // At returns the element at the specified index.
@@ -112,12 +103,11 @@ func (f *Fixed[T]) At(i int) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	got := f.d.At(i)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	if i > len(f.s) || i < 0 {
+		f.err = ErrOutOfBounds
 		return f.zero()
 	}
-	return got
+	return f.s[i]
 }
 
 // Find searches for the first occurrence of a requested element.
@@ -129,16 +119,15 @@ func (f *Fixed[T]) Find(req T) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	found := f.d.Find(req)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	found, err := sliceutil.Find(req, f.Iterating().Forward())
+	if err != nil {
+		f.err = err
 		return f.zero()
 	}
 	return found
 }
 
 // String returns a string representation of the Fixed slice.
-// It delegates to the underlying Dynamic slice's String method.
 // Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) String() string {
 	f.mu.Lock()
@@ -146,9 +135,9 @@ func (f *Fixed[T]) String() string {
 	if ok := f.errorsOk(); !ok {
 		return ""
 	}
-	formatted := f.d.String()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	formatted, err := sliceutil.Format(f.s)
+	if err != nil {
+		f.err = err
 		return ""
 	}
 	return formatted
@@ -163,9 +152,9 @@ func (f *Fixed[T]) Set(elem T, i int) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	new := f.d.Set(elem, i)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	new, err := sliceutil.Set(elem, i, f.s)
+	if err != nil {
+		f.err = err
 		return f.zero()
 	}
 	return new
@@ -180,9 +169,9 @@ func (f *Fixed[T]) Delete(i int) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	deleted := f.d.Delete(i)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	deleted, err := sliceutil.Delete(i, f.s)
+	if err != nil {
+		f.err = err
 		return f.zero()
 	}
 	return deleted
@@ -197,9 +186,9 @@ func (f *Fixed[T]) Insert(i int, elem T) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	inserted := f.d.Insert(i, elem)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	inserted, err := sliceutil.Insert(i, &f.s, elem)
+	if err != nil {
+		f.err = err
 		return f.zero()
 	}
 	return inserted
@@ -207,36 +196,26 @@ func (f *Fixed[T]) Insert(i int, elem T) T {
 
 // Front returns the first element of the Fixed slice.
 // It returns a zero value if the slice is empty or an error occurred.
-// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Front() T {
-	f.mu.Lock()
-	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	got := f.d.Front()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	if len(f.s) == 0 {
 		return f.zero()
 	}
-	return got
+	return f.s[0]
 }
 
 // Back returns the last element of the Fixed slice.
 // It returns a zero value if the slice is empty or an error occurred.
-// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Back() T {
-	f.mu.Lock()
-	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	got := f.d.Back()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	if len(f.s) == 0 {
 		return f.zero()
 	}
-	return got
+	return f.s[len(f.s)-1]
 }
 
 // Pop removes and returns the last element of the Fixed slice.
@@ -248,20 +227,21 @@ func (f *Fixed[T]) Pop() T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	got := f.d.Pop()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	if len(f.s) == 0 {
 		return f.zero()
 	}
-	return got
+	lastIdx := len(f.s) - 1
+	poppedElem := f.s[lastIdx]
+	f.s = f.s[:lastIdx]
+	return poppedElem
 }
 
 func (f *Fixed[T]) outOfBounds() bool {
-	return len(f.d.s) > f.fixedLen
+	return len(f.s) > f.fixedLen
 }
 
 func (f *Fixed[T]) errorsOk() bool {
-	if f.fixedLen < len(f.d.s) {
+	if f.fixedLen < len(f.s) {
 		f.err = ErrFixedLengthOutOfBounds
 		return false
 	}
