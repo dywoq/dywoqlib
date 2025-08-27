@@ -14,7 +14,7 @@
 
 package algorithms
 
-// Parts break k into n parts, including n as the last point.
+// Parts break k into n parts.
 func Parts(n, k int) []float64 {
 	result := make([]float64, k)
 	step := float64(n) / float64(k+1)
