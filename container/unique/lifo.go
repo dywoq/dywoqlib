@@ -12,7 +12,7 @@ type Lifo[T comparable] struct {
 }
 
 func NewLifo[T comparable]() *Lifo[T] {
-	return &Lifo[T]{NewSlice[T](), err.NewContext(nil, "")}
+	return &Lifo[T]{NewSlice[T](), err.NoneContext()}
 }
 
 func (l *Lifo[T]) Native() []T {
