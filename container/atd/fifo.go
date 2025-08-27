@@ -17,24 +17,20 @@ package atd
 import (
 	"sync"
 
-	"github.com/dywoq/dywoqlib/container/slice"
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 // Fifo represents a thread-safe generic first-in-first-out (FIFO) queue.
 // It stores elements of any comparable type T and provides queue operations.
 type Fifo[T comparable] struct {
 	err error
-	d   *slice.Dynamic[T]
+	s   []T
 	mu  sync.Mutex
 }
 
 // NewFifo creates and returns a new instance of Fifo for elements of type T.
 func NewFifo[T comparable]() *Fifo[T] {
-	d := slice.NewDynamic[T]()
-	if d.Error() != nil {
-		return &Fifo[T]{d.Error(), nil, sync.Mutex{}}
-	}
-	return &Fifo[T]{nil, d, sync.Mutex{}}
+	return &Fifo[T]{nil, []T{}, sync.Mutex{}}
 }
 
 // Native returns the underlying slice of elements stored in the Fifo.
@@ -43,7 +39,7 @@ func NewFifo[T comparable]() *Fifo[T] {
 func (f *Fifo[T]) Native() []T {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.d.Native()
+	return f.s
 }
 
 // Error returns the last error encountered by the Fifo instance.
@@ -60,7 +56,7 @@ func (f *Fifo[T]) Error() error {
 func (f *Fifo[T]) Empty() bool {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.d.Length() == 0
+	return len(f.s) == 0
 }
 
 // Length returns the number of elements currently stored in the Fifo queue.
@@ -68,7 +64,7 @@ func (f *Fifo[T]) Empty() bool {
 func (f *Fifo[T]) Length() int {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.d.Length()
+	return len(f.s)
 }
 
 // Front returns the element at the front of the FIFO queue without removing it.
@@ -81,11 +77,10 @@ func (f *Fifo[T]) Front() T {
 	if f.err != nil {
 		return f.zero()
 	}
-	res := f.d.Front()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	if len(f.s) == 0 {
 		return f.zero()
 	}
+	res := f.s[0]
 	return res
 }
 
@@ -99,11 +94,10 @@ func (f *Fifo[T]) Back() T {
 	if f.err != nil {
 		return f.zero()
 	}
-	res := f.d.Back()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
+	if len(f.s) == 0 {
 		return f.zero()
 	}
+	res := f.s[len(f.s)-1]
 	return res
 }
 
@@ -118,12 +112,8 @@ func (f *Fifo[T]) Append(elem T) T {
 	if f.err != nil {
 		return f.zero()
 	}
-	res := f.d.Append(elem)
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
-		return f.zero()
-	}
-	return res[0]
+	f.s = append(f.s, elem)
+	return elem
 }
 
 // Pop removes and returns the front element from the FIFO queue.
@@ -136,12 +126,10 @@ func (f *Fifo[T]) Pop() T {
 	if f.err != nil {
 		return f.zero()
 	}
-	res := f.d.Pop()
-	if f.d.Error() != nil {
-		f.err = f.d.Error()
-		return f.zero()
-	}
-	return res
+	lastIdx := len(f.s)-1
+	poppedElem := f.s[lastIdx]
+	f.s = f.s[:lastIdx]
+	return poppedElem
 }
 
 // String returns the string representation of the Fifo.
@@ -153,7 +141,12 @@ func (f *Fifo[T]) String() string {
 	if f.err != nil {
 		return ""
 	}
-	return f.d.String()
+	formatted, err := sliceutil.Format(f.s)
+	if err != nil {
+		f.err = err
+		return ""
+	}
+	return formatted
 }
 
 func (f *Fifo[T]) zero() T {

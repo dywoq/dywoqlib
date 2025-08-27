@@ -16,15 +16,14 @@ package atd
 
 import (
 	"sync"
-
-	"github.com/dywoq/dywoqlib/container/slice"
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 // Lifo represents a thread-safe generic Last-In-First-Out (LIFO) stack data structure.
 // It stores elements of any comparable type T and provides stack operations.
 type Lifo[T comparable] struct {
 	err error
-	d   *slice.Dynamic[T]
+	s   []T
 	mu  sync.Mutex
 }
 
@@ -32,11 +31,7 @@ type Lifo[T comparable] struct {
 // It initializes the underlying dynamic slice for storing elements of type T.
 // If an error occurs during initialization, the returned Lifo will contain the error and a nil data slice.
 func NewLifo[T comparable]() *Lifo[T] {
-	d := slice.NewDynamic[T]()
-	if d.Error() != nil {
-		return &Lifo[T]{d.Error(), nil, sync.Mutex{}}
-	}
-	return &Lifo[T]{nil, d, sync.Mutex{}}
+	return &Lifo[T]{nil, []T{}, sync.Mutex{}}
 }
 
 // Native returns the underlying slice of elements stored in the Lifo.
@@ -45,7 +40,7 @@ func NewLifo[T comparable]() *Lifo[T] {
 func (l *Lifo[T]) Native() []T {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.d.Native()
+	return l.s
 }
 
 // Error returns the last error encountered by the Lifo instance.
@@ -62,7 +57,7 @@ func (l *Lifo[T]) Error() error {
 func (l *Lifo[T]) Length() int {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.d.Length()
+	return len(l.s)
 }
 
 // Empty returns true if the Lifo stack contains no elements.
@@ -70,7 +65,7 @@ func (l *Lifo[T]) Length() int {
 func (l *Lifo[T]) Empty() bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.d.Length() == 0
+	return len(l.s) == 0
 }
 
 // Append adds the given element to the Lifo container.
@@ -85,12 +80,8 @@ func (l *Lifo[T]) Append(elem T) T {
 	if l.err != nil {
 		return l.zero()
 	}
-	res := l.d.Append(elem)
-	if l.d.Error() != nil {
-		l.err = l.d.Error()
-		return l.zero()
-	}
-	return res[0]
+	l.s = append(l.s, elem)
+	return elem
 }
 
 // Pop removes and returns the top element from the Lifo stack.
@@ -103,12 +94,10 @@ func (l *Lifo[T]) Pop() T {
 	if l.err != nil {
 		return l.zero()
 	}
-	res := l.d.Pop()
-	if l.d.Error() != nil {
-		l.err = l.d.Error()
-		return l.zero()
-	}
-	return res
+	lastIdx := len(l.s) - 1
+	poppedElem := l.s[lastIdx]
+	l.s = l.s[:lastIdx]
+	return poppedElem
 }
 
 // Top returns the element at the top of the LIFO stack without removing it.
@@ -121,12 +110,10 @@ func (l *Lifo[T]) Top() T {
 	if l.err != nil {
 		return l.zero()
 	}
-	res := l.d.Back()
-	if l.d.Error() != nil {
-		l.err = l.d.Error()
+	if len(l.s) == 0 {
 		return l.zero()
 	}
-	return res
+	return l.s[len(l.s)-1]
 }
 
 // String returns the string representation of the Lifo stack.
@@ -138,7 +125,12 @@ func (l *Lifo[T]) String() string {
 	if l.err != nil {
 		return ""
 	}
-	return l.d.String()
+	res, err := sliceutil.Format(l.s)
+	if err != nil {
+		l.err = err
+		return ""
+	}
+	return res
 }
 
 func (l *Lifo[T]) zero() T {
