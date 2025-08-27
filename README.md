@@ -25,6 +25,3 @@ go get github.com/dywoq/dywoqlib
 
 ## Documentation
 To see documentation, see [`docs`](./docs/README.md) folder.
-
-## Examples
-To see examples, see [`docs/examples`](./docs/examples/README.md) folder.
