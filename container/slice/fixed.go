@@ -14,7 +14,11 @@
 
 package slice
 
-import "github.com/dywoq/dywoqlib/iterator"
+import (
+	"sync"
+
+	"github.com/dywoq/dywoqlib/iterator"
+)
 
 // Fixed provides a generic, error-aware wrapper around a Go slice with a fixed maximum length.
 // It uses a Dynamic slice internally and enforces the fixed length constraint.
@@ -22,6 +26,7 @@ type Fixed[T comparable] struct {
 	err      error
 	fixedLen int
 	d        *Dynamic[T]
+	mu       sync.Mutex
 }
 
 // NewFixed creates a new Fixed slice instance with a specified fixed length and initial elements.
@@ -29,49 +34,64 @@ type Fixed[T comparable] struct {
 func NewFixed[T comparable](fixedLen int, elems ...T) *Fixed[T] {
 	d := NewDynamic[T]()
 	if d.Error() != nil {
-		return &Fixed[T]{d.Error(), fixedLen, nil}
+		return &Fixed[T]{d.Error(), fixedLen, nil, sync.Mutex{}}
 	}
 	if fixedLen < 0 {
-		return &Fixed[T]{ErrNegativeFixedLength, fixedLen, nil}
+		return &Fixed[T]{ErrNegativeFixedLength, fixedLen, nil, sync.Mutex{}}
 	}
 	if fixedLen < len(elems) {
-		return &Fixed[T]{ErrFixedLengthOutOfBounds, fixedLen, nil}
+		return &Fixed[T]{ErrFixedLengthOutOfBounds, fixedLen, nil, sync.Mutex{}}
 	}
 	if len(elems) > fixedLen {
-		return &Fixed[T]{ErrOutOfBounds, fixedLen, nil}
+		return &Fixed[T]{ErrOutOfBounds, fixedLen, nil, sync.Mutex{}}
 	}
 	d.Grow(fixedLen)
 	d.Append(elems...)
-	return &Fixed[T]{nil, fixedLen, d}
+	return &Fixed[T]{nil, fixedLen, d, sync.Mutex{}}
 }
 
 // Native returns the underlying Go slice from the internal Dynamic slice.
 // This allows direct access to the raw slice data.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Native() []T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.d.Native()
 }
 
 // Error returns the first error encountered during operations on the Fixed slice.
 // It reflects errors from the Fixed slice itself or its underlying Dynamic slice.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Error() error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.err
 }
 
 // Length returns the current number of elements in the Fixed slice.
 // This is the logical length, not the fixed capacity.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Length() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.d.Length()
 }
 
 // Iterating returns a Combined iterator for the elements in the Fixed slice.
 // This allows for standard iteration patterns over the slice's contents.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Iterating() *iterator.Combined[T] {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.d.Iterating()
 }
 
 // Append adds new elements to the Fixed slice, if capacity allows.
 // It returns the appended elements or an empty slice if an error occurs or capacity is exceeded.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Append(elems ...T) []T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return []T{}
 	}
@@ -85,7 +105,10 @@ func (f *Fixed[T]) Append(elems ...T) []T {
 
 // At returns the element at the specified index.
 // It updates the internal error if the index is out of bounds.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) At(i int) T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -99,7 +122,10 @@ func (f *Fixed[T]) At(i int) T {
 
 // Find searches for the first occurrence of a requested element.
 // It returns the found element or a zero value if not found or an error occurs.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Find(req T) T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -113,7 +139,10 @@ func (f *Fixed[T]) Find(req T) T {
 
 // String returns a string representation of the Fixed slice.
 // It delegates to the underlying Dynamic slice's String method.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) String() string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return ""
 	}
@@ -127,7 +156,10 @@ func (f *Fixed[T]) String() string {
 
 // Set updates the element at a given index within the fixed bounds.
 // It returns the updated element or a zero value on error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Set(elem T, i int) T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -141,7 +173,10 @@ func (f *Fixed[T]) Set(elem T, i int) T {
 
 // Delete removes the element at the specified index.
 // It returns the deleted element or a zero value on error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Delete(i int) T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -155,7 +190,10 @@ func (f *Fixed[T]) Delete(i int) T {
 
 // Insert adds an element at a specific index, if it doesn't exceed the fixed length.
 // It returns the inserted element or a zero value on error or if capacity is exceeded.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Insert(i int, elem T) T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -169,7 +207,10 @@ func (f *Fixed[T]) Insert(i int, elem T) T {
 
 // Front returns the first element of the Fixed slice.
 // It returns a zero value if the slice is empty or an error occurred.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Front() T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -183,7 +224,10 @@ func (f *Fixed[T]) Front() T {
 
 // Back returns the last element of the Fixed slice.
 // It returns a zero value if the slice is empty or an error occurred.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Back() T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -197,7 +241,10 @@ func (f *Fixed[T]) Back() T {
 
 // Pop removes and returns the last element of the Fixed slice.
 // It returns a zero value if the slice is empty or an error occurred.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[T]) Pop() T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
@@ -209,13 +256,10 @@ func (f *Fixed[T]) Pop() T {
 	return got
 }
 
-// outOfBounds checks if the current length of the dynamic slice exceeds the fixed length.
 func (f *Fixed[T]) outOfBounds() bool {
 	return len(f.d.s) > f.fixedLen
 }
 
-// errorsOk checks for and updates any internal errors, including length constraints.
-// It ensures that operations only proceed if the Fixed slice is in a valid state.
 func (f *Fixed[T]) errorsOk() bool {
 	if f.fixedLen < len(f.d.s) {
 		f.err = ErrFixedLengthOutOfBounds

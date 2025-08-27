@@ -15,6 +15,8 @@
 package slice
 
 import (
+	"sync"
+
 	"github.com/dywoq/dywoqlib/iterator"
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
@@ -23,17 +25,21 @@ import (
 type Dynamic[T comparable] struct {
 	err error
 	s   []T
+	mu  sync.Mutex
 }
 
 // NewDynamic creates a new Dynamic slice instance with initial elements.
 // It initializes the Dynamic struct with the provided elements and no error.
 func NewDynamic[T comparable](elems ...T) *Dynamic[T] {
-	return &Dynamic[T]{nil, elems}
+	return &Dynamic[T]{nil, elems, sync.Mutex{}}
 }
 
 // Grow increases the capacity of the underlying slice to at least i.
 // If the current capacity is less than i, a new slice is allocated and elements are copied.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Grow(i int) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return
 	}
@@ -46,31 +52,46 @@ func (d *Dynamic[T]) Grow(i int) {
 
 // Native returns the underlying Go slice.
 // This allows direct interaction with the standard slice if needed.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Native() []T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	return d.s
 }
 
 // Error returns the first error encountered during operations.
 // Subsequent operations will be no-ops if an error is present.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Error() error {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	return d.err
 }
 
 // Length returns the number of elements in the dynamic slice.
 // It provides the current length of the wrapped slice.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Length() int {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	return len(d.s)
 }
 
 // Iterating returns a Combined iterator for the slice.
 // This allows for flexible iteration over the elements.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Iterating() *iterator.Combined[T] {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	return iterator.NewCombined(d.s)
 }
 
 // Append adds new elements to the end of the slice.
 // It modifies the underlying slice and returns the appended elements.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Append(elems ...T) []T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return []T{}
 	}
@@ -80,7 +101,10 @@ func (d *Dynamic[T]) Append(elems ...T) []T {
 
 // At returns the element at the specified index.
 // It updates the internal error if the index is out of bounds.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) At(i int) T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -94,7 +118,10 @@ func (d *Dynamic[T]) At(i int) T {
 
 // Find searches for the first occurrence of a requested element.
 // It returns the found element or a zero value if not found or an error occurs.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Find(req T) T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -107,7 +134,10 @@ func (d *Dynamic[T]) Find(req T) T {
 
 // String returns a string representation of the slice.
 // It uses sliceutil.Format to format the underlying slice.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) String() string {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return ""
 	}
@@ -121,7 +151,10 @@ func (d *Dynamic[T]) String() string {
 
 // Set updates the element at a given index.
 // It returns the updated element or a zero value on error.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Set(elem T, i int) T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -135,7 +168,10 @@ func (d *Dynamic[T]) Set(elem T, i int) T {
 
 // Delete removes the element at the specified index.
 // It returns the deleted element or a zero value on error.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Delete(i int) T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -149,7 +185,10 @@ func (d *Dynamic[T]) Delete(i int) T {
 
 // Insert adds an element at a specific index.
 // It returns the inserted element or a zero value on error.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Insert(i int, elem T) T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -163,7 +202,10 @@ func (d *Dynamic[T]) Insert(i int, elem T) T {
 
 // Front returns the first element of the slice.
 // It returns a zero value if the slice is empty or an error occurred.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Front() T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -176,7 +218,10 @@ func (d *Dynamic[T]) Front() T {
 
 // Back returns the last element of the slice.
 // It returns a zero value if the slice is empty or an error occurred.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Back() T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
@@ -189,7 +234,10 @@ func (d *Dynamic[T]) Back() T {
 
 // Pop removes and returns the last element of the slice.
 // It returns a zero value if the slice is empty or an error occurred.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[T]) Pop() T {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return d.zero()
 	}
