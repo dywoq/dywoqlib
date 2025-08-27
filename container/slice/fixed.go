@@ -41,7 +41,7 @@ func NewFixed[T comparable](fixedLen int, elems ...T) *Fixed[T] {
 	if len(elems) > fixedLen {
 		return &Fixed[T]{ErrOutOfBounds, fixedLen, []T{}, sync.Mutex{}}
 	}
-	s := make([]T, fixedLen)
+	s := make([]T, len(elems), fixedLen)
 	copy(s, elems)
 	return &Fixed[T]{nil, fixedLen, s, sync.Mutex{}}
 }
