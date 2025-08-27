@@ -40,5 +40,6 @@ Each proposal must contain the following headers:
 ## Where to write
 Create proporsal as a sub-issue of the parent issue, if your proporsal may take place in already existing package.
 For example, if you're planning to create the feature inside "container" package, you may create sub-issue of https://github.com/dywoq/dywoqlib/issues/2, even it's marked as closed.
+If your proporsal represents new package (not sub-package), then you don't need it to create it as sub-issue.
 
 To see the progress more comfortably, you may use the [library's Github Project](https://github.com/users/dywoq/projects/19 "").
