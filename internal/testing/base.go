@@ -20,7 +20,7 @@ func SetBase() base { return base{} }
 
 type base struct{}
 
-func (b base) Benchmark(bench *testing.B) { 
+func (b base) Benchmark(bench *testing.B) {
 	bench.ReportAllocs()
 	bench.ReportMetric(0, "custom-metric")
 }
