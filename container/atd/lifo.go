@@ -14,13 +14,18 @@
 
 package atd
 
-import "github.com/dywoq/dywoqlib/container/slice"
+import (
+	"sync"
+
+	"github.com/dywoq/dywoqlib/container/slice"
+)
 
 // Lifo represents a generic Last-In-First-Out (LIFO) stack data structure.
 // It stores elements of any comparable type T and provides stack operations.
 type Lifo[T comparable] struct {
 	err error
 	d   *slice.Dynamic[T]
+	mu  sync.Mutex
 }
 
 // NewLifo creates and returns a new instance of Lifo[T], a last-in-first-out (LIFO) stack.
@@ -29,30 +34,42 @@ type Lifo[T comparable] struct {
 func NewLifo[T comparable]() *Lifo[T] {
 	d := slice.NewDynamic[T]()
 	if d.Error() != nil {
-		return &Lifo[T]{d.Error(), nil}
+		return &Lifo[T]{d.Error(), nil, sync.Mutex{}}
 	}
-	return &Lifo[T]{nil, d}
+	return &Lifo[T]{nil, d, sync.Mutex{}}
 }
 
 // Native returns the underlying slice of elements stored in the Lifo.
 // This provides direct access to the internal data structure.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Native() []T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.d.Native()
 }
 
 // Error returns the last error encountered by the Lifo instance.
 // If no error has occurred, it returns nil.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Error() error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.err
 }
 
 // Length returns the number of elements currently stored in the Lifo stack.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Length() int {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.d.Length()
 }
 
 // Empty returns true if the Lifo stack contains no elements.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Empty() bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.d.Length() == 0
 }
 
@@ -61,7 +78,10 @@ func (l *Lifo[T]) Empty() bool {
 // If an error occurs during the append operation, the error is stored in the Lifo
 // and the zero value of T is returned.
 // Otherwise, it returns the appended element.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Append(elem T) T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.err != nil {
 		return l.zero()
 	}
@@ -76,7 +96,10 @@ func (l *Lifo[T]) Append(elem T) T {
 // Pop removes and returns the top element from the Lifo stack.
 // If an error has previously occurred or an error occurs during the pop operation,
 // it returns the zero value of type T and sets the error state.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Pop() T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.err != nil {
 		return l.zero()
 	}
@@ -91,7 +114,10 @@ func (l *Lifo[T]) Pop() T {
 // Top returns the element at the top of the LIFO stack without removing it.
 // If the LIFO is in an error state or an error occurs while accessing the top element,
 // it returns the zero value of type T.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Top() T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.err != nil {
 		return l.zero()
 	}
@@ -105,7 +131,10 @@ func (l *Lifo[T]) Top() T {
 
 // String returns the string representation of the Lifo stack.
 // If the Lifo has an error, it returns an empty string.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) String() string {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.err != nil {
 		return ""
 	}
