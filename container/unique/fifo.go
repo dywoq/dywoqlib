@@ -13,12 +13,12 @@ type Fifo[T comparable] struct {
 	err err.Context
 }
 
-// NewFifo creates and returns a new instance of Fifo for elements of type T.
+// NewFifo creates and returns a new pointer to Fifo structure.
 func NewFifo[T comparable]() *Fifo[T] {
 	return &Fifo[T]{NewSlice[T](), err.NoneContext()}
 }
 
-// Native returns the underlying slice of elements stored in the Fifo.
+// Native returns the underlying slice.
 func (f *Fifo[T]) Native() []T {
 	return f.s.Native()
 }
