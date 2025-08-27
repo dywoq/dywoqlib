@@ -270,3 +270,6 @@ func main() {
 ## License
 
 `dywoqlib` is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
+
+## Documentation
+To see documentation, see [`docs`](./docs/README.md) folder.
