@@ -19,19 +19,20 @@ import (
 	"sync"
 
 	"github.com/dywoq/dywoqlib/err"
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 // Lifo is a thread-safe generic last-in-last-out (LIFO) queue,
 // with only unique elements, using Slice internally.
 type Lifo[T comparable] struct {
-	s   *Slice[T]
+	s   []T
 	err err.Context
 	mu  sync.Mutex
 }
 
 // NewLifo creates and returns a new pointer to Lifo structure.
 func NewLifo[T comparable]() *Lifo[T] {
-	return &Lifo[T]{NewSlice[T](), err.NoneContext(), sync.Mutex{}}
+	return &Lifo[T]{[]T{}, err.NoneContext(), sync.Mutex{}}
 }
 
 // Native returns the underlying slice.
@@ -39,7 +40,7 @@ func NewLifo[T comparable]() *Lifo[T] {
 func (l *Lifo[T]) Native() []T {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.s.Native()
+	return l.s
 }
 
 // Error returns the possible encountered error context.
@@ -47,7 +48,7 @@ func (l *Lifo[T]) Native() []T {
 func (l *Lifo[T]) Error() err.Context {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.s.err
+	return l.err
 }
 
 // Length returns the length of the underlying slice.
@@ -55,7 +56,7 @@ func (l *Lifo[T]) Error() err.Context {
 func (l *Lifo[T]) Length() int {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.s.Length()
+	return len(l.s)
 }
 
 // Empty checks whether the length of the underlying slice is 0.
@@ -63,7 +64,7 @@ func (l *Lifo[T]) Length() int {
 func (l *Lifo[T]) Empty() bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.s.Length() == 0
+	return len(l.s) == 0
 }
 
 // Append appends the element to the slice, unless it already exists.
@@ -75,18 +76,11 @@ func (l *Lifo[T]) Append(elem T) T {
 	if !l.err.Nil() {
 		return l.zero()
 	}
-
-	if slices.Contains(l.s.Native(), elem) {
+	if slices.Contains(l.s, elem) {
 		return l.zero()
 	}
-
-	res := l.s.Append(elem)
-	if !l.s.Error().Nil() {
-		l.err.SetError(l.s.Error().Error())
-		l.err.SetMore("source is \"unique.Lifo[T].Append(T) T\"")
-		return l.zero()
-	}
-	return res[0]
+	l.s = append(l.s, elem)
+	return elem
 }
 
 // Pop removes the last element to the slice.
@@ -98,12 +92,7 @@ func (l *Lifo[T]) Pop() T {
 	if !l.err.Nil() {
 		return l.zero()
 	}
-	res := l.s.Pop()
-	if !l.s.Error().Nil() {
-		l.err.SetError(l.s.Error().Error())
-		l.err.SetMore("source is \"unique.Lifo[T].Pop() T\"")
-		return l.zero()
-	}
+	res := sliceutil.Pop(&l.s)
 	return res
 }
 
@@ -116,12 +105,7 @@ func (l *Lifo[T]) Top() T {
 	if !l.err.Nil() {
 		return l.zero()
 	}
-	res := l.s.Back()
-	if !l.s.Error().Nil() {
-		l.err.SetError(l.s.Error().Error())
-		l.err.SetMore("source is \"unique.Lifo[T].Top() T\"")
-		return l.zero()
-	}
+	res := sliceutil.Back(l.s)
 	return res
 }
 
@@ -134,9 +118,9 @@ func (l *Lifo[T]) String() string {
 	if !l.err.Nil() {
 		return ""
 	}
-	res := l.s.String()
-	if !l.s.Error().Nil() {
-		l.err.SetError(l.s.Error().Error())
+	res, err := sliceutil.Format(l.s)
+	if err != nil {
+		l.err.SetError(err)
 		l.err.SetMore("source is \"unique.Lifo[T].String() string\"")
 		return ""
 	}

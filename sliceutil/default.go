@@ -109,3 +109,37 @@ func Insert[T comparable](i int, s *[]T, elem T) (T, error) {
 	*s = slices.Insert(*s, i, elem)
 	return elem, nil
 }
+
+// Pop removes and returns the front element from s.
+// If s is empty, it returns zero value.
+func Pop[T comparable](s *[]T) T {
+	slc := *s
+	if len(slc) == 0 {
+		var zero T
+		return zero
+	}
+	lastIdx := len(slc) - 1
+	poppedElem := slc[lastIdx]
+	*s = slc[:lastIdx]
+	return poppedElem
+}
+
+// Front returns the first element of s.
+// If s is empty, it returns zero value.
+func Front[T comparable](s []T) T {
+	if len(s) == 0 {
+		var zero T
+		return zero
+	}
+	return s[0]
+}
+
+// Back returns the last element of s.
+// If s is empty, it returns zero value.
+func Back[T comparable](s []T) T {
+	if len(s) == 0 {
+		var zero T
+		return zero
+	}
+	return s[len(s)-1]
+}

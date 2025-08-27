@@ -19,19 +19,20 @@ import (
 	"sync"
 
 	"github.com/dywoq/dywoqlib/err"
+	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
 // Fifo is a thread-safe generic first-in-first-out (FIFO) queue,
 // with only unique elements, using Slice internally.
 type Fifo[T comparable] struct {
-	s   *Slice[T]
+	s   []T
 	err err.Context
 	mu  sync.Mutex
 }
 
 // NewFifo creates and returns a new pointer to Fifo structure.
 func NewFifo[T comparable]() *Fifo[T] {
-	return &Fifo[T]{NewSlice[T](), err.NoneContext(), sync.Mutex{}}
+	return &Fifo[T]{[]T{}, err.NoneContext(), sync.Mutex{}}
 }
 
 // Native returns the underlying slice.
@@ -39,7 +40,7 @@ func NewFifo[T comparable]() *Fifo[T] {
 func (f *Fifo[T]) Native() []T {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.s.Native()
+	return f.s
 }
 
 // Error returns the possible encountered error context.
@@ -55,7 +56,7 @@ func (f *Fifo[T]) Error() err.Context {
 func (f *Fifo[T]) Empty() bool {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.s.Length() == 0
+	return len(f.s) == 0
 }
 
 // Length returns the length of the underlying slice.
@@ -63,7 +64,7 @@ func (f *Fifo[T]) Empty() bool {
 func (f *Fifo[T]) Length() int {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.s.Length()
+	return len(f.s)
 }
 
 // Front returns the front element of the slice.
@@ -75,12 +76,7 @@ func (f *Fifo[T]) Front() T {
 	if !f.err.Nil() {
 		return f.zero()
 	}
-	res := f.s.Front()
-	if !f.s.Error().Nil() {
-		f.err.SetError(f.s.Error().Error())
-		f.err.SetMore("source is \"unique.Fifo[T].Front() T\"")
-		return f.zero()
-	}
+	res := sliceutil.Front(f.s)
 	return res
 }
 
@@ -93,12 +89,7 @@ func (f *Fifo[T]) Back() T {
 	if !f.err.Nil() {
 		return f.zero()
 	}
-	res := f.s.Back()
-	if !f.s.Error().Nil() {
-		f.err.SetError(f.s.Error().Error())
-		f.err.SetMore("source is \"unique.Fifo[T].Back() T\"")
-		return f.zero()
-	}
+	res := sliceutil.Back(f.s)
 	return res
 }
 
@@ -111,18 +102,11 @@ func (f *Fifo[T]) Append(elem T) T {
 	if !f.err.Nil() {
 		return f.zero()
 	}
-
-	if slices.Contains(f.s.Native(), elem) {
+	if slices.Contains(f.s, elem) {
 		return f.zero()
 	}
-
-	res := f.s.Append(elem)
-	if !f.s.Error().Nil() {
-		f.err.SetError(f.s.Error().Error())
-		f.err.SetMore("source is \"unique.Fifo[T].Append(T) T\"")
-		return f.zero()
-	}
-	return res[0]
+	f.s = append(f.s, elem)
+	return elem
 }
 
 // Pop removes the last element of the slice.
@@ -134,12 +118,7 @@ func (f *Fifo[T]) Pop() T {
 	if !f.err.Nil() {
 		return f.zero()
 	}
-	res := f.s.Pop()
-	if !f.s.Error().Nil() {
-		f.err.SetError(f.s.Error().Error())
-		f.err.SetMore("source is \"unique.Fifo[T].Pop() T\"")
-		return f.zero()
-	}
+	res := sliceutil.Pop(&f.s)
 	return res
 }
 
@@ -152,9 +131,9 @@ func (f *Fifo[T]) String() string {
 	if !f.err.Nil() {
 		return ""
 	}
-	res := f.s.String()
-	if !f.s.Error().Nil() {
-		f.err.SetError(f.s.Error().Error())
+	res, err := sliceutil.Format(f.s)
+	if err != nil {
+		f.err.SetError(err)
 		f.err.SetMore("source is \"unique.Fifo[T].String() string\"")
 		return ""
 	}
