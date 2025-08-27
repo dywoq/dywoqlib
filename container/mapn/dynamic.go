@@ -21,7 +21,7 @@ import (
 	"sync"
 )
 
-// Dynamic is a generic container that wraps a map with keys of type K and values of type V.
+// Dynamic is a thread-safe generic container that wraps a map with keys of type K and values of type V.
 // It also includes an error field to track any errors associated with the map operations.
 // K and V must be comparable types.
 type Dynamic[K, V comparable] struct {

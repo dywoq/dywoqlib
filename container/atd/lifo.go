@@ -20,7 +20,7 @@ import (
 	"github.com/dywoq/dywoqlib/container/slice"
 )
 
-// Lifo represents a generic Last-In-First-Out (LIFO) stack data structure.
+// Lifo represents a thread-safe generic Last-In-First-Out (LIFO) stack data structure.
 // It stores elements of any comparable type T and provides stack operations.
 type Lifo[T comparable] struct {
 	err error

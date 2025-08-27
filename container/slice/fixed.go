@@ -20,7 +20,7 @@ import (
 	"github.com/dywoq/dywoqlib/iterator"
 )
 
-// Fixed provides a generic, error-aware wrapper around a Go slice with a fixed maximum length.
+// Fixed provides a thread-safe generic, error-aware wrapper around a Go slice with a fixed maximum length.
 // It uses a Dynamic slice internally and enforces the fixed length constraint.
 type Fixed[T comparable] struct {
 	err      error

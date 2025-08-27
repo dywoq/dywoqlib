@@ -16,7 +16,7 @@ package mapn
 
 import "sync"
 
-// Fixed is a generic, fixed-length map container that wraps a Dynamic map.
+// Fixed is a thread-safe generic, fixed-length map container that wraps a Dynamic map.
 // It enforces a fixed length and can store an error state.
 // K and V must be comparable.
 type Fixed[K, V comparable] struct {

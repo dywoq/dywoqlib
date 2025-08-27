@@ -21,7 +21,7 @@ import (
 	"github.com/dywoq/dywoqlib/sliceutil"
 )
 
-// Dynamic provides a generic, error-aware wrapper around a Go slice.
+// Dynamic provides a thread-safe generic, error-aware wrapper around a Go slice.
 type Dynamic[T comparable] struct {
 	err error
 	s   []T

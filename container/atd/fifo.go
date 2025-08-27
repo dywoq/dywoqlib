@@ -20,7 +20,7 @@ import (
 	"github.com/dywoq/dywoqlib/container/slice"
 )
 
-// Fifo represents a generic first-in-first-out (FIFO) queue.
+// Fifo represents a thread-safe generic first-in-first-out (FIFO) queue.
 // It stores elements of any comparable type T and provides queue operations.
 type Fifo[T comparable] struct {
 	err error

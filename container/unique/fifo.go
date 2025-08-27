@@ -21,7 +21,7 @@ import (
 	"github.com/dywoq/dywoqlib/err"
 )
 
-// Fifo is a generic first-in-first-out (FIFO) queue,
+// Fifo is a thread-safe generic first-in-first-out (FIFO) queue,
 // with only unique elements, using Slice internally.
 type Fifo[T comparable] struct {
 	s   *Slice[T]

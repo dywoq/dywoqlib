@@ -21,7 +21,7 @@ import (
 	"github.com/dywoq/dywoqlib/err"
 )
 
-// Lifo is a generic last-in-last-out (LIFO) queue,
+// Lifo is a thread-safe generic last-in-last-out (LIFO) queue,
 // with only unique elements, using Slice internally.
 type Lifo[T comparable] struct {
 	s   *Slice[T]
