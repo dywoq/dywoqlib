@@ -16,45 +16,62 @@ package unique
 
 import (
 	"slices"
+	"sync"
 
 	"github.com/dywoq/dywoqlib/err"
 )
 
 // Lifo is a generic last-in-last-out (LIFO) queue,
-// with only unique elements, using Slice internally. 
+// with only unique elements, using Slice internally.
 type Lifo[T comparable] struct {
 	s   *Slice[T]
 	err err.Context
+	mu  sync.Mutex
 }
 
 // NewLifo creates and returns a new pointer to Lifo structure.
 func NewLifo[T comparable]() *Lifo[T] {
-	return &Lifo[T]{NewSlice[T](), err.NoneContext()}
+	return &Lifo[T]{NewSlice[T](), err.NoneContext(), sync.Mutex{}}
 }
 
 // Native returns the underlying slice.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Native() []T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.s.Native()
 }
 
 // Error returns the possible encountered error context.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Error() err.Context {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.s.err
 }
 
 // Length returns the length of the underlying slice.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Length() int {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.s.Length()
 }
 
 // Empty checks whether the length of the underlying slice is 0.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Empty() bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	return l.s.Length() == 0
 }
 
 // Append appends the element to the slice, unless it already exists.
 // If Lifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Append(elem T) T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if !l.err.Nil() {
 		return l.zero()
 	}
@@ -74,7 +91,10 @@ func (l *Lifo[T]) Append(elem T) T {
 
 // Pop removes the last element to the slice.
 // If Lifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Pop() T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if !l.err.Nil() {
 		return l.zero()
 	}
@@ -89,7 +109,10 @@ func (l *Lifo[T]) Pop() T {
 
 // Top returns the top element of the slice.
 // If Lifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) Top() T {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if !l.err.Nil() {
 		return l.zero()
 	}
@@ -104,7 +127,10 @@ func (l *Lifo[T]) Top() T {
 
 // String returns the formatted presentation of slice.
 // If Lifo error or the internal Slice error is not nil, it returns the empty string and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (l *Lifo[T]) String() string {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if !l.err.Nil() {
 		return ""
 	}

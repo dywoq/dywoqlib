@@ -16,6 +16,7 @@ package unique
 
 import (
 	"slices"
+	"sync"
 
 	"github.com/dywoq/dywoqlib/err"
 )
@@ -25,36 +26,52 @@ import (
 type Fifo[T comparable] struct {
 	s   *Slice[T]
 	err err.Context
+	mu  sync.Mutex
 }
 
 // NewFifo creates and returns a new pointer to Fifo structure.
 func NewFifo[T comparable]() *Fifo[T] {
-	return &Fifo[T]{NewSlice[T](), err.NoneContext()}
+	return &Fifo[T]{NewSlice[T](), err.NoneContext(), sync.Mutex{}}
 }
 
 // Native returns the underlying slice.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Native() []T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.s.Native()
 }
 
 // Error returns the possible encountered error context.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Error() err.Context {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.err
 }
 
 // Empty checks whether the length of the underlying slice is 0.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Empty() bool {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.s.Length() == 0
 }
 
 // Length returns the length of the underlying slice.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Length() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.s.Length()
 }
 
 // Front returns the front element of the slice.
 // If Fifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Front() T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if !f.err.Nil() {
 		return f.zero()
 	}
@@ -69,7 +86,10 @@ func (f *Fifo[T]) Front() T {
 
 // Back returns the top element of the slice.
 // If Fifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Back() T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if !f.err.Nil() {
 		return f.zero()
 	}
@@ -84,7 +104,10 @@ func (f *Fifo[T]) Back() T {
 
 // Front appends the element to the slice, unless it already exists in the slice.
 // If Fifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Append(elem T) T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if !f.err.Nil() {
 		return f.zero()
 	}
@@ -104,7 +127,10 @@ func (f *Fifo[T]) Append(elem T) T {
 
 // Pop removes the last element of the slice.
 // If Fifo error or the internal Slice error is not nil, it returns the zero value and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) Pop() T {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if !f.err.Nil() {
 		return f.zero()
 	}
@@ -119,7 +145,10 @@ func (f *Fifo[T]) Pop() T {
 
 // String returns the formatted presentation of slice.
 // If Fifo error or the internal Slice error is not nil, it returns the empty string and sets the error.
+// Locks the mutex and unlocks after the completing.
 func (f *Fifo[T]) String() string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if !f.err.Nil() {
 		return ""
 	}

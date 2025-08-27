@@ -16,6 +16,7 @@ package unique
 
 import (
 	"slices"
+	"sync"
 
 	"github.com/dywoq/dywoqlib/err"
 	"github.com/dywoq/dywoqlib/iterator"
@@ -27,6 +28,7 @@ import (
 type Slice[T comparable] struct {
 	s   []T
 	err err.Context
+	mu  sync.Mutex
 }
 
 // NewSlice creates and returns a new pointer to Slice.
@@ -50,13 +52,17 @@ func NewSlice[T comparable](elems ...T) *Slice[T] {
 	}
 	s.s = result
 	s.err = err.NoneContext()
+	s.mu = sync.Mutex{}
 	return s
 }
 
 // Grow pre-allocates the underlying slice, unless there are no encountered errors.
 // If capacity of the slice is lower than i, it creates a new slice with the initial capacity i,
 // and copies the new slice to the underlying one.
-func (s Slice[T]) Grow(i int) {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Grow(i int) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return
 	}
@@ -68,22 +74,34 @@ func (s Slice[T]) Grow(i int) {
 }
 
 // Native returns the underlying slice.
-func (s Slice[T]) Native() []T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Native() []T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	return s.s
 }
 
 // Error returns the possible encountered error.
-func (s Slice[T]) Error() err.Context {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Error() err.Context {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	return s.err
 }
 
 // Length returns the length of the underlying slice.
-func (s Slice[T]) Length() int {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Length() int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	return len(s.s)
 }
 
 // Iterating returns a pointer to iterator.Combined structure.
-func (s Slice[T]) Iterating() *iterator.Combined[T] {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Iterating() *iterator.Combined[T] {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	return iterator.NewCombined(s.s)
 }
 
@@ -92,7 +110,10 @@ func (s Slice[T]) Iterating() *iterator.Combined[T] {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the appended elements.
-func (s Slice[T]) Append(elems ...T) []T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Append(elems ...T) []T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return []T{}
 	}
@@ -111,7 +132,10 @@ func (s Slice[T]) Append(elems ...T) []T {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the element at i.
-func (s Slice[T]) At(i int) T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) At(i int) T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -128,7 +152,10 @@ func (s Slice[T]) At(i int) T {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the found element.
-func (s Slice[T]) Find(req T) T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Find(req T) T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -144,7 +171,10 @@ func (s Slice[T]) Find(req T) T {
 // String returns the formatted underlying slice.
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
-func (s Slice[T]) String() string {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) String() string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return ""
 	}
@@ -161,7 +191,10 @@ func (s Slice[T]) String() string {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the set element.
-func (s Slice[T]) Set(elem T, i int) T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Set(elem T, i int) T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -183,7 +216,10 @@ func (s Slice[T]) Set(elem T, i int) T {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the deleted element.
-func (s Slice[T]) Delete(i int) T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Delete(i int) T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -200,7 +236,10 @@ func (s Slice[T]) Delete(i int) T {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the inserted element.
-func (s Slice[T]) Insert(i int, elem T) T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Insert(i int, elem T) T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -221,7 +260,10 @@ func (s Slice[T]) Insert(i int, elem T) T {
 // Front returns the front element in the underlying slice.
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
-func (s Slice[T]) Front() T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Front() T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -235,7 +277,10 @@ func (s Slice[T]) Front() T {
 // Back returns the back element in the underlying slice.
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
-func (s Slice[T]) Back() T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Back() T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -250,7 +295,10 @@ func (s Slice[T]) Back() T {
 // If the error state is not nil, it returns the zero value and skips the operation.
 // If any error has encountered during the operation, the function sets the error to the internal error state.
 // Returns the popped element.
-func (s Slice[T]) Pop() T {
+// Locks the mutex and unlocks after the completing.
+func (s *Slice[T]) Pop() T {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if !s.err.Nil() {
 		return s.zero()
 	}
@@ -263,7 +311,7 @@ func (s Slice[T]) Pop() T {
 	return poppedElem
 }
 
-func (s Slice[T]) zero() T {
+func (s *Slice[T]) zero() T {
 	var zero T
 	return zero
 }
