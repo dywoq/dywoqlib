@@ -15,8 +15,8 @@
 package atd
 
 import (
-	"sync"
 	"github.com/dywoq/dywoqlib/sliceutil"
+	"sync"
 )
 
 // Lifo represents a thread-safe generic Last-In-First-Out (LIFO) stack data structure.

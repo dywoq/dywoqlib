@@ -126,7 +126,7 @@ func (f *Fifo[T]) Pop() T {
 	if f.err != nil {
 		return f.zero()
 	}
-	lastIdx := len(f.s)-1
+	lastIdx := len(f.s) - 1
 	poppedElem := f.s[lastIdx]
 	f.s = f.s[:lastIdx]
 	return poppedElem

@@ -32,7 +32,7 @@ type Fixed[K, V comparable] struct {
 
 // NewFixed creates a new Fixed map container with a specified fixed length and initial map values.
 // It returns a pointer to a Fixed[K, V] instance. If the provided fixedLen is negative, less than
-// the length of the initial map, the returned Fixed will contain the appropriate error. 
+// the length of the initial map, the returned Fixed will contain the appropriate error.
 // The function ensures that the resulting container has a capacity of at least fixedLen and is initialized with the contents of m.
 func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 	if fixedLen < 0 {
