@@ -14,42 +14,41 @@
 
 package mapn
 
-import "sync"
+import (
+	"sync"
 
-// Fixed is a thread-safe generic, fixed-length map container that wraps a Dynamic map.
+	"github.com/dywoq/dywoqlib/mapnutil"
+)
+
+// Fixed is a thread-safe generic, fixed-length map container.
 // It enforces a fixed length and can store an error state.
 // K and V must be comparable.
 type Fixed[K, V comparable] struct {
 	err      error
 	fixedLen int
-	m        *Dynamic[K, V]
+	m        map[K]V
 	mu       sync.Mutex
 }
 
 // NewFixed creates a new Fixed map container with a specified fixed length and initial map values.
 // It returns a pointer to a Fixed[K, V] instance. If the provided fixedLen is negative, less than
-// the length of the initial map, or if there is an error initializing the underlying dynamic map,
-// the returned Fixed will contain the appropriate error. The function ensures that the resulting
-// container has a capacity of at least fixedLen and is initialized with the contents of m.
+// the length of the initial map, the returned Fixed will contain the appropriate error. 
+// The function ensures that the resulting container has a capacity of at least fixedLen and is initialized with the contents of m.
 func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
-	d := NewDynamic(map[K]V{})
-	if d.Error() != nil {
-		return &Fixed[K, V]{d.Error(), fixedLen, nil, sync.Mutex{}}
-	}
 	if fixedLen < 0 {
-		return &Fixed[K, V]{ErrNegativeFixedLength, fixedLen, nil, sync.Mutex{}}
+		return &Fixed[K, V]{ErrNegativeFixedLength, fixedLen, map[K]V{}, sync.Mutex{}}
 	}
 	if fixedLen < len(m) {
-		return &Fixed[K, V]{ErrFixedLengthOutOfBounds, fixedLen, nil, sync.Mutex{}}
+		return &Fixed[K, V]{ErrFixedLengthOutOfBounds, fixedLen, map[K]V{}, sync.Mutex{}}
 	}
 	if len(m) > fixedLen {
-		return &Fixed[K, V]{ErrOutOfBounds, fixedLen, nil, sync.Mutex{}}
+		return &Fixed[K, V]{ErrOutOfBounds, fixedLen, map[K]V{}, sync.Mutex{}}
 	}
-	d.Grow(fixedLen)
+	data := make(map[K]V, fixedLen)
 	for key, value := range m {
-		d.Add(key, value)
+		data[key] = value
 	}
-	return &Fixed[K, V]{nil, fixedLen, d, sync.Mutex{}}
+	return &Fixed[K, V]{nil, fixedLen, data, sync.Mutex{}}
 }
 
 // Length returns the number of key-value pairs currently stored in the Fixed map.
@@ -57,7 +56,7 @@ func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 func (f *Fixed[K, V]) Length() int {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.m.Length()
+	return len(f.m)
 }
 
 // Error returns the error associated with the Fixed container, if any.
@@ -79,7 +78,7 @@ func (f *Fixed[K, V]) Exists(reqkey K) bool {
 	if ok := f.errorsOk(); !ok {
 		return false
 	}
-	return f.m.Exists(reqkey)
+	return mapnutil.Exists(f.m, reqkey)
 }
 
 // Add inserts the specified key-value pair (reqkey, reqvalue) into the Fixed map.
@@ -92,12 +91,9 @@ func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
 	}
-	res1, res2 := f.m.Add(reqkey, reqvalue)
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
-	}
-	k = res1
-	v = res2
+	f.m[reqkey] = reqvalue
+	k = reqkey
+	v = reqvalue
 	return
 }
 
@@ -112,12 +108,11 @@ func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
 	}
-	res1, res2 := f.m.Set(reqkey, reqvalue)
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
+	if f.Exists(reqkey) {
+		f.m[reqkey] = reqvalue
+		k = reqkey
+		v = reqvalue
 	}
-	k = res1
-	v = res2
 	return
 }
 
@@ -131,10 +126,9 @@ func (f *Fixed[K, V]) Keys() []K {
 	if ok := f.errorsOk(); !ok {
 		return []K{}
 	}
-	keys := f.m.Keys()
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
-		return []K{}
+	keys := make([]K, len(f.m))
+	for key := range f.m {
+		keys = append(keys, key)
 	}
 	return keys
 }
@@ -149,10 +143,9 @@ func (f *Fixed[K, V]) Values() []V {
 	if ok := f.errorsOk(); !ok {
 		return []V{}
 	}
-	values := f.m.Values()
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
-		return []V{}
+	values := make([]V, len(f.m))
+	for _, value := range f.m {
+		values = append(values, value)
 	}
 	return values
 }
@@ -168,12 +161,10 @@ func (f *Fixed[K, V]) Delete(reqkey K) (k K) {
 	if ok := f.errorsOk(); !ok {
 		return
 	}
-	res1 := f.m.Delete(reqkey)
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
-		return
+	if mapnutil.Exists(f.m, reqkey) {
+		delete(f.m, reqkey)
+		k = reqkey
 	}
-	k = res1
 	return
 }
 
@@ -189,13 +180,10 @@ func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
 	}
-	res1, res2 := f.m.Get(reqkey)
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
-		return
+	if mapnutil.Exists(f.m, reqkey) {
+		k = reqkey
+		v = f.m[reqkey]
 	}
-	k = res1
-	v = res2
 	return
 }
 
@@ -209,9 +197,9 @@ func (f *Fixed[K, V]) String() string {
 	if ok := f.errorsOk(); !ok {
 		return ""
 	}
-	res := f.m.String()
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
+	res, err := mapnutil.Format(f.m)
+	if err != nil {
+		f.err = err
 		return ""
 	}
 	return res
@@ -222,19 +210,15 @@ func (f *Fixed[K, V]) String() string {
 func (f *Fixed[K, V]) Native() map[K]V {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.m.Native()
+	return f.m
 }
 
 func (f *Fixed[K, V]) outOfBounds() bool {
-	return f.m.Length() > f.fixedLen
+	return f.Length() > f.fixedLen
 }
 
 func (f *Fixed[K, V]) errorsOk() bool {
 	if f.err != nil {
-		return false
-	}
-	if f.m.Error() != nil {
-		f.err = f.m.Error()
 		return false
 	}
 	if f.outOfBounds() {

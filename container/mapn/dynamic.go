@@ -15,10 +15,10 @@
 package mapn
 
 import (
-	"fmt"
 	"maps"
-	"strings"
 	"sync"
+
+	"github.com/dywoq/dywoqlib/mapnutil"
 )
 
 // Dynamic is a thread-safe generic container that wraps a map with keys of type K and values of type V.
@@ -220,20 +220,11 @@ func (d *Dynamic[K, V]) String() string {
 	if d.err != nil {
 		return ""
 	}
-	if len(d.m) == 0 {
+	res, err := mapnutil.Format(d.m)
+	if err != nil {
 		return ""
 	}
-	var b strings.Builder
-	b.WriteString("{\n")
-	for key, value := range d.m {
-		_, err := fmt.Fprintf(&b, "  %v: %v\n", key, value)
-		if err != nil {
-			d.err = err
-			return ""
-		}
-	}
-	b.WriteString("}")
-	return b.String()
+	return res
 }
 
 func (d *Dynamic[K, V]) Native() map[K]V {
