@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"maps"
 	"strings"
+	"sync"
 )
 
 // Dynamic is a generic container that wraps a map with keys of type K and values of type V.
@@ -26,22 +27,29 @@ import (
 type Dynamic[K, V comparable] struct {
 	err error
 	m   map[K]V
+	mu  sync.Mutex
 }
 
 // NewDynamic creates and returns a new Dynamic instance wrapping the provided map m.
 // K and V are the key and value types of the map, which must be comparable.
 // The returned Dynamic can be used to perform dynamic operations on the underlying map.
 func NewDynamic[K, V comparable](m map[K]V) *Dynamic[K, V] {
-	return &Dynamic[K, V]{nil, m}
+	return &Dynamic[K, V]{nil, m, sync.Mutex{}}
 }
 
 // Length returns the number of key-value pairs currently stored in the Dynamic map.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Length() int {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	return len(d.m)
 }
 
 // Error returns the last error encountered by the Dynamic container, or nil if no error has occurred.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Error() error {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	return d.err
 }
 
@@ -50,7 +58,10 @@ func (d *Dynamic[K, V]) Error() error {
 // If the map already contains elements, it creates a new map with a capacity equal to
 // the greater of the current length or i, and copies all existing elements into it.
 // If an error is present in the Dynamic instance, the method returns immediately.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Grow(i int) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return
 	}
@@ -67,7 +78,10 @@ func (d *Dynamic[K, V]) Grow(i int) {
 // Exists checks if the specified key exists in the dynamic map.
 // It returns true if the key is present, and false otherwise.
 // If the Dynamic instance has an error state (d.err != nil), it always returns false.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Exists(reqkey K) (exists bool) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return false
 	}
@@ -80,7 +94,10 @@ func (d *Dynamic[K, V]) Exists(reqkey K) (exists bool) {
 // If the key already exists, it sets an error (ErrKeyAlreadyExist) and returns zero values.
 // If the Dynamic instance has a pre-existing error, the operation is skipped and zero values are returned.
 // Returns the inserted key and value on success, or zero values on failure.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return
 	}
@@ -98,7 +115,10 @@ func (d *Dynamic[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 // If the key exists, it sets the value to reqvalue and returns the key and value.
 // If the key does not exist, it sets an internal error (ErrKeyNotFound) and returns zero values.
 // If a previous error exists in the Dynamic instance, the method returns immediately with zero values.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return
 	}
@@ -116,7 +136,10 @@ func (d *Dynamic[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 // If an internal error has occurred, it returns an empty slice.
 // The method uses a fixed-size slice to collect the keys efficiently.
 // If an error occurs while appending keys, it sets the internal error state and returns an empty slice.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Keys() []K {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return []K{}
 	}
@@ -132,7 +155,10 @@ func (d *Dynamic[K, V]) Keys() []K {
 // The method collects the values using a fixed-size slice and handles any errors
 // that may arise during the collection process. If an error occurs while appending
 // values, it sets the internal error state and returns an empty slice.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Values() []V {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return []V{}
 	}
@@ -147,7 +173,10 @@ func (d *Dynamic[K, V]) Values() []V {
 // If the key exists, it is deleted and the key is returned.
 // If the key does not exist, the error field is set to ErrKeyNotFound and the zero value of K is returned.
 // If the Dynamic instance already has an error, the method returns immediately without performing any operation.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return
 	}
@@ -164,7 +193,10 @@ func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
 // If the key exists, it returns the key and its corresponding value.
 // If the key does not exist, it sets the internal error to ErrKeyNotFound and returns zero values for K and V.
 // If there is a pre-existing error in the Dynamic instance, it returns zero values for K and V immediately.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return
 	}
@@ -181,7 +213,10 @@ func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
 // If an error has previously occurred or the map is empty, it returns an empty string.
 // The output is a multi-line string with each key-value pair on a new line, enclosed in braces.
 // If formatting fails, it sets the error in the Dynamic struct and returns an empty string.
+// Locks the mutex and unlocks after the completing.
 func (d *Dynamic[K, V]) String() string {
+	d.mu.Lock()
+	defer d.mu.Unlock()
 	if d.err != nil {
 		return ""
 	}

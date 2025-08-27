@@ -14,6 +14,8 @@
 
 package mapn
 
+import "sync"
+
 // Fixed is a generic, fixed-length map container that wraps a Dynamic map.
 // It enforces a fixed length and can store an error state.
 // K and V must be comparable.
@@ -21,6 +23,7 @@ type Fixed[K, V comparable] struct {
 	err      error
 	fixedLen int
 	m        *Dynamic[K, V]
+	mu       sync.Mutex
 }
 
 // NewFixed creates a new Fixed map container with a specified fixed length and initial map values.
@@ -31,39 +34,48 @@ type Fixed[K, V comparable] struct {
 func NewFixed[K, V comparable](fixedLen int, m map[K]V) *Fixed[K, V] {
 	d := NewDynamic(map[K]V{})
 	if d.Error() != nil {
-		return &Fixed[K, V]{d.Error(), fixedLen, nil}
+		return &Fixed[K, V]{d.Error(), fixedLen, nil, sync.Mutex{}}
 	}
 	if fixedLen < 0 {
-		return &Fixed[K, V]{ErrNegativeFixedLength, fixedLen, nil}
+		return &Fixed[K, V]{ErrNegativeFixedLength, fixedLen, nil, sync.Mutex{}}
 	}
 	if fixedLen < len(m) {
-		return &Fixed[K, V]{ErrFixedLengthOutOfBounds, fixedLen, nil}
+		return &Fixed[K, V]{ErrFixedLengthOutOfBounds, fixedLen, nil, sync.Mutex{}}
 	}
 	if len(m) > fixedLen {
-		return &Fixed[K, V]{ErrOutOfBounds, fixedLen, nil}
+		return &Fixed[K, V]{ErrOutOfBounds, fixedLen, nil, sync.Mutex{}}
 	}
 	d.Grow(fixedLen)
 	for key, value := range m {
 		d.Add(key, value)
 	}
-	return &Fixed[K, V]{nil, fixedLen, d}
+	return &Fixed[K, V]{nil, fixedLen, d, sync.Mutex{}}
 }
 
 // Length returns the number of key-value pairs currently stored in the Fixed map.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Length() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.m.Length()
 }
 
 // Error returns the error associated with the Fixed container, if any.
 // It implements the error interface for the Fixed type.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Error() error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.err
 }
 
 // Exists checks whether the specified key exists in the Fixed map.
 // It first verifies the internal error state; if an error is present, it returns false.
 // Otherwise, it delegates the existence check to the underlying map.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Exists(reqkey K) bool {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return false
 	}
@@ -73,7 +85,10 @@ func (f *Fixed[K, V]) Exists(reqkey K) bool {
 // Add inserts the specified key-value pair (reqkey, reqvalue) into the Fixed map.
 // It returns the resulting key and value after insertion. If an error occurs during
 // the operation, the error is stored internally and the zero values for K and V are returned.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return
 	}
@@ -90,7 +105,10 @@ func (f *Fixed[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 // If there are any existing errors in the Fixed instance, the operation is skipped and zero values are returned.
 // The method returns the key and value as stored in the underlying map.
 // If an error occurs during the operation, it is recorded in the Fixed instance's error field.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return
 	}
@@ -106,7 +124,10 @@ func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 // Keys returns a slice containing all the keys present in the Fixed map.
 // If there are any existing errors in the Fixed instance or in the underlying map,
 // it returns an empty slice and sets the error state accordingly.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Keys() []K {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return []K{}
 	}
@@ -121,7 +142,10 @@ func (f *Fixed[K, V]) Keys() []K {
 // Values returns a slice containing all the values stored in the Fixed map.
 // If there are any errors detected by errorsOk or if the underlying map has an error,
 // it returns an empty slice and sets the error state accordingly.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Values() []V {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return []V{}
 	}
@@ -137,7 +161,10 @@ func (f *Fixed[K, V]) Values() []V {
 // If there are any existing errors in the Fixed instance, the operation is aborted.
 // After attempting deletion, if an error occurs in the underlying map, it is stored in the Fixed instance's error field.
 // The method returns the key that was deleted, or the zero value of K if the operation was not successful.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Delete(reqkey K) (k K) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return
 	}
@@ -155,7 +182,10 @@ func (f *Fixed[K, V]) Delete(reqkey K) (k K) {
 // retrieval process or if the Fixed map is in an error state, the returned key
 // and value will be their zero values. Any error encountered is stored in the
 // Fixed struct's err field.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return
 	}
@@ -172,7 +202,10 @@ func (f *Fixed[K, V]) Get(reqkey K) (k K, v V) {
 // String returns the string representation of the Fixed map.
 // If there are any errors detected by errorsOk or from the underlying map's Error method,
 // it sets the error field and returns an empty string.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) String() string {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	if ok := f.errorsOk(); !ok {
 		return ""
 	}
@@ -184,7 +217,11 @@ func (f *Fixed[K, V]) String() string {
 	return res
 }
 
+// Native returns the underlying map.
+// Locks the mutex and unlocks after the completing.
 func (f *Fixed[K, V]) Native() map[K]V {
+	f.mu.Lock()
+	defer f.mu.Unlock()
 	return f.m.Native()
 }
 
