@@ -68,6 +68,9 @@ func (i *implementation) Nil() bool {
 }
 
 func (i *implementation) String() string {
+	if i.err == nil {
+		return "<nil>"
+	}
 	return i.err.Error() + ": " + i.more
 }
 
@@ -77,8 +80,12 @@ type jsonPayload struct {
 }
 
 func (i *implementation) Marshal() ([]byte, error) {
+	err := ""
+	if i.err != nil {
+		err = i.err.Error()
+	}
 	data := jsonPayload{
-		Error: i.err.Error(),
+		Error: err,
 		More:  i.more,
 	}
 	return json.Marshal(data)
