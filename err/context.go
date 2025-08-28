@@ -80,7 +80,7 @@ type jsonPayload struct {
 }
 
 func (i *implementation) Marshal() ([]byte, error) {
-	err := ""
+	err := "<nil>"
 	if i.err != nil {
 		err = i.err.Error()
 	}
