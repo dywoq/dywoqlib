@@ -119,7 +119,7 @@ func (f *Fixed[T]) Find(req T) T {
 	if ok := f.errorsOk(); !ok {
 		return f.zero()
 	}
-	found, err := sliceutil.Find(req, f.Iterating().Forward())
+	found, err := sliceutil.Find(req, iterator.NewForward(f.s))
 	if err != nil {
 		f.err = err
 		return f.zero()
