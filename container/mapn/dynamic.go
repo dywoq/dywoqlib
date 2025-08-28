@@ -101,7 +101,7 @@ func (d *Dynamic[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 	if d.err != nil {
 		return
 	}
-	if !d.Exists(reqkey) {
+	if !mapnutil.Exists(d.m, reqkey) {
 		d.m[reqkey] = reqvalue
 		k = reqkey
 		v = reqvalue
@@ -122,7 +122,7 @@ func (d *Dynamic[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	if d.err != nil {
 		return
 	}
-	if d.Exists(reqkey) {
+	if !mapnutil.Exists(d.m, reqkey) {
 		d.m[reqkey] = reqvalue
 		k = reqkey
 		v = reqvalue
@@ -180,7 +180,7 @@ func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
 	if d.err != nil {
 		return
 	}
-	if d.Exists(reqkey) {
+	if mapnutil.Exists(d.m, reqkey) {
 		delete(d.m, reqkey)
 		k = reqkey
 		return
@@ -200,7 +200,7 @@ func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
 	if d.err != nil {
 		return
 	}
-	if d.Exists(reqkey) {
+	if mapnutil.Exists(d.m, reqkey) {
 		k = reqkey
 		v = d.m[reqkey]
 		return

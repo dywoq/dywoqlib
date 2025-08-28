@@ -108,7 +108,7 @@ func (f *Fixed[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 	if ok := f.errorsOk(); !ok {
 		return
 	}
-	if f.Exists(reqkey) {
+	if mapnutil.Exists(f.m, reqkey) {
 		f.m[reqkey] = reqvalue
 		k = reqkey
 		v = reqvalue
