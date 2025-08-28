@@ -107,7 +107,6 @@ func (d *Dynamic[K, V]) Add(reqkey K, reqvalue V) (k K, v V) {
 		v = reqvalue
 		return
 	}
-	d.err = ErrKeyAlreadyExist
 	return
 }
 
@@ -128,7 +127,6 @@ func (d *Dynamic[K, V]) Set(reqkey K, reqvalue V) (k K, v V) {
 		v = reqvalue
 		return
 	}
-	d.err = ErrKeyNotFound
 	return
 }
 
@@ -185,7 +183,6 @@ func (d *Dynamic[K, V]) Delete(reqkey K) (k K) {
 		k = reqkey
 		return
 	}
-	d.err = ErrKeyNotFound
 	return
 }
 
@@ -205,7 +202,6 @@ func (d *Dynamic[K, V]) Get(reqkey K) (k K, v V) {
 		v = d.m[reqkey]
 		return
 	}
-	d.err = ErrKeyNotFound
 	return
 }
 
