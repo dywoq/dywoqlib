@@ -54,6 +54,20 @@ func (f *Forward[T]) Value() T {
 	return f.data[f.pos]
 }
 
+// ValuePtr returns a pointer to the current element of the Forward iterator.
+// If an error has occurred or the current position is out of bounds,
+// it sets the error to ErrOutOfBounds (if applicable) and returns nil.
+func (f *Forward[T]) ValuePtr() *T {
+	if f.err != nil {
+		return nil
+	}
+	if !(f.pos >= 0 && f.pos < len(f.data)) {
+		f.err = ErrOutOfBounds
+		return nil
+	}
+	return &f.data[f.pos]
+}
+
 // Next advances the iterator to the next element and returns true if there are more elements to iterate over.
 // It increments the current position and checks if it is still within the bounds of the data slice.
 func (f *Forward[T]) Next() bool {

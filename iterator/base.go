@@ -22,6 +22,8 @@ type Base[T comparable] interface {
 	Position() int
 	// Value returns the current element of type T.
 	Value() T
+	// ValuePtr returns a pointer to the current element of type T.
+	ValuePtr() *T
 	// Next advances the iterator to the next element and returns true if there is a next element.
 	Next() bool
 	// Reset resets the iterator to its initial state.

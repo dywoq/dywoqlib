@@ -53,6 +53,20 @@ func (r *Reverse[T]) Value() T {
 	return r.data[r.pos]
 }
 
+// ValuePtr returns a pointer to the current element of the Reverse iterator.
+// If an error has occurred or the current position is out of bounds,
+// it sets the error to ErrOutOfBounds (if applicable) and returns nil.
+func (r *Reverse[T]) ValuePtr() *T {
+	if r.err != nil {
+		return nil
+	}
+	if !(r.pos >= 0 && r.pos < len(r.data)) {
+		r.err = ErrOutOfBounds
+		return nil
+	}
+	return &r.data[r.pos]
+}
+
 // Next moves the iterator to the previous element and returns true if the new position is valid.
 // It decrements the current position and checks if it is still within the bounds of the collection.
 func (r *Reverse[T]) Next() bool {
