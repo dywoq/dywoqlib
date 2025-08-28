@@ -14,6 +14,8 @@
 
 package iterator
 
+import "github.com/dywoq/dywoqlib/attribute"
+
 // Combined is a generic iterator struct that wraps a slice of comparable elements and provides methods to create forward and reverse iterators.
 // T must be comparable.
 type Combined[T comparable] struct {
@@ -27,10 +29,20 @@ func (c Combined[T]) Forward() *Forward[T] { return NewForward(c.s) }
 func (c Combined[T]) Reverse() *Reverse[T] { return NewReserve(c.s) }
 
 // ReadonlyForward returns a new read-only forward iterator for the combined iterator's slice.
-func (c Combined[T]) ReadonlyForward() *ReadonlyForward[T] { return NewReadonlyForward(c.s) }
+//
+// DEPRECATED, MAY BE REMOVED IN THE FUTURE
+func (c Combined[T]) ReadonlyForward() *ReadonlyForward[T] {
+	attribute.Deprecated(nil)
+	return NewReadonlyForward(c.s)
+}
 
 // ReadonlyReverse returns a new read-only forward iterator for the combined iterator's slice.
-func (c Combined[T]) ReadonlyReverse() *ReadonlyReverse[T] { return NewReadonlyReverse(c.s) }
+//
+// DEPRECATED, MAY BE REMOVED IN THE FUTURE
+func (c Combined[T]) ReadonlyReverse() *ReadonlyReverse[T] {
+	attribute.Deprecated(nil)
+	return NewReadonlyReverse(c.s)
+}
 
 // NewCombined creates a new Combined iterator instance with the provided slice.
 // T must be comparable.
