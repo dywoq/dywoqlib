@@ -159,7 +159,7 @@ func (s *Slice[T]) Find(req T) T {
 	if !s.err.Nil() {
 		return s.zero()
 	}
-	found, err2 := sliceutil.Find(req, s.Iterating().Forward())
+	found, err2 := sliceutil.Find(req, iterator.NewForward(s.s))
 	if err2 != nil {
 		s.err.SetError(err2)
 		s.err.SetMore("source is \"unique.Slice[T].Find(T) T\"")
