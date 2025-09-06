@@ -107,14 +107,11 @@ func (s *String) Front() rune {
 }
 
 func (s *String) Back() rune {
-	if s.err != nil {
+	rs := s.runes()
+	if len(rs) == 0 {
 		return s.zero()
 	}
-	res := s.At(s.b.Len() - 1)
-	if s.err != nil {
-		return s.zero()
-	}
-	return res
+	return rs[len(rs)-1]
 }
 
 func (s *String) String() string {
