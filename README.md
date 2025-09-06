@@ -7,7 +7,7 @@
 To use `dywoqlib` in your project, you can install it using `go get`:
 
 ```sh
-go get github.com/dywoq/dywoqlib
+go get github.com/dywoq/dywoqlib/lib
 ```
 
 ## Features
