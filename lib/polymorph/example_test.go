@@ -108,3 +108,11 @@ func ExampleTypeOfGeneric() {
 	// Output:
 	// typeof: int
 }
+
+func ExampleIs() {
+	val := int(20)
+	fmt.Printf("polymorph.Is[int](val): %v\n", polymorph.Is[int](val))
+
+	// Output:
+	// polymorph.Is[int](val): true
+}
