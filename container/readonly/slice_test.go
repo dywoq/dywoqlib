@@ -12,7 +12,7 @@ func TestSliceLength(t *go_testing.T) {
 		want int
 	}{
 		{"non-zero length", NewSlice(2, 3, 4), 3},
-		{"zero length", NewSlice[int](), 3},
+		{"zero length", NewSlice[int](), 0},
 	}
 
 	for _, test := range tests {
