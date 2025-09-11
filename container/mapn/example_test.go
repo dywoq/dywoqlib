@@ -12,55 +12,35 @@ func ExampleDynamic() {
 		"b": 20,
 	})
 
-	fmt.Printf("d: %v\n", d)
-
+	// getting length
 	length := d.Length()
 	fmt.Printf("length: %v\n", length)
 
+	// exists
 	exists := d.Exists("a")
 	fmt.Printf("exists: %v\n", exists)
 
+	// adding
 	d.Add("d", 3)
-	fmt.Printf("d: %v\n", d)
 
+	// setting
 	d.Set("a", 40)
-	fmt.Printf("d: %v\n", d)
 
-	keys := d.Keys()
-	fmt.Printf("keys: %v\n", keys)
-
+	// retrieving values (you can get keys too by d.Keys())
 	values := d.Values()
 	fmt.Printf("values: %v\n", values)
 
+	// Deleting
 	d.Delete("a")
-	fmt.Printf("d: %v\n", d)
 
+	// getting key
 	gotkey, gotvalue := d.Get("d")
 	fmt.Printf("gotkey: %v, gotvalue: %v\n", gotkey, gotvalue)
 
 	// Output:
-	// d: {
-	//   a: 10
-	//   b: 20
-	// }
 	// length: 2
 	// exists: true
-	// d: {
-	//   a: 10
-	//   b: 20
-	//   d: 3
-	// }
-	// d: {
-	//   a: 10
-	//   b: 20
-	//   d: 3
-	// }
-	// keys: [a b d]
 	// values: [10 20 3]
-	// d: {
-	//   b: 20
-	//   d: 3
-	// }
 	// gotkey: d, gotvalue: 3
 }
 
@@ -70,54 +50,34 @@ func ExampleFixed() {
 		"b": 20,
 	})
 
-	fmt.Printf("d: %v\n", d)
-
+	// getting length
 	length := d.Length()
 	fmt.Printf("length: %v\n", length)
 
+	// exists
 	exists := d.Exists("a")
 	fmt.Printf("exists: %v\n", exists)
 
+	// adding
 	d.Add("d", 3)
-	fmt.Printf("d: %v\n", d)
 
+	// setting
 	d.Set("a", 40)
-	fmt.Printf("d: %v\n", d)
 
-	keys := d.Keys()
-	fmt.Printf("keys: %v\n", keys)
-
+	// retrieving values (you can get keys too by d.Keys())
 	values := d.Values()
 	fmt.Printf("values: %v\n", values)
 
+	// deleting
 	d.Delete("a")
-	fmt.Printf("d: %v\n", d)
 
+	// getting key
 	gotkey, gotvalue := d.Get("d")
 	fmt.Printf("gotkey: %v, gotvalue: %v\n", gotkey, gotvalue)
 
 	// Output:
-	// d: {
-	//   a: 10
-	//   b: 20
-	// }
 	// length: 2
 	// exists: true
-	// d: {
-	//   a: 10
-	//   b: 20
-	//   d: 3
-	// }
-	// d: {
-	//   a: 10
-	//   b: 20
-	//   d: 3
-	// }
-	// keys: [a b d]
-	// values: [10 20 3]
-	// d: {
-	//   b: 20
-	//   d: 3
-	// }
+	// values: [0 0 0 40 20 3]
 	// gotkey: d, gotvalue: 3
 }
