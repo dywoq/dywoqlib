@@ -12,7 +12,7 @@ func TestSliceLength(t *go_testing.T) {
 		want int
 	}{
 		{"non-zero length", NewSlice(2, 3, 4), 3},
-		{"zero length", NewSlice[int](), 3},
+		{"zero length", NewSlice[int](), 0},
 	}
 
 	for _, test := range tests {
@@ -38,7 +38,7 @@ func TestSliceAt(t *go_testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *go_testing.T) {
-			got := test.s.Length()
+			got := test.s.At(test.i)
 			if got != test.want {
 				t.Errorf("got %v, want %v", got, test.want)
 			}

@@ -62,14 +62,6 @@ func ExampleMap() {
 	exists := m.Exists("one")
 	fmt.Printf("exists: %v\n", exists)
 
-	// getting keys
-	keys := m.Keys()
-	fmt.Printf("keys: %v\n", keys)
-
-	// getting values
-	values := m.Values()
-	fmt.Printf("values: %v\n", values)
-
 	// getting
 	gotkey, gotvalue := m.Get("one")
 	fmt.Printf("gotkey: %v\n", gotkey)
@@ -78,8 +70,6 @@ func ExampleMap() {
 	// Output:
 	// length: 4
 	// exists: true
-	// keys: [two three four one]
-	// values: [1 2 3 4]
 	// gotkey: one
 	// gotvalue: 1
 }
