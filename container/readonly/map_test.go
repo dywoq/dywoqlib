@@ -1,10 +1,9 @@
 package readonly
 
 import (
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 	"slices"
 	go_testing "testing"
-
-	// internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 )
 
 func TestMapLength(t *go_testing.T) {
@@ -49,5 +48,53 @@ func TestMapGet(t *go_testing.T) {
 	want := 2
 	if got != want {
 		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func BenchmarkLength(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	m := NewMap(map[int]int{2: 2, 3: 3})
+	for b.Loop() {
+		_ = m.Length()
+	}
+}
+
+func BenchmarkExists(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	m := NewMap(map[int]int{2: 2, 3: 3})
+	for b.Loop() {
+		_ = m.Exists(2)
+	}
+}
+
+func BenchmarkKeys(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	m := NewMap(map[int]int{2: 2, 3: 3})
+	for b.Loop() {
+		_ = m.Keys()
+	}
+}
+
+func BenchmarkValues(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	m := NewMap(map[int]int{2: 2, 3: 3})
+	for b.Loop() {
+		_ = m.Values()
+	}
+}
+
+func BenchmarkGet(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	m := NewMap(map[int]int{2: 2, 3: 3})
+	for b.Loop() {
+		_, _ = m.Get(2)
+	}
+}
+
+func BenchmarkString(b *go_testing.B) {
+	internal_testing.SetBase().Benchmark(b)
+	m := NewMap(map[int]int{2: 2, 3: 3})
+	for b.Loop() {
+		_ = m.String()
 	}
 }
