@@ -13,7 +13,12 @@ func ExampleString() {
 
 	it := str.Iterating().Forward()
 	for it.Next() {
-		fmt.Printf("it.Value(): %v\n", string(it.Value()))
+		v := string(it.Value())
+		if v != " " {
+			fmt.Printf("it.Value(): %v\n", v)
+		} else {
+			fmt.Printf("it.Value():\n")
+		}
 	}
 
 	str.Append(" Bye, Go!")
