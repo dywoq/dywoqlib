@@ -1,3 +1,17 @@
+// Copyright 2025 dywoq
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package readonly_test
 
 import (
@@ -72,4 +86,29 @@ func ExampleMap() {
 	// exists: true
 	// gotkey: one
 	// gotvalue: 1
+}
+
+func ExampleIterating() {
+	s := readonly.NewSlice(2, 3, 4)
+
+	// forward
+	it := readonly.Iterating(s, "forward")
+	for it.Next() {
+		fmt.Printf("it.Value(): %v\n", it.Value())
+	}
+	it.Reset()
+
+	// reverse
+	it = readonly.Iterating(s, "reverse")
+	for it.Next() {
+		fmt.Printf("it.Value(): %v\n", it.Value())
+	}
+
+	// Output:
+	// it.Value(): 2
+	// it.Value(): 3
+	// it.Value(): 4
+	// it.Value(): 4
+	// it.Value(): 3
+	// it.Value(): 2
 }
