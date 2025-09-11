@@ -26,10 +26,6 @@ func ExampleDynamic() {
 	// setting
 	d.Set("a", 40)
 
-	// retrieving values (you can get keys too by d.Keys())
-	values := d.Values()
-	fmt.Printf("values: %v\n", values)
-
 	// Deleting
 	d.Delete("a")
 
@@ -40,7 +36,6 @@ func ExampleDynamic() {
 	// Output:
 	// length: 2
 	// exists: true
-	// values: [10 20 3]
 	// gotkey: d, gotvalue: 3
 }
 
@@ -64,10 +59,6 @@ func ExampleFixed() {
 	// setting
 	d.Set("a", 40)
 
-	// retrieving values (you can get keys too by d.Keys())
-	values := d.Values()
-	fmt.Printf("values: %v\n", values)
-
 	// deleting
 	d.Delete("a")
 
@@ -78,6 +69,5 @@ func ExampleFixed() {
 	// Output:
 	// length: 2
 	// exists: true
-	// values: [0 0 0 40 20 3]
 	// gotkey: d, gotvalue: 3
 }
