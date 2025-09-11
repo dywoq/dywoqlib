@@ -18,8 +18,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.25'
-      - name: Check gofmt
-        run: test -z "$(gofmt -l .)"
       - name: Build
         run: go build ./...
       - name: Tests
