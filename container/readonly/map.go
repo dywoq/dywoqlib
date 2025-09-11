@@ -113,3 +113,8 @@ func (m *Map[K, V]) String() string {
 	}
 	return res
 }
+
+// NewMap creates new a pointer to read-only container map.
+func NewMap[K, V comparable](s map[K]V) *Map[K, V] {
+	return &Map[K, V]{s, sync.Mutex{}, err.NoneContext()}
+}
