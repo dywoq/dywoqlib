@@ -87,3 +87,28 @@ func ExampleMap() {
 	// gotkey: one
 	// gotvalue: 1
 }
+
+func ExampleIterating() {
+	s := readonly.NewSlice(2, 3, 4)
+
+	// forward
+	it := readonly.Iterating(s, "forward")
+	for it.Next() {
+		fmt.Printf("it.Value(): %v\n", it.Value())
+	}
+	it.Reset()
+
+	// reverse
+	it = readonly.Iterating(s, "reverse")
+	for it.Next() {
+		fmt.Printf("it.Value(): %v\n", it.Value())
+	}
+
+	// Output:
+	// it.Value(): 2
+	// it.Value(): 3
+	// it.Value(): 4
+	// it.Value(): 4
+	// it.Value(): 3
+	// it.Value(): 2
+}
