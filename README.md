@@ -1,3 +1,24 @@
+![GitHub repo size](https://img.shields.io/github/repo-size/dywoq/dywoqlib.svg)
+![GitHub stars](https://img.shields.io/github/stars/dywoq/dywoqlib.svg?style=social)
+![GitHub forks](https://img.shields.io/github/forks/dywoq/dywoqlib.svg?style=social)
+![GitHub issues](https://img.shields.io/github/issues/dywoq/dywoqlib.svg)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/dywoq/dywoqlib.svg)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/dywoq/dywoqlib.svg)
+![GitHub license](https://img.shields.io/github/license/dywoq/dywoqlib.svg)
+![GitHub release](https://img.shields.io/github/release/dywoq/dywoqlib.svg)
+![GitHub release date](https://img.shields.io/github/release-date/dywoq/dywoqlib.svg)
+![GitHub tag](https://img.shields.io/github/v/tag/dywoq/dywoqlib.svg)
+![GitHub Actions](https://img.shields.io/github/workflow/status/dywoq/dywoqlib/CI.svg)
+![Codecov](https://img.shields.io/codecov/c/github/dywoq/dywoqlib.svg)
+![Maintainability](https://img.shields.io/codeclimate/maintainability/dywoq/dywoqlib.svg)
+![GitHub top language](https://img.shields.io/github/languages/top/dywoq/dywoqlib.svg)
+![GitHub language count](https://img.shields.io/github/languages/count/dywoq/dywoqlib.svg)
+![Dependencies](https://img.shields.io/librariesio/github/dywoq/dywoqlib.svg)
+![Contributors](https://img.shields.io/github/contributors/dywoq/dywoqlib.svg)
+![Last Commit](https://img.shields.io/github/last-commit/dywoq/dywoqlib.svg)
+![Open Issues](https://img.shields.io/github/issues/dywoq/dywoqlib.svg)
+![Pull Requests](https://img.shields.io/github/issues-pr/dywoq/dywoqlib.svg)
+
 # dywoqlib
 
 `dywoqlib` is a comprehensive Go library designed to provide a collection of utility packages that enhance and simplify common programming tasks. It includes generic data structures, iterators, optional types, and various helper functions for slices, strings, and more.

@@ -49,3 +49,16 @@ func ExampleReverse() {
 	// it.Value(): 2
 	// slice: [4 6 8]
 }
+
+func ExampleReadonlyBase() {
+	slice := []int{2, 3, 4}
+	it := iterator.ReadonlyBase[int](iterator.NewForward(slice))
+	for it.Next() {
+		fmt.Printf("it.Value(): %v\n", it.Value())
+	}
+
+	// Output:
+	// it.Value(): 2
+	// it.Value(): 3
+	// it.Value(): 4
+}
