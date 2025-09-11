@@ -26,25 +26,3 @@ func ExampleExists() {
 	// exists2: true
 	// exists3: false
 }
-
-func ExampleFormat() {
-	m := map[int]string{
-		1: "a",
-		2: "b",
-	}
-
-	emptyM := map[int]string{}
-
-	formatted, _ := mapnutil.Format(m)
-	fmt.Printf("formatted: %v\n", formatted)
-
-	emptyFormatted, _ := mapnutil.Format(emptyM)
-	fmt.Printf("emptyFormatted: %v\n", emptyFormatted)
-
-	// Output:
-	// formatted: {
-	//   1: a
-	//   2: b
-	// }
-	// emptyFormatted:
-}
