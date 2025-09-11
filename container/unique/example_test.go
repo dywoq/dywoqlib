@@ -85,7 +85,7 @@ func ExampleLifo() {
 	// empty: false
 	// length: 1
 	// l: []
-	// top: 50
+	// top: 30
 }
 
 func ExampleFifo() {
