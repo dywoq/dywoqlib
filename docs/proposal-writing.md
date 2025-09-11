@@ -9,7 +9,16 @@
 6. Each proposal should focus on **one main feature or idea** only.  
 7. Avoid subjective opinions. Provide only facts, reasoning, and benefits.  
 8. Provide examples when necessary.  
-9. Keep consistency in naming, formatting, and code style with the rest of the project.  
+9. Keep consistency in naming, formatting, and code style with the rest of the project.  /
+10. The naming of issues is: `[<container-name (eg. container/mapn)>] <issue-name>`
+11. The implementation of features are (if it was accepted):
+    - Creating your feature's branch or the fork of the repository. 
+    - Writing code (implementing).
+    - Writing tests and examples with the expected behavior.
+    - Making pull request. The naming is: `[<container-name (eg. container/mapn)>] <issue-name>`
+    - If the workflows fall, we need to fix bugs.
+    - After this, pull request can be merged.
+    - Your feature was accepted and implemented.
 
 ## Required Structure
 Each proposal must contain the following headers:
@@ -19,9 +28,6 @@ Each proposal must contain the following headers:
 
 - **Features**  
   List of all new functions, structures, variables, constants, or types.  
-
-- **The Version**  
-  The target version where the feature is planned to be introduced.  
 
 ## Features Documentation Rules
 - Every feature must include both a **description** and a **signature**.  
@@ -38,8 +44,8 @@ Each proposal must contain the following headers:
    ```
 
 ## Where to write
-Create proporsal as a sub-issue of the parent issue, if your proporsal may take place in already existing package.
+Create proposal as a sub-issue of the parent issue, if your proposal may take place in already existing package.
 For example, if you're planning to create the feature inside "container" package, you may create sub-issue of https://github.com/dywoq/dywoqlib/issues/2, even it's marked as closed.
-If your proporsal represents new package (not sub-package), then you don't need it to create it as sub-issue.
+If your proposal represents new package (not sub-package), then you don't need it to create it as sub-issue.
 
 To see the progress more comfortably, you may use the [library's Github Project](https://github.com/users/dywoq/projects/19 "").
