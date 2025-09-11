@@ -28,6 +28,23 @@ type Base[T comparable] interface {
 	Next() bool
 	// Reset resets the iterator to its initial state.
 	Reset()
-	// Length returns the current length ofthe slice.
+	// Length returns the current length off the slice.
+	Length() int
+}
+
+// ReadonlyBase defines a generic iterator interface for traversing a collection of elements of type T,
+// but in readonly way.
+type ReadonlyBase[T comparable] interface {
+	// Error returns any error encountered during iteration.
+	Error() error
+	// Position returns the current position.
+	Position() int
+	// Value returns the current element of type T.
+	Value() T
+	// Next advances the iterator to the next element and returns true if there is a next element.
+	Next() bool
+	// Reset resets the iterator to its initial state.
+	Reset()
+	// Length returns the current length off the slice.
 	Length() int
 }
