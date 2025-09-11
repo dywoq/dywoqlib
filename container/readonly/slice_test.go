@@ -38,7 +38,7 @@ func TestSliceAt(t *go_testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *go_testing.T) {
-			got := test.s.Length()
+			got := test.s.At(test.i)
 			if got != test.want {
 				t.Errorf("got %v, want %v", got, test.want)
 			}
