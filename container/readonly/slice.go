@@ -16,6 +16,11 @@ type Slice[T comparable] struct {
 	err err.Context
 }
 
+// NewSlice creates new a pointer to read-only container slice.
+func NewSlice[T comparable](s []T) *Slice[T] {
+	return &Slice[T]{s, sync.Mutex{}, err.NoneContext()}
+}
+
 // Error returns the possibly encountered current error.
 // If error doesn't present, the function returns err.NoneContext().
 // The mutex locks and unlocks after the function completed.
