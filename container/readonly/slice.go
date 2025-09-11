@@ -17,7 +17,7 @@ type Slice[T comparable] struct {
 }
 
 // NewSlice creates new a pointer to read-only container slice.
-func NewSlice[T comparable](s []T) *Slice[T] {
+func NewSlice[T comparable](s ... T) *Slice[T] {
 	return &Slice[T]{s, sync.Mutex{}, err.NoneContext()}
 }
 
