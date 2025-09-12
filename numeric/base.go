@@ -210,7 +210,7 @@ func (b baseImplementation[I]) Equal(val I) bool {
 	if !b.err.Nil() {
 		return false
 	}
-	return b.num == 0
+	return b.num == val
 }
 
 func (b baseImplementation[I]) Error() err.Context {

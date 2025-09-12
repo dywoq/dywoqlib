@@ -227,7 +227,7 @@ func TestBaseSign(t *go_testing.T) {
 }
 
 func TestBasePrime(t *go_testing.T) {
-	num := Int(0)
+	num := Int(2)
 	got := num.Prime()
 	want := true
 	if got != want {
