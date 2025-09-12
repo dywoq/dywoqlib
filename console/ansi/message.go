@@ -14,6 +14,8 @@
 
 package ansi
 
+import "github.com/dywoq/dywoqlib/attribute"
+
 type message struct {
 	textColor       Color
 	backgroundColor Color
@@ -21,24 +23,29 @@ type message struct {
 }
 
 func (m *message) String() string {
+	attribute.Deprecated(nil)
 	return m.value
 }
 
 func (m *message) BgColor() Color {
+	attribute.Deprecated(nil)
 	return m.backgroundColor
 }
 
 func (m *message) FgColor() Color {
+	attribute.Deprecated(nil)
 	return m.textColor
 }
 
 func (m *message) SetBgColor(c Color) Base {
+	attribute.Deprecated(nil)
 	m.backgroundColor = c
 	m.value = ApplyBoth(m.value, m.textColor, c)
 	return m
 }
 
 func (m *message) SetFgColor(c Color) Base {
+	attribute.Deprecated(nil)
 	m.textColor = c
 	m.value = ApplyBoth(m.value, c, m.backgroundColor)
 	return m

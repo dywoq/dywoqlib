@@ -16,6 +16,8 @@ package ansi
 
 import (
 	"fmt"
+
+	"github.com/dywoq/dywoqlib/attribute"
 )
 
 // Color represents ANSI color type, always equivalent to int8.
@@ -43,6 +45,7 @@ const resetCode = "\x1b[0m"
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func FgFrom(c Color) string {
+	attribute.Deprecated(nil)
 	return fmt.Sprintf("\x1b[3%dm", c)
 }
 
@@ -50,6 +53,7 @@ func FgFrom(c Color) string {
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func BgFrom(c Color) string {
+	attribute.Deprecated(nil)
 	return fmt.Sprintf("\x1b[4%dm", c)
 }
 
@@ -58,6 +62,7 @@ func BgFrom(c Color) string {
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func ApplyFg(value string, c Color) string {
+	attribute.Deprecated(nil)
 	return fmt.Sprintf("%s%s%s", FgFrom(c), value, resetCode)
 }
 
@@ -66,6 +71,7 @@ func ApplyFg(value string, c Color) string {
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func ApplyBg(value string, c Color) string {
+	attribute.Deprecated(nil)
 	return fmt.Sprintf("%s%s%s", BgFrom(c), value, resetCode)
 }
 
@@ -74,5 +80,6 @@ func ApplyBg(value string, c Color) string {
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func ApplyBoth(value string, textColor, bgColor Color) string {
+	attribute.Deprecated(nil)
 	return fmt.Sprintf("%s%s%s%s", FgFrom(textColor), BgFrom(bgColor), value, resetCode)
 }

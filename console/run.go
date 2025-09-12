@@ -14,13 +14,18 @@
 
 package console
 
-import "os/exec"
+import (
+	"os/exec"
+
+	"github.com/dywoq/dywoqlib/attribute"
+)
 
 // Run runs the command with arguments if they're provided.
 // It returns an output of command and an error.
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func Run(command string, args ...string) ([]byte, error) {
+	attribute.Deprecated(nil)
 	cmd := exec.Command(command, args...)
 	return cmd.CombinedOutput()
 }

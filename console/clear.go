@@ -16,12 +16,15 @@ package console
 
 import (
 	"runtime"
+
+	"github.com/dywoq/dywoqlib/attribute"
 )
 
 // Clear clears the console screen.
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func Clear() (err error) {
+	attribute.Deprecated(nil)
 	goos := runtime.GOOS
 	switch goos {
 	case "windows":

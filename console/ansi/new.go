@@ -14,10 +14,13 @@
 
 package ansi
 
+import "github.com/dywoq/dywoqlib/attribute"
+
 // New creates a new ANSI message. bg and fg can be optional.
 // The colors are automatically None.
 //
 // DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func New(value string) Base {
+	attribute.Deprecated(nil)
 	return &message{None, None, value}
 }
