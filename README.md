@@ -38,7 +38,6 @@ go get github.com/dywoq/dywoqlib/lib
 *   **Optional Type**: An `Optional` type to handle nullable values gracefully.
 *   **Polymorphism Utilities**: Helpers for working with Go generics at runtime.
 *   **Slice and String Utilities**: A rich set of functions for manipulating slices and strings.
-*   **Console Helper**: A simple way to run external commands.
 *   **Panic Recovery**: A utility to safely recover from panics with logging.
 
 ## License

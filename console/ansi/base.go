@@ -17,6 +17,8 @@ package ansi
 import "fmt"
 
 // Base represents ANSI message.
+//
+// DEPRECATED, MAY BE REMOVED IN THE FUTURE
 type Base interface {
 	fmt.Stringer
 	// BgColor returns the current background color.

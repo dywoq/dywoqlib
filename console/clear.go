@@ -19,6 +19,8 @@ import (
 )
 
 // Clear clears the console screen.
+//
+// DEPRECATED, MAY BE REMOVED IN THE FUTURE
 func Clear() (err error) {
 	goos := runtime.GOOS
 	switch goos {
