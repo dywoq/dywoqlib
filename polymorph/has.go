@@ -14,11 +14,29 @@
 
 package polymorph
 
-import "reflect"
+import (
+	"reflect"
+	"sync"
+)
+
+var methodCache sync.Map
+
+type typeMethod struct {
+	typ  reflect.Type
+	name string
+}
 
 // HasMethod checks if T has a method with the given name.
 func HasMethod[T any](name string) bool {
+	key := typeMethod{
+		typ:  TypeOfGeneric[T](),
+		name: name,
+	}
+	if found, ok := methodCache.Load(key); ok {
+		return found.(bool)
+	}
 	_, found := TypeOfGeneric[T]().MethodByName(name)
+	methodCache.Store(key, found)
 	return found
 }
 
