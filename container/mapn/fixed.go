@@ -197,12 +197,7 @@ func (f *Fixed[K, V]) String() string {
 	if ok := f.errorsOk(); !ok {
 		return ""
 	}
-	res, err := mapnutil.Format(f.m)
-	if err != nil {
-		f.err = err
-		return ""
-	}
-	return res
+	return mapnutil.Format(f.m)
 }
 
 // Native returns the underlying map.

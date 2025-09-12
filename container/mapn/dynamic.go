@@ -216,11 +216,7 @@ func (d *Dynamic[K, V]) String() string {
 	if d.err != nil {
 		return ""
 	}
-	res, err := mapnutil.Format(d.m)
-	if err != nil {
-		return ""
-	}
-	return res
+	return mapnutil.Format(d.m)
 }
 
 func (d *Dynamic[K, V]) Native() map[K]V {

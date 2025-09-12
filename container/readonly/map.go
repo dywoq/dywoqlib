@@ -119,13 +119,7 @@ func (m *Map[K, V]) String() string {
 	if !m.err.Nil() {
 		return ""
 	}
-	res, err1 := mapnutil.Format(m.m)
-	if err1 != nil {
-		m.err.SetError(err1)
-		m.err.SetMore("source is readonly.Map[T comparable].String() string")
-		return ""
-	}
-	return res
+	return mapnutil.Format(m.m)
 }
 
 // NewMap creates new a pointer to read-only container map.
