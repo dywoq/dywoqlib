@@ -37,9 +37,5 @@ func Experimental(event func()) {
 }
 
 func experimentalFormat(target, source string) string {
-	strs := make([]string, 5)
-	strs = append(strs, "attribute.Experimental: ", target, " is experimental; ")
-	strs = append(strs, "source: ", source)
-	res := strings.Join(strs, "")
-	return res
+	return fmt.Sprintf("attribute.Experimental: %s is experimental; source: %s", target, source)
 }
