@@ -19,7 +19,7 @@ import (
 	"strings"
 )
 
-// Unsafe is a attribute-function that generates warning about removed function.
+// Unsafe is a attribute-function that generates warning about unsafe function.
 // DOES NOT automatically returns zero values (e.g., "", 0, nil etc.).
 // If event is not nil,
 // then it uses the custom event instead of outputting the warning.
