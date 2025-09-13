@@ -7,6 +7,9 @@ import (
 	"github.com/dywoq/dywoqlib/numeric/limits"
 )
 
+// Cast safely converts b to Base[To] integer. First, it checks if b fits the
+// limits of integer To. If b doesn't, it returns zero number, and error.
+// If b does, Cast converts b into Base[To].
 func Cast[From, To constraints.Integral](b Base[From]) (Base[To], err.Context) {
 	val := b.Get()
 	minTo, maxTo := limits.Numeric[To]()
