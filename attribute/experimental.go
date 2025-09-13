@@ -16,7 +16,6 @@ package attribute
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Experimental is a attribute-function that generates warning about experimental function.

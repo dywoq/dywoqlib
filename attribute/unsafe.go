@@ -16,7 +16,6 @@ package attribute
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Unsafe is a attribute-function that generates warning about unsafe function.

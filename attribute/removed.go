@@ -16,7 +16,6 @@ package attribute
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Removed is a attribute-function that generates warning about removed function.
