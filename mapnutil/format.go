@@ -22,15 +22,15 @@ import (
 // Format returns a string presentation of the map.
 // If the function encounters any error, it returns it and empty string.
 func Format[K, V comparable](m map[K]V) string {
-    if len(m) == 0 {
-        return "{}"
-    }
+	if len(m) == 0 {
+		return "{}"
+	}
 
-    var b strings.Builder
-    b.WriteString("{\n")
-    for key, value := range m {
-        fmt.Fprintf(&b, "  %v: %v\n", key, value)
-    }
-    b.WriteString("}")
-    return b.String()
+	var b strings.Builder
+	b.WriteString("{\n")
+	for key, value := range m {
+		fmt.Fprintf(&b, "  %v: %v\n", key, value)
+	}
+	b.WriteString("}")
+	return b.String()
 }
