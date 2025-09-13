@@ -96,7 +96,6 @@ func TestFifoFront(t *go_testing.T) {
 			for _, appending := range test.appended {
 				test.fifo.Append(appending)
 			}
-			test.fifo.Pop()
 			got := test.fifo.Front()
 			if got != test.want {
 				t.Errorf("got %v, want %v", got, test.want)
@@ -112,8 +111,8 @@ func TestFifoBack(t *go_testing.T) {
 		appended []int
 		want     int
 	}{
-		{"front", NewFifo[int](), []int{2, 3}, 2},
-		{"empty front", NewFifo[int](), []int{}, 0},
+		{"back", NewFifo[int](), []int{2, 3}, 3},
+		{"empty back", NewFifo[int](), []int{}, 0},
 	}
 
 	for _, test := range tests {
@@ -121,7 +120,6 @@ func TestFifoBack(t *go_testing.T) {
 			for _, appending := range test.appended {
 				test.fifo.Append(appending)
 			}
-			test.fifo.Pop()
 			got := test.fifo.Back()
 			if got != test.want {
 				t.Errorf("got %v, want %v", got, test.want)
