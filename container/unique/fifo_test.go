@@ -131,7 +131,7 @@ func TestFifoBack(t *go_testing.T) {
 func TestFifoPop(t *go_testing.T) {
 	tests := []struct {
 		name     string
-		lifo     *Fifo[int]
+		fifo     *Fifo[int]
 		appended []int
 		want     []int
 	}{
@@ -142,10 +142,10 @@ func TestFifoPop(t *go_testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *go_testing.T) {
 			for _, appending := range test.appended {
-				test.lifo.Append(appending)
+				test.fifo.Append(appending)
 			}
-			test.lifo.Pop()
-			got := test.lifo.Native()
+			test.fifo.Pop()
+			got := test.fifo.Native()
 			if !slices.Equal(got, test.want) {
 				t.Errorf("got %v, want %v", got, test.want)
 			}
