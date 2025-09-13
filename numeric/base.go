@@ -146,7 +146,7 @@ func UInt(val ...uint) Base[uint] { return baseFactoryMethod(val...) }
 // UInt8 returns Base[uint8] integer.
 func UInt8(val ...uint8) Base[uint8] { return baseFactoryMethod(val...) }
 
-// UInt8 returns Base[uint16] integer.
+// UInt16 returns Base[uint16] integer.
 func UInt16(val ...uint16) Base[uint16] { return baseFactoryMethod(val...) }
 
 // UInt32 returns Base[uint32] integer.
@@ -161,49 +161,54 @@ type baseImplementation[I constraints.Integral] struct {
 }
 
 func (b baseImplementation[I]) Absolute() I {
+	if !b.err.Nil() {
+		return 0
+	}
+
 	if b.num < 0 {
 		return -b.num
 	}
+
 	return b.num
 }
 
 func (b baseImplementation[I]) Add(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(b.num + val)
+	return b.chain(b.num + val)
 }
 
 func (b baseImplementation[I]) And(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(b.num & val)
+	return b.chain(b.num & val)
 }
 
 func (b baseImplementation[I]) Compare(val I) base.Compare {
-	switch {
-	case !b.err.Nil():
+	if !b.err.Nil() {
 		return 0
+	}
+
+	switch {
 	case b.num > val:
 		return base.CompareGreater
 	case b.num < val:
 		return base.CompareLess
-	case b.num == val:
-		return base.CompareEqual
 	default:
-		return 0
+		return base.CompareEqual
 	}
 }
 
 func (b baseImplementation[I]) Divide(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
 	if val == 0 {
-		return b.none()
+		return b.error(err.NewContext(ErrDivisionByZero, "division by zero"))
 	}
-	return b.new(b.num / val)
+	return b.chain(b.num / val)
 }
 
 func (b baseImplementation[I]) Equal(val I) bool {
@@ -218,6 +223,9 @@ func (b baseImplementation[I]) Error() err.Context {
 }
 
 func (b baseImplementation[I]) Even() bool {
+	if !b.err.Nil() {
+		return false
+	}
 	return b.num%2 == 0
 }
 
@@ -234,16 +242,16 @@ func (b baseImplementation[I]) Limits() (I, I) {
 
 func (b baseImplementation[I]) Minus(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(b.num - val)
+	return b.chain(b.num - val)
 }
 
 func (b baseImplementation[I]) Multiply(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(b.num * val)
+	return b.chain(b.num * val)
 }
 
 func (b baseImplementation[I]) Negative() bool {
@@ -254,14 +262,17 @@ func (b baseImplementation[I]) Negative() bool {
 }
 
 func (b baseImplementation[I]) Odd() bool {
+	if !b.err.Nil() {
+		return false
+	}
 	return b.num%2 != 0
 }
 
 func (b baseImplementation[I]) Or(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(b.num | val)
+	return b.chain(b.num | val)
 }
 
 func (b baseImplementation[I]) Positive() bool {
@@ -272,6 +283,10 @@ func (b baseImplementation[I]) Positive() bool {
 }
 
 func (b baseImplementation[I]) Prime() bool {
+	if !b.err.Nil() {
+		return false
+	}
+
 	switch {
 	case b.num <= 1:
 		return false
@@ -287,48 +302,49 @@ func (b baseImplementation[I]) Prime() bool {
 			return false
 		}
 	}
+
 	return true
 }
 
 func (b baseImplementation[I]) Set(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(val)
+	return b.chain(val)
 }
 
 func (b baseImplementation[I]) ShiftLeft(n I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
 	if n < 0 {
-		return b.none()
+		return b.error(err.NewContext(ErrNegativeShift, "negative shift"))
 	}
-	return b.new(b.num << n)
+	return b.chain(b.num << n)
 }
 
 func (b baseImplementation[I]) ShiftRight(n I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
 	if n < 0 {
-		return b.none()
+		return b.error(err.NewContext(ErrNegativeShift, "negative shift"))
 	}
-	return b.new(b.num >> n)
+	return b.chain(b.num >> n)
 }
 
 func (b baseImplementation[I]) Sign() base.Sign {
-	switch {
-	case !b.err.Nil():
+	if !b.err.Nil() {
 		return 0
+	}
+
+	switch {
 	case b.num < 0:
 		return base.SignNegative
 	case b.num > 0:
 		return base.SignPositive
-	case b.num == 0:
-		return base.SignZero
 	default:
-		return 0
+		return base.SignZero
 	}
 }
 
@@ -341,9 +357,9 @@ func (b baseImplementation[I]) String() string {
 
 func (b baseImplementation[I]) Xor(val I) Base[I] {
 	if !b.err.Nil() {
-		return b.none()
+		return b.error(b.err)
 	}
-	return b.new(b.num ^ val)
+	return b.chain(b.num ^ val)
 }
 
 func (b baseImplementation[I]) Zero() bool {
@@ -353,11 +369,11 @@ func (b baseImplementation[I]) Zero() bool {
 	return b.num == 0
 }
 
-func (b *baseImplementation[I]) none() Base[I] {
-	return baseImplementation[I]{0, err.NoneContext()}
+func (b *baseImplementation[I]) error(e err.Context) Base[I] {
+	return baseImplementation[I]{b.num, e}
 }
 
-func (b *baseImplementation[I]) new(val I) Base[I] {
+func (b *baseImplementation[I]) chain(val I) Base[I] {
 	return baseImplementation[I]{val, err.NoneContext()}
 }
 
