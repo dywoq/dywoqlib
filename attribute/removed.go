@@ -19,16 +19,16 @@ import (
 	"strings"
 )
 
-// Unsafe is a attribute-function that generates warning about removed function.
+// Removed is a attribute-function that generates warning about removed function.
 // DOES NOT automatically returns zero values (e.g., "", 0, nil etc.).
 // If event is not nil,
 // then it uses the custom event instead of outputting the warning.
-func Unsafe(event func()) {
+func Removed(event func()) {
 	m := management{}
 	targetSkip, sourceSkip := m.skipNums()
 	target := m.funcInfo(targetSkip)
 	source := m.funcInfo(sourceSkip)
-	msg := unsafeFormat(target, source)
+	msg := removedFormat(target, source)
 	if event != nil {
 		event()
 		return
@@ -36,9 +36,9 @@ func Unsafe(event func()) {
 	fmt.Println(msg)
 }
 
-func unsafeFormat(target, source string) string {
+func removedFormat(target, source string) string {
 	strs := make([]string, 5)
-	strs = append(strs, "attribute.Unsafe: ", target, " is unsafe; ")
+	strs = append(strs, "attribute.Removed: ", target, " is removed; ")
 	strs = append(strs, "source: ", source)
 	res := strings.Join(strs, "")
 	return res

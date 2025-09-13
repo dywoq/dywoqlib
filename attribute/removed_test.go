@@ -16,8 +16,8 @@ package attribute_test
 
 import "github.com/dywoq/dywoqlib/attribute"
 
-func ExampleUnsafe() {
-	attribute.Unsafe(nil)
+func ExampleRemoved() {
+	attribute.Removed(nil)
 	// Output:
-	// attribute.Unsafe: github.com/dywoq/dywoqlib/attribute_test.ExampleUnsafe is unsafe; source: testing.runExample
+	// attribute.Removed: github.com/dywoq/dywoqlib/attribute_test.ExampleRemoved is removed; source: testing.runExample
 }
