@@ -135,12 +135,7 @@ func (f *Fixed[T]) String() string {
 	if ok := f.errorsOk(); !ok {
 		return ""
 	}
-	formatted, err := sliceutil.Format(f.s)
-	if err != nil {
-		f.err = err
-		return ""
-	}
-	return formatted
+	return sliceutil.Format(f.s)
 }
 
 // Set updates the element at a given index within the fixed bounds.

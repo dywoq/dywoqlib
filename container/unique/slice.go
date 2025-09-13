@@ -178,13 +178,7 @@ func (s *Slice[T]) String() string {
 	if !s.err.Nil() {
 		return ""
 	}
-	formatted, err2 := sliceutil.Format(s.s)
-	if err2 != nil {
-		s.err.SetError(err2)
-		s.err.SetMore("source is \"unique.Slice[T].String() string\"")
-		return ""
-	}
-	return formatted
+	return sliceutil.Format(s.s)
 }
 
 // Set sets elem at i in the underlying slice, if elem doesn't exist in the underlying slice.

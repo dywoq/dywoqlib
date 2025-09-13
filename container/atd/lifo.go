@@ -126,12 +126,7 @@ func (l *Lifo[T]) String() string {
 	if l.err != nil {
 		return ""
 	}
-	res, err := sliceutil.Format(l.s)
-	if err != nil {
-		l.err = err
-		return ""
-	}
-	return res
+	return sliceutil.Format(l.s)
 }
 
 func (l *Lifo[T]) zero() T {

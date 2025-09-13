@@ -141,12 +141,7 @@ func (d *Dynamic[T]) String() string {
 	if d.err != nil {
 		return ""
 	}
-	formatted, err := sliceutil.Format(d.s)
-	if err != nil {
-		d.err = err
-		return ""
-	}
-	return formatted
+	return sliceutil.Format(d.s)
 }
 
 // Set updates the element at a given index.

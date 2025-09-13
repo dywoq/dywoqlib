@@ -25,26 +25,20 @@ import (
 // Format returns a formatted string representation of a slice,
 // enclosed in brackets and with elements separated by commas.
 // For example, a slice [1, 2, 3] is formatted as "[1, 2, 3]".
-func Format[T comparable](s []T) (string, error) {
+func Format[T comparable](s []T) string {
 	if len(s) == 0 {
-		return "[]", nil
+		return "[]"
 	}
 	var b strings.Builder
 	b.WriteString("[")
 	for i, elem := range s {
-		_, err := fmt.Fprintf(&b, "%v", elem)
-		if err != nil {
-			return "", err
-		}
+		fmt.Fprintf(&b, "%v", elem)
 		if i != len(s)-1 {
-			_, err = fmt.Fprintf(&b, ", ")
-			if err != nil {
-				return "", err
-			}
+			fmt.Fprintf(&b, ", ")
 		}
 	}
 	b.WriteString("]")
-	return b.String(), nil
+	return b.String()
 }
 
 // Find searches for the requested element in a forward iterator.
