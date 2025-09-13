@@ -152,7 +152,7 @@ func TestDynamicGet(t *go_testing.T) {
 			gotkey, gotvalue := test.m.Get(test.key)
 			want := test.want
 			if gotkey != want.key {
-				t.Errorf("got key %v, want key %v", gotkey, want.value)
+				t.Errorf("got key %v, want key %v", gotkey, want.key)
 			}
 
 			if gotvalue != want.value {
