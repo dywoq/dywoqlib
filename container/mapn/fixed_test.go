@@ -1,19 +1,20 @@
 package mapn
 
 import (
-	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 	"maps"
 	go_testing "testing"
+
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 )
 
-func TestDynamicLength(t *go_testing.T) {
+func TestFixedLength(t *go_testing.T) {
 	tests := []struct {
 		name string
-		m    *Dynamic[int, int]
+		m    *Fixed[int, int]
 		want int
 	}{
-		{"not empty map", NewDynamic(map[int]int{2: 2, 3: 3}), 2},
-		{"empty map", NewDynamic(map[int]int{}), 0},
+		{"not empty map", NewFixed(10, map[int]int{2: 2, 3: 3}), 2},
+		{"empty map", NewFixed(10, map[int]int{}), 0},
 	}
 
 	for _, test := range tests {
@@ -26,15 +27,15 @@ func TestDynamicLength(t *go_testing.T) {
 	}
 }
 
-func TestDynamicExists(t *go_testing.T) {
+func TestFixedExists(t *go_testing.T) {
 	tests := []struct {
 		name string
-		m    *Dynamic[int, int]
+		m    *Fixed[int, int]
 		key  int
 		want bool
 	}{
-		{"does exist", NewDynamic(map[int]int{2: 2}), 2, true},
-		{"does not exist", NewDynamic(map[int]int{2: 2}), 3, false},
+		{"does exist", NewFixed(10, map[int]int{2: 2}), 2, true},
+		{"does not exist", NewFixed(10, map[int]int{2: 2}), 3, false},
 	}
 
 	for _, test := range tests {
@@ -47,18 +48,18 @@ func TestDynamicExists(t *go_testing.T) {
 	}
 }
 
-func TestDynamicAdd(t *go_testing.T) {
+func TestFixedAdd(t *go_testing.T) {
 	tests := []struct {
 		name string
-		m    *Dynamic[int, int]
+		m    *Fixed[int, int]
 		add  struct{ key, value int }
 		want map[int]int
 	}{
-		{"key does exist", NewDynamic(map[int]int{2: 2}), struct {
+		{"key does exist", NewFixed(10, map[int]int{2: 2}), struct {
 			key   int
 			value int
 		}{2, 2}, map[int]int{2: 2}},
-		{"key does not exist", NewDynamic(map[int]int{2: 2}), struct {
+		{"key does not exist", NewFixed(10, map[int]int{2: 2}), struct {
 			key   int
 			value int
 		}{3, 3}, map[int]int{2: 2, 3: 3}},
@@ -76,18 +77,18 @@ func TestDynamicAdd(t *go_testing.T) {
 	}
 }
 
-func TestDynamicSet(t *go_testing.T) {
+func TestFixedSet(t *go_testing.T) {
 	tests := []struct {
 		name string
-		m    *Dynamic[int, int]
+		m    *Fixed[int, int]
 		set  struct{ key, value int }
 		want map[int]int
 	}{
-		{"key does exist", NewDynamic(map[int]int{2: 2}), struct {
+		{"key does exist", NewFixed(10, map[int]int{2: 2}), struct {
 			key   int
 			value int
 		}{2, 3}, map[int]int{2: 2}},
-		{"key does not exist", NewDynamic(map[int]int{2: 2}), struct {
+		{"key does not exist", NewFixed(10, map[int]int{2: 2}), struct {
 			key   int
 			value int
 		}{3, 3}, map[int]int{2: 2, 3: 3}},
@@ -105,15 +106,15 @@ func TestDynamicSet(t *go_testing.T) {
 	}
 }
 
-func TestDynamicDelete(t *go_testing.T) {
+func TestFixedDelete(t *go_testing.T) {
 	tests := []struct {
 		name    string
-		m       *Dynamic[int, int]
+		m       *Fixed[int, int]
 		deleted int
 		want    map[int]int
 	}{
-		{"key does exist", NewDynamic(map[int]int{2: 2}), 2, map[int]int{}},
-		{"key does not exist", NewDynamic(map[int]int{2: 2}), 3, map[int]int{2: 2}},
+		{"key does exist", NewFixed(10, map[int]int{2: 2}), 2, map[int]int{}},
+		{"key does not exist", NewFixed(10, map[int]int{2: 2}), 3, map[int]int{2: 2}},
 	}
 
 	for _, test := range tests {
@@ -128,20 +129,20 @@ func TestDynamicDelete(t *go_testing.T) {
 	}
 }
 
-func TestDynamicGet(t *go_testing.T) {
+func TestFixedGet(t *go_testing.T) {
 	tests := []struct {
 		name string
-		m    *Dynamic[int, int]
+		m    *Fixed[int, int]
 		key  int
 		want struct {
 			key, value int
 		}
 	}{
-		{"key does exists", NewDynamic(map[int]int{2: 2}), 2, struct {
+		{"key does exists", NewFixed(10, map[int]int{2: 2}), 2, struct {
 			key   int
 			value int
 		}{2, 2}},
-		{"key does not exist", NewDynamic(map[int]int{2: 2}), 3, struct {
+		{"key does not exist", NewFixed(10, map[int]int{2: 2}), 3, struct {
 			key   int
 			value int
 		}{0, 0}},
@@ -162,49 +163,49 @@ func TestDynamicGet(t *go_testing.T) {
 	}
 }
 
-func BenchmarkDynamicLength(b *go_testing.B) {
+func BenchmarkFixedLength(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
-	m := NewDynamic(map[int]int{2: 2, 3: 3})
+	m := NewFixed(10, map[int]int{2: 2, 3: 3})
 	for b.Loop() {
 		_ = m.Length()
 	}
 }
 
-func BenchmarkDynamicExists(b *go_testing.B) {
+func BenchmarkFixedExists(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
-	m := NewDynamic(map[int]int{2: 2, 3: 3})
+	m := NewFixed(10, map[int]int{2: 2, 3: 3})
 	for b.Loop() {
 		_ = m.Exists(2)
 	}
 }
 
-func BenchmarkDynamicAdd(b *go_testing.B) {
+func BenchmarkFixedAdd(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
-	m := NewDynamic(map[int]int{2: 2, 3: 3})
+	m := NewFixed(10, map[int]int{2: 2, 3: 3})
 	for b.Loop() {
 		_, _ = m.Add(2, 2)
 	}
 }
 
-func BenchmarkDynamicSet(b *go_testing.B) {
+func BenchmarkFixedSet(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
-	m := NewDynamic(map[int]int{2: 2, 3: 3})
+	m := NewFixed(10, map[int]int{2: 2, 3: 3})
 	for b.Loop() {
 		_, _ = m.Set(2, 2)
 	}
 }
 
-func BenchmarkDynamicDelete(b *go_testing.B) {
+func BenchmarkFixedDelete(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
-	m := NewDynamic(map[int]int{2: 2, 3: 3})
+	m := NewFixed(10, map[int]int{2: 2, 3: 3})
 	for b.Loop() {
 		_ = m.Delete(2)
 	}
 }
 
-func BenchmarkDynamicGet(b *go_testing.B) {
+func BenchmarkFixedGet(b *go_testing.B) {
 	internal_testing.SetBase().Benchmark(b)
-	m := NewDynamic(map[int]int{2: 2, 3: 3})
+	m := NewFixed(10, map[int]int{2: 2, 3: 3})
 	for b.Loop() {
 		_, _ = m.Get(2)
 	}
