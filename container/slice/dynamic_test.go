@@ -20,7 +20,7 @@ func TestDynamicNative(t *go_testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *go_testing.T) {
 			got := test.slice.Native()
-			if !reflect.DeepEqual(got, test.want) {
+			if !slices.Equal(got, test.want) {
 				t.Errorf("got %v, want %v", got, test.want)
 			}
 		})
