@@ -103,8 +103,8 @@ func ExampleBase() {
 	// positive: true
 	// equal: false
 	// comparison: -1
-	// odd: true
-	// even: false
+	// odd: false
+	// even: true
 	// abs: 20
 	// and: 0
 	// or: 21

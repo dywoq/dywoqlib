@@ -9,96 +9,212 @@ import (
 )
 
 func TestBaseGet(t *go_testing.T) {
-	num := Int(32)
-	got := num.Get()
-	want := 32
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want int
+	}{
+		{"positive", Int(32), 32},
+		{"negative", Int(-10), -10},
+		{"zero", Int(0), 0},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Get()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
-
 func TestBaseAdd(t *go_testing.T) {
-	num := Int(32)
-	got := num.Add(4)
-	want := 36
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		add  int
+		want int
+	}{
+		{"positive", Int(32), 4, 36},
+		{"add negative", Int(10), -5, 5},
+		{"add zero", Int(5), 0, 5},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Add(test.add)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseMinus(t *go_testing.T) {
-	num := Int(32)
-	got := num.Minus(4)
-	want := 28
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		sub  int
+		want int
+	}{
+		{"positive", Int(32), 4, 28},
+		{"subtract negative", Int(10), -5, 15},
+		{"from zero", Int(0), 5, -5},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Minus(test.sub)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseDivide(t *go_testing.T) {
-	num := Int(32)
-	got := num.Divide(16)
-	want := 2
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name   string
+		num    Base[int]
+		div    int
+		want   int
+		panics bool
+	}{
+		{"divides evenly", Int(32), 16, 2, false},
+		{"odd result", Int(10), 3, 3, false},
+		{"negative result", Int(10), -5, -2, false},
+		{"divide by zero", Int(10), 0, 0, true},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Divide(test.div)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) && !test.panics {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseMultiply(t *go_testing.T) {
-	num := Int(32)
-	got := num.Multiply(2)
-	want := 64
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		mul  int
+		want int
+	}{
+		{"positive", Int(32), 2, 64},
+		{"multiply by zero", Int(10), 0, 0},
+		{"multiply by one", Int(10), 1, 10},
+		{"multiply by negative", Int(5), -2, -10},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Multiply(test.mul)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseLimits(t *go_testing.T) {
 	num := UInt8(0)
 	gotmin, gotmax := num.Limits()
-	wantmin, wantmax := 0, uint(math.MaxUint16)
-	if gotmin != uint8(wantmin) {
+	wantmin, wantmax := uint8(0), uint8(math.MaxUint8)
+	if gotmin != wantmin {
 		t.Errorf("gotmin %v, wantmin %v", gotmin, wantmin)
 	}
-	if gotmax != uint8(wantmax) {
+	if gotmax != wantmax {
 		t.Errorf("gotmax %v, wantmax %v", gotmax, wantmax)
 	}
 }
 
 func TestBaseZero(t *go_testing.T) {
-	num := UInt8(0)
-	got := num.Zero()
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[uint8]
+		want bool
+	}{
+		{"is zero", UInt8(0), true},
+		{"is not zero", UInt8(5), false},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Zero()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
 func TestBaseNegative(t *go_testing.T) {
-	num := Int(-1)
-	got := num.Negative()
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want bool
+	}{
+		{"is negative", Int(-1), true},
+		{"is positive", Int(1), false},
+		{"is zero", Int(0), false},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Negative()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
 func TestBasePositive(t *go_testing.T) {
-	num := Int(1)
-	got := num.Positive()
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want bool
+	}{
+		{"is positive", Int(1), true},
+		{"is negative", Int(-1), false},
+		{"is zero", Int(0), false},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Positive()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
-
 func TestBaseEqual(t *go_testing.T) {
-	numA := Int(-1)
-	numB := Int(-1)
-	got := numA.Equal(numB.Get())
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		numA Base[int]
+		numB Base[int]
+		want bool
+	}{
+		{"equal", Int(-1), Int(-1), true},
+		{"not equal", Int(5), Int(10), false},
+		{"different signs", Int(-5), Int(5), false},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.numA.Equal(test.numB.Get())
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
@@ -125,83 +241,200 @@ func TestBaseCompare(t *go_testing.T) {
 }
 
 func TestBaseOdd(t *go_testing.T) {
-	num := Int(0)
-	got := num.Odd()
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want bool
+	}{
+		{"is odd", Int(7), true},
+		{"is not odd (even)", Int(0), false},
+		{"negative odd", Int(-3), true},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Odd()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
 func TestBaseEven(t *go_testing.T) {
-	num := Int(7)
-	got := num.Even()
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want bool
+	}{
+		{"is even", Int(8), true},
+		{"is not even (odd)", Int(7), false},
+		{"negative even", Int(-4), true},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Even()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
 func TestBaseAbsolute(t *go_testing.T) {
-	num := Int(7)
-	got := num.Absolute()
-	want := 7
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want int
+	}{
+		{"positive", Int(7), 7},
+		{"negative", Int(-7), 7},
+		{"zero", Int(0), 0},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Absolute()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
 func TestBaseString(t *go_testing.T) {
-	num := Int(7)
-	got := num.String()
-	want := "7"
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want string
+	}{
+		{"positive", Int(7), "7"},
+		{"negative", Int(-10), "-10"},
+		{"zero", Int(0), "0"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.String()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
 func TestBaseAnd(t *go_testing.T) {
-	num := Int(5)
-	got := num.And(1)
-	want := 1
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		and  int
+		want int
+	}{
+		{"positive", Int(5), 1, 1},
+		{"zero result", Int(4), 3, 0},
+		{"negative number", Int(-5), 3, 3},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.And(test.and)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseOr(t *go_testing.T) {
-	num := Int(5)
-	got := num.Or(1)
-	want := 5
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		or   int
+		want int
+	}{
+		{"positive", Int(5), 1, 5},
+		{"or results in original", Int(5), 4, 5},
+		{"negative number", Int(-5), 2, -5},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Or(test.or)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseXor(t *go_testing.T) {
-	num := Int(5)
-	got := num.Xor(1)
-	want := 4
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		xor  int
+		want int
+	}{
+		{"positive", Int(5), 1, 4},
+		{"with zero", Int(5), 0, 5},
+		{"negative number", Int(-5), 2, -7},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Xor(test.xor)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseShiftLeft(t *go_testing.T) {
-	num := Int(5)
-	got := num.ShiftLeft(1)
-	want := 10
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		bits int
+		want int
+	}{
+		{"positive", Int(5), 1, 10},
+		{"shift of zero", Int(5), 0, 5},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.ShiftLeft(test.bits)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
 func TestBaseShiftRight(t *go_testing.T) {
-	num := Int(5)
-	got := num.ShiftRight(1)
-	want := 2
-	if got.Get() != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		bits int
+		want int
+	}{
+		{"positive", Int(5), 1, 2},
+		{"shift of zero", Int(5), 0, 5},
+		{"large shift", Int(100), 10, 0},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.ShiftRight(test.bits)
+			want := Int(test.want)
+			if !got.Equal(want.Get()) {
+				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			}
+		})
 	}
 }
 
@@ -227,11 +460,27 @@ func TestBaseSign(t *go_testing.T) {
 }
 
 func TestBasePrime(t *go_testing.T) {
-	num := Int(2)
-	got := num.Prime()
-	want := true
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
+	tests := []struct {
+		name string
+		num  Base[int]
+		want bool
+	}{
+		{"is prime", Int(2), true},
+		{"is prime 1", Int(3), true},
+		{"is not prime (even)", Int(4), false},
+		{"is not prime (negative)", Int(-5), false},
+		{"is not prime (1)", Int(1), false},
+		{"is not prime (large)", Int(15), false},
+		{"large prime", Int(101), true},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *go_testing.T) {
+			got := test.num.Prime()
+			if got != test.want {
+				t.Errorf("got %v, want %v", got, test.want)
+			}
+		})
 	}
 }
 
