@@ -12,9 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package constraints
-
-// Floating is a constraint of float types such as float32, float64.
-type Floating interface {
-	~float32 | ~float64
-}
+// Package base provides basic types for numeric operations.
+package base

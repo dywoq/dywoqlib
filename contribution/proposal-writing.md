@@ -32,6 +32,7 @@ Each proposal must contain the following headers:
 ## Features Documentation Rules
 - Every feature must include both a **description** and a **signature**.  
 - The format should follow standard Go inline documentation style.  
+- When you write the implementation of feature - just copy its documentation from the proposal into the code.
 
 ### Example
 - ```algorithms.Gcd```
