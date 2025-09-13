@@ -18,14 +18,14 @@ import "github.com/dywoq/dywoqlib/iterator"
 
 // Iterating returns a read-only iterator for s. If it is "forward",
 // it returns iterator.ReadonlyBase(iterator.Forward), otherwise,
-// if it is "reverse", the function returns iterator.ReadonlyBase(iterator.Reserve).
+// if it is "reverse", the function returns iterator.ReadonlyBase(iterator.Reverse).
 // Default, it returns iterator.ReadonlyBase(nil).
 func Iterating[T comparable](s *Slice[T], it string) iterator.ReadonlyBase[T] {
 	switch it {
 	case "forward":
 		return iterator.ReadonlyBase[T](iterator.NewForward(s.s))
 	case "reverse":
-		return iterator.ReadonlyBase[T](iterator.NewReserve(s.s))
+		return iterator.ReadonlyBase[T](iterator.NewReverse(s.s))
 	}
 	return iterator.ReadonlyBase[T](nil)
 }

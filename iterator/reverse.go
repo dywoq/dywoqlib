@@ -21,9 +21,9 @@ type Reverse[T comparable] struct {
 	err  error
 }
 
-// NewReserve creates a new Reverse iterator for the provided slice of elements.
+// NewReverse creates a new Reverse iterator for the provided slice of elements.
 // T must be a comparable type.
-func NewReserve[T comparable](data []T) *Reverse[T] {
+func NewReverse[T comparable](data []T) *Reverse[T] {
 	return &Reverse[T]{data, len(data), nil}
 }
 
