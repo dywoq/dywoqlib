@@ -37,10 +37,6 @@ func Removed(event func()) {
 }
 
 func removedFormat(target, source string) string {
-	strs := make([]string, 5)
-	strs = append(strs, "attribute.Removed: ", target, " is removed; ")
-	strs = append(strs, "source: ", source)
-	res := strings.Join(strs, "")
-	return res
+	return fmt.Sprintf("attribute.Removed: %s is removed; source: %s", target, source)
 }
 
