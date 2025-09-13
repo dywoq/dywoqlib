@@ -14,8 +14,6 @@
 
 package iterator
 
-import "github.com/dywoq/dywoqlib/attribute"
-
 // Combined is a generic iterator struct that wraps a slice of comparable elements and provides methods to create forward and reverse iterators.
 // T must be comparable.
 type Combined[T comparable] struct {
