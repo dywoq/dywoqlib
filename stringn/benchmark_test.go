@@ -305,9 +305,7 @@ func BenchmarkRead(b *go_testing.B) {
 	buf := make([]byte, s.Length())
 
 	for b.Loop() {
-		b.StopTimer()
 		s = New("hello world")
-		b.StartTimer()
 		_, _ = s.Read(buf)
 	}
 }
