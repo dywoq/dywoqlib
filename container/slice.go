@@ -43,7 +43,7 @@ func (it IterableSlice[T]) Iterating() *iterator.Combined[T] { return iterator.N
 // It will panic if i is negative.
 func (g *GrowableSlice[T]) Grow(i int) {
 	if i < 0 {
-		panic("capacity cannot be negative")
+		panic("github.com/dywoq/dywoqlib/container: capacity cannot be negative")
 	}
 
 	if cap(*g) < i {

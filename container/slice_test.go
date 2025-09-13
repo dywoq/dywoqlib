@@ -22,9 +22,14 @@ import (
 
 func TestGrowableSlice_Grow(t *testing.T) {
 	t.Run("negative capacity should panic", func(t *testing.T) {
+		expectedPanicMsg := "github.com/dywoq/dywoqlib/container: capacity cannot be negative"
 		defer func() {
-			if r := recover(); r == nil {
+			r := recover()
+			if r == nil {
 				t.Errorf("The code did not panic")
+			}
+			if r != expectedPanicMsg {
+				t.Errorf("Expected panic message '%s', got '%v'", expectedPanicMsg, r)
 			}
 		}()
 		s := make(container.GrowableSlice[int], 0)
