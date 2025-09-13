@@ -218,7 +218,7 @@ func (b baseImplementation[I]) Error() err.Context {
 }
 
 func (b baseImplementation[I]) Even() bool {
-	return !(b.num%2 == 0)
+	return b.num%2 == 0
 }
 
 func (b baseImplementation[I]) Get() I {
@@ -254,7 +254,7 @@ func (b baseImplementation[I]) Negative() bool {
 }
 
 func (b baseImplementation[I]) Odd() bool {
-	return b.num%2 == 0
+	return b.num%2 != 0
 }
 
 func (b baseImplementation[I]) Or(val I) Base[I] {
