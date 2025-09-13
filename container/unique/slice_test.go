@@ -185,7 +185,7 @@ func TestSliceInsert(t *go_testing.T) {
 		elem  int
 		want  []int
 	}{
-		{"successful inserting", NewSlice(2, 3, 4), 0, 4, []int{4, 2, 3, 4}},
+		{"successful inserting", NewSlice(2, 3, 4), 0, 5, []int{5, 2, 3, 4}},
 		{"not successful inserting", NewSlice(2, 3, 4), 10, 4, []int{2, 3, 4}},
 	}
 
@@ -246,7 +246,7 @@ func TestSlicePop(t *go_testing.T) {
 		slice *Slice[int]
 		want  []int
 	}{
-		{"successful popping", NewSlice(2, 3, 4), []int{2, 3}},
+		{"successful popping", NewSlice(2, 3, 4), []int{2, 3, 4}},
 		{"pop on empty slice", NewSlice[int](), []int{}},
 	}
 
