@@ -12,5 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package unique provides containers that will contain only unique elements and no duplicates.
-package unique
+// Package attribute provides attribute-like functions such as Deprecated and Todo
+// for marking functions as deprecated or unimplemented, with optional custom event handling.
+package attribute

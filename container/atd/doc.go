@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package unique provides containers that will contain only unique elements and no duplicates.
-package unique
+// Package atd provides thread-safe generic FIFO (First-In-First-Out) and LIFO (Last-In-First-Out) containers.
+package atd

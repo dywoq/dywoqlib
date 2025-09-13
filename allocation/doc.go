@@ -12,5 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package unique provides containers that will contain only unique elements and no duplicates.
-package unique
+// Package allocation provides an interface for types that can be grown.
+package allocation
