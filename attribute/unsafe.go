@@ -37,10 +37,6 @@ func Unsafe(event func()) {
 }
 
 func unsafeFormat(target, source string) string {
-	strs := make([]string, 5)
-	strs = append(strs, "attribute.Unsafe: ", target, " is unsafe; ")
-	strs = append(strs, "source: ", source)
-	res := strings.Join(strs, "")
-	return res
+	return fmt.Sprintf("attribute.Unsafe: %s is unsafe; source: %s", target, source)
 }
 
