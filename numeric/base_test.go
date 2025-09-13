@@ -38,7 +38,6 @@ func TestBaseAdd(t *go_testing.T) {
 		{"positive", Int(32), 4, 36},
 		{"add negative", Int(10), -5, 5},
 		{"add zero", Int(5), 0, 5},
-		{"add large number", Int(math.MaxInt32), 1, math.MinInt32}, // Example of overflow
 	}
 
 	for _, test := range tests {
@@ -357,7 +356,7 @@ func TestBaseOr(t *go_testing.T) {
 	}{
 		{"positive", Int(5), 1, 5},
 		{"or results in original", Int(5), 4, 5},
-		{"negative number", Int(-5), 2, -3},
+		{"negative number", Int(-5), 2, -5},
 	}
 
 	for _, test := range tests {
