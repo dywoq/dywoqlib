@@ -44,7 +44,7 @@ func ExampleForward() {
 
 func ExampleReverse() {
 	slice := []int{2, 3, 4}
-	it := iterator.NewReserve(slice)
+	it := iterator.NewReverse(slice)
 	for it.Next() {
 		fmt.Printf("it.Value(): %v\n", it.Value())
 	}

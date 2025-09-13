@@ -23,8 +23,8 @@ type Combined[T comparable] struct {
 // Forward returns a new forward iterator for the combined iterator's slice.
 func (c Combined[T]) Forward() *Forward[T] { return NewForward(c.s) }
 
-// Forward returns a new reverse iterator for the combined iterator's slice.
-func (c Combined[T]) Reverse() *Reverse[T] { return NewReserve(c.s) }
+// Reverse returns a new reverse iterator for the combined iterator's slice.
+func (c Combined[T]) Reverse() *Reverse[T] { return NewReverse(c.s) }
 
 // NewCombined creates a new Combined iterator instance with the provided slice.
 // T must be comparable.
