@@ -12,16 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Package base provides basic types for numeric operations.
 package base
-
-// Sign represents the sign of a numeric value.
-type Sign int
-
-const (
-	// SignNegative indicates that the value is negative.
-	SignNegative Sign = -1
-	// SignPositive indicates that the value is positive.
-	SignPositive Sign = 1
-	// SignZero indicates that the value is zero.
-	SignZero Sign = 0
-)

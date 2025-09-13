@@ -14,10 +14,14 @@
 
 package base
 
+// Compare is the result of a comparison between two values.
 type Compare int
 
 const (
-	CompareLess    Compare = -1
-	CompareEqual   Compare = 0
+	// CompareLess indicates that the first value is less than the second.
+	CompareLess Compare = -1
+	// CompareEqual indicates that the two values are equal.
+	CompareEqual Compare = 0
+	// CompareGreater indicates that the first value is greater than the second.
 	CompareGreater Compare = 1
 )
