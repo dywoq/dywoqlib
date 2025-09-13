@@ -15,14 +15,14 @@ func TestFormat(t *testing.T) {
 	)
 
 	// first test
-	got, _ := Format(x)
+	got := Format(x)
 	want := "[10, 11, 44]"
 	if got != want {
 		t.Errorf("Format([]int{10, 11, 44}) = %s, want %s", got, want)
 	}
 
 	// second test
-	got, _ = Format(y)
+	got = Format(y)
 	want = "[]"
 	if got != want {
 		t.Errorf("Format([]int{}) = %s, want %s", got, want)

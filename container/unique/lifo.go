@@ -118,13 +118,7 @@ func (l *Lifo[T]) String() string {
 	if !l.err.Nil() {
 		return ""
 	}
-	res, err := sliceutil.Format(l.s)
-	if err != nil {
-		l.err.SetError(err)
-		l.err.SetMore("source is \"unique.Lifo[T].String() string\"")
-		return ""
-	}
-	return res
+	return sliceutil.Format(l.s)
 }
 
 func (l *Lifo[T]) zero() T {

@@ -9,10 +9,7 @@ import (
 
 func ExampleFormat() {
 	slice := []int{2, 3, 4}
-	str, err := sliceutil.Format(slice)
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-	}
+	str := sliceutil.Format(slice)
 	fmt.Printf("str: %v\n", str)
 	// Output:
 	// str: [2, 3, 4]

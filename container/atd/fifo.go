@@ -141,12 +141,7 @@ func (f *Fifo[T]) String() string {
 	if f.err != nil {
 		return ""
 	}
-	formatted, err := sliceutil.Format(f.s)
-	if err != nil {
-		f.err = err
-		return ""
-	}
-	return formatted
+	return sliceutil.Format(f.s)
 }
 
 func (f *Fifo[T]) zero() T {

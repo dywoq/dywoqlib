@@ -96,7 +96,6 @@ func (s *Slice[T]) Find(req T) T {
 
 // String returns a string representation of the slice.
 // It uses sliceutil.Format to format the underlying slice.
-// Updates the error state if sliceutil.Format returned the error.
 // The mutex locks and unlocks after the function completed.
 func (s *Slice[T]) String() string {
 	s.mu.Lock()
@@ -104,13 +103,7 @@ func (s *Slice[T]) String() string {
 	if !s.err.Nil() {
 		return ""
 	}
-	res, err1 := sliceutil.Format(s.s)
-	if err1 != nil {
-		s.err.SetError(err1)
-		s.err.SetMore(s.errContextSource("String() string"))
-		return ""
-	}
-	return res
+	return sliceutil.Format(s.s)
 }
 
 // Front returns the first element of the slice.

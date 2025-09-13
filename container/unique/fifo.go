@@ -131,13 +131,7 @@ func (f *Fifo[T]) String() string {
 	if !f.err.Nil() {
 		return ""
 	}
-	res, err := sliceutil.Format(f.s)
-	if err != nil {
-		f.err.SetError(err)
-		f.err.SetMore("source is \"unique.Fifo[T].String() string\"")
-		return ""
-	}
-	return res
+	return sliceutil.Format(f.s)
 }
 
 func (f *Fifo[T]) zero() T {
