@@ -38,9 +38,14 @@ func (f FormattableSlice[T]) String() string { return sliceutil.Format(f) }
 // It uses a factory method iterator.NewCombined() internally.
 func (it IterableSlice[T]) Iterating() *iterator.Combined[T] { return iterator.NewCombined(it) }
 
-// Grow increases the capacity of the slice to at i.
+// Grow increases the capacity of the slice to i.
 // If the current capacity is less than i, a new slice is allocated and elements are copied.
+// It will panic if i is negative.
 func (g *GrowableSlice[T]) Grow(i int) {
+	if i < 0 {
+		panic("capacity cannot be negative")
+	}
+
 	if cap(*g) < i {
 		newSlice := make([]T, len(*g), i)
 		copy(newSlice, *g)
