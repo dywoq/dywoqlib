@@ -15,17 +15,23 @@
 package stringn
 
 import (
-	"testing"
+	go_testing "testing"
+
+	internal_testing "github.com/dywoq/dywoqlib/internal/testing"
 )
 
-func BenchmarkAppend(b *testing.B) {
+func BenchmarkAppend(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("hello")
 		s.Append(" world")
 	}
 }
 
-func BenchmarkAt(b *testing.B) {
+func BenchmarkAt(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -33,35 +39,45 @@ func BenchmarkAt(b *testing.B) {
 	}
 }
 
-func BenchmarkInsert(b *testing.B) {
+func BenchmarkInsert(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("hello world")
 		s.Insert(6, '!')
 	}
 }
 
-func BenchmarkRemoveRange(b *testing.B) {
+func BenchmarkRemoveRange(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("hello world")
 		s.RemoveRange(5, 11)
 	}
 }
 
-func BenchmarkReplace(b *testing.B) {
+func BenchmarkReplace(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("hello world")
 		s.Replace("world", "go")
 	}
 }
 
-func BenchmarkReverse(b *testing.B) {
+func BenchmarkReverse(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("hello world")
 		s.Reverse()
 	}
 }
 
-func BenchmarkToLower(b *testing.B) {
+func BenchmarkToLower(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("HELLO WORLD")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -69,7 +85,9 @@ func BenchmarkToLower(b *testing.B) {
 	}
 }
 
-func BenchmarkToUpper(b *testing.B) {
+func BenchmarkToUpper(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -77,7 +95,9 @@ func BenchmarkToUpper(b *testing.B) {
 	}
 }
 
-func BenchmarkCompare(b *testing.B) {
+func BenchmarkCompare(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -85,7 +105,9 @@ func BenchmarkCompare(b *testing.B) {
 	}
 }
 
-func BenchmarkEquals(b *testing.B) {
+func BenchmarkEquals(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -93,7 +115,9 @@ func BenchmarkEquals(b *testing.B) {
 	}
 }
 
-func BenchmarkSplit(b *testing.B) {
+func BenchmarkSplit(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world, how are you?")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -101,7 +125,9 @@ func BenchmarkSplit(b *testing.B) {
 	}
 }
 
-func BenchmarkSubstring(b *testing.B) {
+func BenchmarkSubstring(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -109,14 +135,18 @@ func BenchmarkSubstring(b *testing.B) {
 	}
 }
 
-func BenchmarkPrepend(b *testing.B) {
+func BenchmarkPrepend(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("world")
 		s.Prepend("hello ")
 	}
 }
 
-func BenchmarkContainsRune(b *testing.B) {
+func BenchmarkContainsRune(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -124,7 +154,9 @@ func BenchmarkContainsRune(b *testing.B) {
 	}
 }
 
-func BenchmarkContainsString(b *testing.B) {
+func BenchmarkContainsString(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -132,7 +164,9 @@ func BenchmarkContainsString(b *testing.B) {
 	}
 }
 
-func BenchmarkFront(b *testing.B) {
+func BenchmarkFront(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -140,7 +174,9 @@ func BenchmarkFront(b *testing.B) {
 	}
 }
 
-func BenchmarkBack(b *testing.B) {
+func BenchmarkBack(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -148,7 +184,9 @@ func BenchmarkBack(b *testing.B) {
 	}
 }
 
-func BenchmarkHasRunePrefix(b *testing.B) {
+func BenchmarkHasRunePrefix(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -156,7 +194,9 @@ func BenchmarkHasRunePrefix(b *testing.B) {
 	}
 }
 
-func BenchmarkHasStringPrefix(b *testing.B) {
+func BenchmarkHasStringPrefix(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -164,7 +204,9 @@ func BenchmarkHasStringPrefix(b *testing.B) {
 	}
 }
 
-func BenchmarkHasRuneSuffix(b *testing.B) {
+func BenchmarkHasRuneSuffix(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -172,7 +214,9 @@ func BenchmarkHasRuneSuffix(b *testing.B) {
 	}
 }
 
-func BenchmarkHasStringSuffix(b *testing.B) {
+func BenchmarkHasStringSuffix(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -180,14 +224,18 @@ func BenchmarkHasStringSuffix(b *testing.B) {
 	}
 }
 
-func BenchmarkSet(b *testing.B) {
+func BenchmarkSet(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		s := New("hello world")
 		s.Set('W', 6)
 	}
 }
 
-func BenchmarkNative(b *testing.B) {
+func BenchmarkNative(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -196,7 +244,9 @@ func BenchmarkNative(b *testing.B) {
 	}
 }
 
-func BenchmarkString(b *testing.B) {
+func BenchmarkString(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -205,7 +255,9 @@ func BenchmarkString(b *testing.B) {
 	}
 }
 
-func BenchmarkLength(b *testing.B) {
+func BenchmarkLength(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -214,7 +266,9 @@ func BenchmarkLength(b *testing.B) {
 	}
 }
 
-func BenchmarkError(b *testing.B) {
+func BenchmarkError(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -223,7 +277,9 @@ func BenchmarkError(b *testing.B) {
 	}
 }
 
-func BenchmarkClear(b *testing.B) {
+func BenchmarkClear(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -232,7 +288,9 @@ func BenchmarkClear(b *testing.B) {
 	}
 }
 
-func BenchmarkEmpty(b *testing.B) {
+func BenchmarkEmpty(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -241,7 +299,9 @@ func BenchmarkEmpty(b *testing.B) {
 	}
 }
 
-func BenchmarkGrow(b *testing.B) {
+func BenchmarkGrow(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 
@@ -250,7 +310,9 @@ func BenchmarkGrow(b *testing.B) {
 	}
 }
 
-func BenchmarkWrite(b *testing.B) {
+func BenchmarkWrite(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	data := []byte(" world")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -261,7 +323,9 @@ func BenchmarkWrite(b *testing.B) {
 	}
 }
 
-func BenchmarkRead(b *testing.B) {
+func BenchmarkRead(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello world")
 	buf := make([]byte, s.Length())
 	b.ResetTimer()
@@ -274,7 +338,9 @@ func BenchmarkRead(b *testing.B) {
 	}
 }
 
-func BenchmarkIterating(b *testing.B) {
+func BenchmarkIterating(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	s := New("hello")
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -285,7 +351,9 @@ func BenchmarkIterating(b *testing.B) {
 	}
 }
 
-func BenchmarkNew(b *testing.B) {
+func BenchmarkNew(b *go_testing.B) {
+	base := internal_testing.SetBase()
+	base.Benchmark(b)
 	for i := 0; i < b.N; i++ {
 		_ = New("hello")
 	}
