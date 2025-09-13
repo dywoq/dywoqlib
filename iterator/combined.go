@@ -28,21 +28,6 @@ func (c Combined[T]) Forward() *Forward[T] { return NewForward(c.s) }
 // Forward returns a new reverse iterator for the combined iterator's slice.
 func (c Combined[T]) Reverse() *Reverse[T] { return NewReserve(c.s) }
 
-// ReadonlyForward returns a new read-only forward iterator for the combined iterator's slice.
-//
-// DEPRECATED, MAY BE REMOVED IN THE FUTURE
-func (c Combined[T]) ReadonlyForward() *ReadonlyForward[T] {
-	attribute.Deprecated(nil)
-	return NewReadonlyForward(c.s)
-}
-
-// ReadonlyReverse returns a new read-only forward iterator for the combined iterator's slice.
-//
-// DEPRECATED, MAY BE REMOVED IN THE FUTURE
-func (c Combined[T]) ReadonlyReverse() *ReadonlyReverse[T] {
-	attribute.Deprecated(nil)
-	return NewReadonlyReverse(c.s)
-}
 
 // NewCombined creates a new Combined iterator instance with the provided slice.
 // T must be comparable.
