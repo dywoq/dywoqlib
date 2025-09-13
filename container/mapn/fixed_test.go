@@ -87,11 +87,11 @@ func TestFixedSet(t *go_testing.T) {
 		{"key does exist", NewFixed(10, map[int]int{2: 2}), struct {
 			key   int
 			value int
-		}{2, 3}, map[int]int{2: 2}},
+		}{2, 3}, map[int]int{2: 3}},
 		{"key does not exist", NewFixed(10, map[int]int{2: 2}), struct {
 			key   int
 			value int
-		}{3, 3}, map[int]int{2: 2, 3: 3}},
+		}{3, 3}, map[int]int{2: 2}},
 	}
 
 	for _, test := range tests {
