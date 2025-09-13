@@ -43,5 +43,5 @@ go get github.com/dywoq/dywoqlib/lib
 ## License
 `dywoqlib` is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
 
-## Documentation
-To see documentation, see [`docs`](./docs/README.md) folder.
+## Contribution
+If you want to contribute, see [`contribution`](./docs/README.md) folder.
