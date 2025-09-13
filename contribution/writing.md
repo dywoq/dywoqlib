@@ -16,14 +16,14 @@ import (
 2. In your benchmarks use:
 ```go
 func BenchmarkFoo(b *go_testing.B) {
-	internal_testing.SetBase(b)
+	internal_testing.SetBase().Benchmark(b)
 	// something...
 }
 ```
 1. Use `b.Loop()` instead of `for` statement:
 ```go
 func BenchmarkFoo(b *go_testing.B) {
-	internal_testing.SetBase(b)
+	internal_testing.SetBase().Benchmark(b)
 	for b.Loop() {
 		// something...
 	}
