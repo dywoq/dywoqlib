@@ -293,9 +293,7 @@ func BenchmarkWrite(b *go_testing.B) {
 	base.Benchmark(b)
 	data := []byte(" world")
 	for b.Loop() {
-		b.StopTimer()
 		s := New("hello")
-		b.StartTimer()
 		_, _ = s.Write(data)
 	}
 }
