@@ -17,7 +17,7 @@ package numeric
 import "errors"
 
 var (
-	ErrDivisionByZero  = errors.New("division by zero")
-	ErrNegativeShift = errors.New("negative shift")
-	ErrOverflow      = errors.New("overflow")
+	ErrDivisionByZero = errors.New("github.com/dywoq/dywoqlib/numeric: division by zero")
+	ErrNegativeShift  = errors.New("github.com/dywoq/dywoqlib/numeric: negative shift")
+	ErrOverflow       = errors.New("github.com/dywoq/dywoqlib/numeric: overflow")
 )
