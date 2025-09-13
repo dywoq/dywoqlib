@@ -76,24 +76,29 @@ func TestBaseMinus(t *go_testing.T) {
 
 func TestBaseDivide(t *go_testing.T) {
 	tests := []struct {
-		name   string
-		num    Base[int]
-		div    int
-		want   int
-		panics bool
+		name      string
+		num       Base[int]
+		div       int
+		want      int
+		wantError bool
 	}{
 		{"divides evenly", Int(32), 16, 2, false},
 		{"odd result", Int(10), 3, 3, false},
 		{"negative result", Int(10), -5, -2, false},
-		{"divide by zero", Int(10), 0, 0, true},
+		{"divide by zero", Int(10), 0, 10, true},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *go_testing.T) {
 			got := test.num.Divide(test.div)
-			want := Int(test.want)
-			if !got.Equal(want.Get()) && !test.panics {
-				t.Errorf("got %v, want %v", got.Get(), want.Get())
+			if got.Error().Nil() && test.wantError {
+				t.Error("wanted error, got nil")
+			}
+			if !got.Error().Nil() && !test.wantError {
+				t.Errorf("wanted no error, got %v", got.Error())
+			}
+			if !test.wantError && !got.Equal(test.want) {
+				t.Errorf("got %v, want %v", got.Get(), test.want)
 			}
 		})
 	}
@@ -457,6 +462,117 @@ func TestBaseSign(t *go_testing.T) {
 			}
 		})
 	}
+}
+
+func TestBaseError(t *go_testing.T) {
+	num := Int(10).Divide(0)
+	if num.Error().Nil() {
+		t.Fatal("error should not be nil")
+	}
+
+	t.Run("TestErrorAdd", func(t *go_testing.T) {
+		if num.Add(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorMinus", func(t *go_testing.T) {
+		if num.Minus(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorMultiply", func(t *go_testing.T) {
+		if num.Multiply(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorDivide", func(t *go_testing.T) {
+		if num.Divide(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorAnd", func(t *go_testing.T) {
+		if num.And(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorOr", func(t *go_testing.T) {
+		if num.Or(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorXor", func(t *go_testing.T) {
+		if num.Xor(5).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorShiftLeft", func(t *go_testing.T) {
+		if num.ShiftLeft(1).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorShiftRight", func(t *go_testing.T) {
+		if num.ShiftRight(1).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorSet", func(t *go_testing.T) {
+		if num.Set(1).Error().Nil() {
+			t.Error("error should be propagated")
+		}
+	})
+
+	t.Run("TestErrorPrime", func(t *go_testing.T) {
+		if num.Prime() {
+			t.Error("prime should be false")
+		}
+	})
+
+	t.Run("TestErrorAbsolute", func(t *go_testing.T) {
+		if num.Absolute() != 0 {
+			t.Error("absolute should be 0")
+		}
+	})
+
+	t.Run("TestErrorEven", func(t *go_testing.T) {
+		if num.Even() {
+			t.Error("even should be false")
+		}
+	})
+
+	t.Run("TestErrorOdd", func(t *go_testing.T) {
+		if num.Odd() {
+			t.Error("odd should be false")
+		}
+	})
+
+	t.Run("TestErrorCompare", func(t *go_testing.T) {
+		if num.Compare(5) != 0 {
+			t.Error("compare should be 0")
+		}
+	})
+
+	t.Run("TestErrorLimits", func(t *go_testing.T) {
+		min, max := num.Limits()
+		if min != 0 || max != 0 {
+			t.Error("limits should be 0,0")
+		}
+	})
+
+	t.Run("TestErrorSign", func(t *go_testing.T) {
+		if num.Sign() != 0 {
+			t.Error("sign should be 0")
+		}
+	})
+
 }
 
 func TestBasePrime(t *go_testing.T) {
