@@ -48,14 +48,16 @@ func ExampleString() {
 	str.Prepend("Hi! Bye!")
 	fmt.Printf("str: %v\n", str)
 
-	str.Remove(0, 1)
+	str.RemoveRange(0, 1)
 	fmt.Printf("str: %v\n", str)
 
 	str.Replace("b", "y")
 	fmt.Printf("str: %v\n", str)
 
-	fmt.Printf("lower: %v\n", str.ToLower())
-	fmt.Printf("upper: %v\n", str.ToUpper())
+	str.ToLower()
+	fmt.Printf("lower: %v\n", str)
+	str.ToUpper()
+	fmt.Printf("upper: %v\n", str)
 	fmt.Printf("compare: %v\n", str.Compare("Hi!"))
 	fmt.Printf("equals: %v\n", str.Equals("Bye!"))
 	fmt.Printf("split: %v\n", str.Split("y"))
@@ -89,6 +91,6 @@ func ExampleString() {
 	// upper: I! BYE!
 	// compare: 1
 	// equals: false
-	// split: [i! B e!]
-	// substr: i
+	// split: [I! BYE!]
+	// substr: I
 }

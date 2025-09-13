@@ -45,14 +45,7 @@ func (s *String) Grow(i int) {
 	if s.err != nil {
 		return
 	}
-	if s.b.Len() == 0 {
-		s.b.Grow(i)
-		return
-	}
-	var newStr bytes.Buffer
-	newStr.Grow(i)
-	newStr.WriteString(s.b.String())
-	s.b = newStr
+	s.b.Grow(i)
 }
 
 func (s *String) Iterating() *iterator.Combined[rune] {
@@ -175,7 +168,9 @@ func (s *String) Insert(i int, r rune) rune {
 		s.err = err
 		return s.zero()
 	}
-	s.updateBuffer(updatedRs)
+	if updatedRs != nil {
+		s.updateBuffer(updatedRs)
+	}
 	return r
 }
 
@@ -248,18 +243,16 @@ func (s *String) Prepend(strs ...string) []string {
 	return []string{s.b.String()}
 }
 
-func (s *String) Remove(start, end int) rune {
+func (s *String) RemoveRange(start, end int) {
 	if s.err != nil {
-		return rune(0)
+		return
 	}
 	rs := s.runes()
 	if start < 0 || end > len(rs) || start > end {
 		s.err = ErrInvalidIndexForRemoval
-		return s.zero()
+		return
 	}
-	removedRune := rs[start]
 	s.updateBuffer(append(rs[:start], rs[end:]...))
-	return removedRune
 }
 
 func (s *String) Replace(old, new string) {
@@ -279,18 +272,22 @@ func (s *String) Reverse() {
 	s.updateBuffer(rs)
 }
 
-func (s *String) ToLower() string {
+func (s *String) ToLower() {
 	if s.err != nil {
-		return ""
+		return
 	}
-	return strings.ToLower(s.b.String())
+	newStr := strings.ToLower(s.b.String())
+	s.b.Reset()
+	s.b.WriteString(newStr)
 }
 
-func (s *String) ToUpper() string {
+func (s *String) ToUpper() {
 	if s.err != nil {
-		return ""
+		return
 	}
-	return strings.ToUpper(s.b.String())
+	newStr := strings.ToUpper(s.b.String())
+	s.b.Reset()
+	s.b.WriteString(newStr)
 }
 
 func (s *String) Compare(str string) int {
@@ -350,8 +347,7 @@ func (s *String) zero() rune {
 
 func (*String) insertRune(i int, elem rune, s []rune) ([]rune, error) {
 	if i < 0 || i > len(s) {
-		zero := rune(0)
-		return []rune{zero}, ErrIndexOutOfBounds
+		return nil, ErrIndexOutOfBounds
 	}
 	return slices.Insert(s, i, elem), nil
 }

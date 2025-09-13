@@ -154,7 +154,125 @@ func TestInsert(t *testing.T) {
 	}
 }
 
-func TestСontainsRune(t *testing.T) {
+func TestGrow(t *testing.T) {
+	str := New("hello")
+	str.Grow(10)
+	if str.b.Cap() < 15 {
+		t.Errorf("expected capacity >= 15, got %d", str.b.Cap())
+	}
+}
+
+func TestToLower(t *testing.T) {
+	str := New("HeLLo")
+	str.ToLower()
+	want := "hello"
+	if str.Native() != want {
+		t.Errorf("got %s, want %s", str.Native(), want)
+	}
+}
+
+func TestToUpper(t *testing.T) {
+	str := New("HeLLo")
+	str.ToUpper()
+	want := "HELLO"
+	if str.Native() != want {
+		t.Errorf("got %s, want %s", str.Native(), want)
+	}
+}
+
+func TestInsert_OutOfBounds(t *testing.T) {
+	str := New("hello")
+	str.Insert(10, '!')
+	if str.Error() == nil {
+		t.Errorf("expected an error for out-of-bounds insert")
+	}
+	want := "hello"
+	if str.Native() != want {
+		t.Errorf("string should not be modified on error. got %s, want %s", str.Native(), want)
+	}
+}
+
+func TestRemoveRange(t *testing.T) {
+	str := New("hello")
+	str.RemoveRange(1, 4)
+	want := "ho"
+	if str.Native() != want {
+		t.Errorf("got %s, want %s", str.Native(), want)
+	}
+}
+
+func TestReverse(t *testing.T) {
+	str := New("hello")
+	str.Reverse()
+	want := "olleh"
+	if str.Native() != want {
+		t.Errorf("got %s, want %s", str.Native(), want)
+	}
+}
+
+func TestSubstring(t *testing.T) {
+	str := New("hello")
+	substr := str.Substring(1, 4)
+	want := "ell"
+	if substr != want {
+		t.Errorf("got %s, want %s", substr, want)
+	}
+}
+
+func TestSplit(t *testing.T) {
+	str := New("a,b,c")
+	parts := str.Split(",")
+	want := []string{"a", "b", "c"}
+	if !slices.Equal(parts, want) {
+		t.Errorf("got %v, want %v", parts, want)
+	}
+}
+
+func TestCompare(t *testing.T) {
+	str := New("a")
+	if str.Compare("a") != 0 {
+		t.Errorf("expected 0")
+	}
+	if str.Compare("b") != -1 {
+		t.Errorf("expected -1")
+	}
+	if str.Compare("A") != 1 {
+		t.Errorf("expected 1")
+	}
+}
+
+func TestEquals(t *testing.T) {
+	str := New("hello")
+	if !str.Equals("hello") {
+		t.Errorf("expected true")
+	}
+	if str.Equals("world") {
+		t.Errorf("expected false")
+	}
+}
+
+func TestAt(t *testing.T) {
+	str := New("hello")
+	r := str.At(1)
+	if r != 'e' {
+		t.Errorf("got %c, want %c", r, 'e')
+	}
+	str.At(10)
+	if str.Error() == nil {
+		t.Errorf("expected error for out-of-bounds At")
+	}
+}
+
+func TestPrepend(t *testing.T) {
+	str := New("world")
+	str.Prepend("hello ", "beautiful ")
+	want := "hello beautiful world"
+	if str.Native() != want {
+		t.Errorf("got %s, want %s", str.Native(), want)
+	}
+}
+
+func TestContainsRune(t *testing.T) {
 	str1 := New("bye")
 	tests := []struct {
 		body      string
@@ -171,7 +289,7 @@ func TestСontainsRune(t *testing.T) {
 	}
 }
 
-func TestСontainsString(t *testing.T) {
+func TestContainsString(t *testing.T) {
 	str1 := New("hello")
 	tests := []struct {
 		body      string
