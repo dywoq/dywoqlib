@@ -68,3 +68,22 @@ panic("github.com/dywoq/dywoqlib/foo/something: division by zero")
 ```
 container.unique.optimization - #32
 ```
+
+### Errors
+1. When you're using `err.Context`, you need to add the context like this: 
+```
+source is <package>.<the name of function>
+```
+
+Example:
+```go
+err2 := err.NewContext(
+	errors.New("github.com/dywoq/dywoqlib/foo/something: division by zero"), 
+	"source is foo.Something"
+)
+```
+
+2. If you're creating errors through `errors.New`, you need always put link to the package before the message, example:
+```go
+err := errors.New("github.com/dywoq/dywoqlib/foo/something: division by zero")
+```
