@@ -3,7 +3,7 @@
 ## Proposal Writing Guidelines
 
 ### 1. Goal
-- Clearly state **what you want** in one sentence.
+- Clearly state **what you want**.
 - Example:  
   > Propose adding a `Pool` utility to handle goroutines efficiently.
 
