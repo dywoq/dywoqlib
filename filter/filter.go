@@ -38,6 +38,12 @@ func Slice[S any](s []S, pred func(S) bool) []S {
 	return result
 }
 
+// SliceNot returns a filtered slice of elements that don't satisfy pred.
+// Returns an empty slice if len(s) is 0.
+func SliceNot[S any](s []S, pred func(S) bool) []S {
+	return Slice(s, func(s S) bool { return !pred(s) })
+}
+
 // Map returns a filtered map of keys that satisfy pred.
 // Returns an empty map if len(m) is 0.
 func Map[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
@@ -51,4 +57,10 @@ func Map[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
 		}
 	}
 	return result
+}
+
+// Map returns a filtered map of keys that satisfy pred.
+// Returns an empty map if len(m) is 0.
+func MapNot[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
+	return Map(m, func(k K, v V) bool { return !pred(k, v) })
 }
