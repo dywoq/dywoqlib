@@ -18,7 +18,7 @@
 //
 //  func main() {
 //     s := filter.Slice([]int{1, 2, 3, 4, 5, 6}, func(elem int) bool { return elem%2 == 0 })
-//     fmt.Println(s)
+//     fmt.Println(s) // Output: [2 4 6]
 //  }
 //
 package filter
