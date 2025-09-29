@@ -1,0 +1,22 @@
+package filter
+
+// Map returns a filtered map of keys that satisfy pred.
+// Returns an empty map if len(m) is 0.
+func Map[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
+	if len(m) == 0 {
+		return map[K]V{}
+	}
+	result := map[K]V{}
+	for k, v := range m {
+		if pred(k, v) {
+			result[k] = v
+		}
+	}
+	return result
+}
+
+// Map returns a filtered map of keys that satisfy pred.
+// Returns an empty map if len(m) is 0.
+func MapNot[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
+	return Map(m, func(k K, v V) bool { return !pred(k, v) })
+}
