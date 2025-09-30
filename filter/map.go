@@ -29,7 +29,7 @@ func Map[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
 	return result
 }
 
-// Map returns a filtered map of keys that don't satisfy pred.
+// MapNot returns a filtered map of keys that don't satisfy pred.
 // Returns an empty map if len(m) is 0.
 func MapNot[K comparable, V any](m map[K]V, pred func(K, V) bool) map[K]V {
 	return Map(m, func(k K, v V) bool { return !pred(k, v) })
