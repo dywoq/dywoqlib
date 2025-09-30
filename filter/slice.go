@@ -20,7 +20,7 @@ func Slice[S any](s []S, pred func(S) bool) []S {
 	if len(s) == 0 {
 		return []S{}
 	}
-	result := []S{}
+	result := make([]S, 0, len(s))
 	for _, elem := range s {
 		if pred(elem) {
 			result = append(result, elem)
