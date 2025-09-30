@@ -87,3 +87,87 @@ func TestMapValues(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkMap(b *testing.B) {
+	m := map[string]int{}
+	for i := range 1000 {
+		m[fmt.Sprintf("k%d", i)] = i
+	}
+	pred := func(_ string, v int) bool { return v%2 == 0 }
+
+	for b.Loop() {
+		_ = filter.Map(m, pred)
+	}
+}
+
+func BenchmarkMapNot(b *testing.B) {
+	m := map[string]int{}
+	for i := range 1000 {
+		m[fmt.Sprintf("k%d", i)] = i
+	}
+	pred := func(_ string, v int) bool { return v%2 == 0 }
+
+	for b.Loop() {
+		_ = filter.MapNot(m, pred)
+	}
+}
+
+func BenchmarkMapKeys(b *testing.B) {
+	m := map[string]int{}
+	for i := range 1000 {
+		m[fmt.Sprintf("k%d", i)] = i
+	}
+	pred := func(k string) bool { return len(k) > 2 }
+
+	for b.Loop() {
+		_ = filter.MapKeys(m, pred)
+	}
+}
+
+func BenchmarkMapValues(b *testing.B) {
+	m := map[string]int{}
+	for i := range 1000 {
+		m[fmt.Sprintf("k%d", i)] = i
+	}
+	pred := func(v int) bool { return v%2 == 0 }
+
+	for b.Loop() {
+		_ = filter.MapValues(m, pred)
+	}
+}
+
+func ExampleMap() {
+	m := map[string]int{"a": 2, "b": 3, "c": 4}
+	even := func(_ string, v int) bool { return v%2 == 0 }
+
+	got := filter.Map(m, even)
+	fmt.Println(got)
+	// Output: map[a:2 c:4]
+}
+
+func ExampleMapNot() {
+	m := map[string]int{"a": 2, "b": 3, "c": 4}
+	even := func(_ string, v int) bool { return v%2 == 0 }
+
+	got := filter.MapNot(m, even)
+	fmt.Println(got)
+	// Output: map[b:3]
+}
+
+func ExampleMapKeys() {
+	m := map[string]int{"a": 2, "bs": 3, "c": 4}
+	oneChar := func(k string) bool { return len(k) == 1 }
+
+	got := filter.MapKeys(m, oneChar)
+	fmt.Println(got)
+	// Output: map[a:2 c:4]
+}
+
+func ExampleMapValues() {
+	m := map[string]int{"a": 2, "bs": 3, "c": 4}
+	even := func(v int) bool { return v%2 == 0 }
+
+	got := filter.MapValues(m, even)
+	fmt.Println(got)
+	// Output: map[a:2 c:4]
+}
