@@ -32,5 +32,5 @@ func Slice[S any](s []S, pred func(S) bool) []S {
 // SliceNot returns a filtered slice of elements that don't satisfy pred.
 // Returns an empty slice if len(s) is 0.
 func SliceNot[S any](s []S, pred func(S) bool) []S {
-	return Slice(s, func(s S) bool { return !pred(s) })
+	return Slice(s, func(elem S) bool { return !pred(elem) })
 }
